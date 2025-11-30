@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAppData } from '../context/AppDataContext';
+import { Plus, DollarSign, Calendar, Check, X, FileText } from 'lucide-react';
 
 const Expenses = () => {
     const { expenses, addExpense, markExpensePaid, budget, updateBudget, groups } = useAppData();
@@ -10,6 +11,7 @@ const Expenses = () => {
     const [expenseToConfirm, setExpenseToConfirm] = useState(null);
     const [newExpense, setNewExpense] = useState({
         title: '',
+        description: '',
         amount: '',
         date: new Date().toISOString().split('T')[0],
         split: false
@@ -35,6 +37,7 @@ const Expenses = () => {
         setIsModalOpen(false);
         setNewExpense({
             title: '',
+            description: '',
             amount: '',
             date: new Date().toISOString().split('T')[0],
             split: false
@@ -97,7 +100,7 @@ const Expenses = () => {
                 </div>
                 <div className="header-actions">
                     <button className="add-button" onClick={() => setIsModalOpen(true)}>
-                        + Add Expense
+                        <Plus size={16} style={{ marginRight: '5px' }} /> Add Expense
                     </button>
                     <button className="add-button" style={{ backgroundColor: '#FADADD', color: '#4A2C2C' }} onClick={handleBudgetClick}>
                         Set Budget
@@ -110,19 +113,19 @@ const Expenses = () => {
                     className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
                     onClick={() => setActiveTab('upcoming')}
                 >
-                    Upcoming Expenses
+                    Upcoming
                 </button>
                 <button
                     className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
                     onClick={() => setActiveTab('completed')}
                 >
-                    Completed Expenses
+                    Completed
                 </button>
                 <button
                     className={`tab-button ${activeTab === 'overdue' ? 'active' : ''}`}
                     onClick={() => setActiveTab('overdue')}
                 >
-                    Overdue Expenses
+                    Overdue
                 </button>
             </div>
 
@@ -137,8 +140,14 @@ const Expenses = () => {
                                 <h4>{expense.title}</h4>
                                 <div className="expense-row">
                                     <span className="label">Total Amount</span>
-                                    <span className="value">${parseFloat(expense.amount).toFixed(2)}</span>
+                                    <span className="value">₱{parseFloat(expense.amount).toFixed(2)}</span>
                                 </div>
+                                {expense.description && (
+                                    <div className="expense-row">
+                                        <span className="label">Description</span>
+                                        <span className="value">{expense.description}</span>
+                                    </div>
+                                )}
                                 <div className="expense-row">
                                     <span className="label">Due Date</span>
                                     <span className="value">{new Date(expense.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
@@ -146,7 +155,7 @@ const Expenses = () => {
                                 {expense.split && (
                                     <div className="expense-row">
                                         <span className="label">Your Share (1/{memberCount})</span>
-                                        <span className="value">${(parseFloat(expense.amount) / memberCount).toFixed(2)}</span>
+                                        <span className="value">₱{(parseFloat(expense.amount) / memberCount).toFixed(2)}</span>
                                     </div>
                                 )}
                             </div>
@@ -167,7 +176,7 @@ const Expenses = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h2>Add Expense</h2>
-                            <button className="close-button" onClick={() => setIsModalOpen(false)}>×</button>
+                            <button className="close-button" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
@@ -179,6 +188,20 @@ const Expenses = () => {
                                     onChange={handleInputChange}
                                     required
                                 />
+                            </div>
+                            <div className="form-group">
+                                <label>Description (Optional)</label>
+                                <div className="input-wrapper">
+                                    <FileText size={16} className="input-icon" style={{ position: 'absolute', top: '12px', left: '10px', color: '#888' }} />
+                                    <input
+                                        type="text"
+                                        name="description"
+                                        value={newExpense.description}
+                                        onChange={handleInputChange}
+                                        style={{ paddingLeft: '35px' }}
+                                        placeholder="Add details..."
+                                    />
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Amount</label>
@@ -230,7 +253,7 @@ const Expenses = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h2>Confirm Payment</h2>
-                            <button className="close-button" onClick={() => setIsConfirmModalOpen(false)}>×</button>
+                            <button className="close-button" onClick={() => setIsConfirmModalOpen(false)}><X size={20} /></button>
                         </div>
                         <p>Are you sure you want to mark this expense as paid?</p>
                         <div className="modal-actions">
@@ -246,7 +269,7 @@ const Expenses = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h2>Set Monthly Budget</h2>
-                            <button className="close-button" onClick={() => setIsBudgetModalOpen(false)}>×</button>
+                            <button className="close-button" onClick={() => setIsBudgetModalOpen(false)}><X size={20} /></button>
                         </div>
                         <form onSubmit={handleSaveBudget}>
                             <div className="form-group">

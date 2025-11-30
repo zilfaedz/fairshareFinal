@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createUser } from '../api/users';
-import { useAppData } from '../context/AppDataContext';
 
 const Register = () => {
     const [fullName, setFullName] = useState('');
@@ -10,7 +8,6 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    const { updateUser } = useAppData();
 
     const validate = () => {
         const newErrors = {};
@@ -18,32 +15,29 @@ const Register = () => {
         if (!email.trim()) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(email)) {
-            newErrors.email = 'Email is invalid';
+            newErrors.email = 'Email must contain @ and a valid domain';
         }
-        if (!password) newErrors.password = 'Password is required';
+        if (!password) {
+            newErrors.password = 'Password is required';
+        } else if (password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters long';
+        }
         if (password !== confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match';
         }
         return newErrors;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
-
-        try {
-            const newUser = await createUser({ fullName, email, password });
-            updateUser(newUser);
-            console.log('User registered successfully');
-            navigate('/dashboard');
-        } catch (error) {
-            console.error('Registration failed:', error);
-            setErrors({ submit: 'Registration failed. Please try again.' });
-        }
+        // Handle registration logic here
+        console.log('Register:', { fullName, email, password });
+        navigate('/dashboard');
     };
 
     return (

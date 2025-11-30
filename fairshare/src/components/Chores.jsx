@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAppData } from '../context/AppDataContext';
+import { Plus, Calendar, Clock, CheckCircle, Trash2, Edit2, X } from 'lucide-react';
 
 const Chores = () => {
     const { chores, addChore, updateChore, deleteChore, toggleChoreStatus, groups } = useAppData();
@@ -115,7 +116,7 @@ const Chores = () => {
                 <h1>Chores</h1>
                 <div className="header-actions">
                     <button className="add-button" onClick={handleAddClick}>
-                        + Add Chore
+                        <Plus size={16} style={{ marginRight: '5px' }} /> Add Chore
                     </button>
                 </div>
             </div>
@@ -125,25 +126,25 @@ const Chores = () => {
                     className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
                     onClick={() => setActiveTab('upcoming')}
                 >
-                    Upcoming Chores
+                    Upcoming
                 </button>
                 <button
                     className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
                     onClick={() => setActiveTab('completed')}
                 >
-                    Completed Chores
+                    Completed
                 </button>
                 <button
                     className={`tab-button ${activeTab === 'overdue' ? 'active' : ''}`}
                     onClick={() => setActiveTab('overdue')}
                 >
-                    Overdue Chores
+                    Overdue
                 </button>
             </div>
 
             <div className="chores-list">
                 {sortedDates.length === 0 ? (
-                    <p className="empty-state">No {activeTab} chores.</p>
+                    <p className="empty-state">No {activeTab} tasks.</p>
                 ) : (
                     sortedDates.map(date => (
                         <div key={date} className="date-group">
@@ -167,7 +168,7 @@ const Chores = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h2>{selectedChore ? (isEditMode ? 'Edit Chore' : 'Chore Details') : 'Add Chore'}</h2>
-                            <button className="close-button" onClick={() => setIsModalOpen(false)}>×</button>
+                            <button className="close-button" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
                         </div>
 
                         {!isEditMode && selectedChore ? (

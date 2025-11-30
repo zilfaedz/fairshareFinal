@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAppData } from '../context/AppDataContext';
+import { User, Users, LogOut, Trash2, Copy, Plus, Camera, X } from 'lucide-react';
 
 const Settings = () => {
     const {
@@ -155,38 +156,42 @@ const Settings = () => {
 
             {activeTab === 'group' && (
                 <div className="settings-content">
-                    <div className="settings-card pink-bg">
-                        <div className="card-header-icon">
-                            <span className="icon">👥</span>
-                            <h3>Join Existing Group</h3>
-                        </div>
-                        <p className="card-description">Enter a room code to join an existing group</p>
-                        <form onSubmit={handleJoinGroup} className="settings-form-row">
-                            <input
-                                type="text"
-                                placeholder="Enter room code (e.g., ROOM123)"
-                                value={joinCode}
-                                onChange={(e) => setJoinCode(e.target.value)}
-                                className="settings-input"
-                            />
-                            <button type="submit" className="settings-button primary">Join Group</button>
-                        </form>
-                    </div>
+                    {(!groups || groups.length === 0) && (
+                        <>
+                            <div className="settings-card pink-bg">
+                                <div className="card-header-icon">
+                                    <Users size={24} className="icon" />
+                                    <h3>Join Existing Group</h3>
+                                </div>
+                                <p className="card-description">Enter a room code to join an existing group</p>
+                                <form onSubmit={handleJoinGroup} className="settings-form-row">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter room code (e.g., ROOM123)"
+                                        value={joinCode}
+                                        onChange={(e) => setJoinCode(e.target.value)}
+                                        className="settings-input"
+                                    />
+                                    <button type="submit" className="settings-button primary">Join Group</button>
+                                </form>
+                            </div>
 
-                    <div className="settings-card pink-bg">
-                        <h3>Create New Group</h3>
-                        <p className="card-description">Group Name</p>
-                        <form onSubmit={handleCreateGroup} className="settings-form-row">
-                            <input
-                                type="text"
-                                placeholder="e.g., Apartment 4B"
-                                value={newGroupName}
-                                onChange={(e) => setNewGroupName(e.target.value)}
-                                className="settings-input"
-                            />
-                            <button type="submit" className="settings-button primary">Create Group</button>
-                        </form>
-                    </div>
+                            <div className="settings-card pink-bg">
+                                <h3>Create New Group</h3>
+                                <p className="card-description">Group Name</p>
+                                <form onSubmit={handleCreateGroup} className="settings-form-row">
+                                    <input
+                                        type="text"
+                                        placeholder="e.g., Apartment 4B"
+                                        value={newGroupName}
+                                        onChange={(e) => setNewGroupName(e.target.value)}
+                                        className="settings-input"
+                                    />
+                                    <button type="submit" className="settings-button primary">Create Group</button>
+                                </form>
+                            </div>
+                        </>
+                    )}
 
                     <h2 className="section-title">My Groups</h2>
                     {groups && groups.length > 0 ? (
@@ -199,7 +204,7 @@ const Settings = () => {
                                     </div>
                                     <div className="group-actions-top">
                                         <span className="room-code">{group.code}</span>
-                                        <button className="icon-button copy-button">❐</button>
+                                        <button className="icon-button copy-button"><Copy size={16} /></button>
                                     </div>
                                 </div>
 
@@ -211,7 +216,7 @@ const Settings = () => {
                                                 className="icon-button delete-button"
                                                 onClick={() => removeGroupMember(group.id, member.id)}
                                             >
-                                                🗑️
+                                                <Trash2 size={16} />
                                             </button>
                                         </div>
                                     ))}
@@ -303,8 +308,8 @@ const Settings = () => {
                                     <input
                                         type="text"
                                         className="settings-input"
-                                        value={editFormData.fullName || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, fullName: e.target.value })}
+                                        value={editFormData.name || ''}
+                                        onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
                                     />
                                 </div>
                                 <div className="info-row">
@@ -347,7 +352,7 @@ const Settings = () => {
                             <>
                                 <div className="info-row">
                                     <span className="info-label">Name</span>
-                                    <span className="info-value">{user.fullName}</span>
+                                    <span className="info-value">{user.name}</span>
                                 </div>
                                 <div className="info-row">
                                     <span className="info-label">Date of Birth</span>

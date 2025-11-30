@@ -5,17 +5,15 @@ const UserProfile = () => {
     const { user, updateUser } = useAppData();
     const [formData, setFormData] = useState({
         name: '',
-        email: '',
-        profilePicture: ''
+        email: ''
     });
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         if (user) {
             setFormData({
-                name: user.name || user.fullName, // Handle both naming conventions
-                email: user.email,
-                profilePicture: user.profilePicture || ''
+                name: user.name,
+                email: user.email
             });
         }
     }, [user]);
@@ -28,24 +26,9 @@ const UserProfile = () => {
         });
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData({ ...formData, profilePicture: reader.result });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Map name back to fullName if needed by backend, or keep as is if context handles it
-        updateUser({
-            ...formData,
-            fullName: formData.name // Ensure backend gets 'fullName'
-        });
+        updateUser(formData);
         setIsEditing(false);
     };
 
@@ -62,29 +45,15 @@ const UserProfile = () => {
 
             <div className="profile-card">
                 <div className="profile-header">
-                    <div className="profile-avatar-large">
-                        {formData.profilePicture ? (
-                            <img src={formData.profilePicture} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                        ) : (
-                            <div style={{ width: '100%', height: '100%', backgroundColor: '#ccc', borderRadius: '50%' }}></div>
-                        )}
-                    </div>
+                    <div className="profile-avatar-large"></div>
                     {!isEditing ? (
                         <div className="profile-info-display">
-                            <h2>{user.name || user.fullName}</h2>
+                            <h2>{user.name}</h2>
                             <p>{user.email}</p>
                         </div>
                     ) : (
                         <div className="profile-edit-form">
                             <form onSubmit={handleSubmit}>
-                                <div className="form-group">
-                                    <label>Profile Picture</label>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageChange}
-                                    />
-                                </div>
                                 <div className="form-group">
                                     <label>Name</label>
                                     <input
@@ -112,11 +81,7 @@ const UserProfile = () => {
                                         className="action-button cancel"
                                         onClick={() => {
                                             setIsEditing(false);
-                                            setFormData({
-                                                name: user.name || user.fullName,
-                                                email: user.email,
-                                                profilePicture: user.profilePicture || ''
-                                            });
+                                            setFormData({ name: user.name, email: user.email });
                                         }}
                                     >
                                         Cancel

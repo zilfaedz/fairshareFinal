@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import Chores from './components/Chores';
 import Expenses from './components/Expenses';
 import Settings from './components/Settings';
+import LandingPage from './components/LandingPage';
 import './App.css';
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
             <Route path="/chores" element={<Layout><Chores /></Layout>} />

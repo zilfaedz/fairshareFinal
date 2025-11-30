@@ -6,17 +6,14 @@ export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }) => {
     // Initialize state with empty arrays (transient state)
-    const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('user');
-        return savedUser ? JSON.parse(savedUser) : {
-            fullName: 'John Doe',
-            email: 'user@email.com',
-            dateOfBirth: '2000-01-01',
-            gender: 'Male',
-            username: 'username',
-            password: 'password123',
-            profilePicture: null
-        };
+    const [user, setUser] = useState({
+        name: 'John Doe',
+        email: 'user@email.com',
+        dateOfBirth: '2000-01-01',
+        gender: 'Male',
+        username: 'username',
+        password: 'password123',
+        profilePicture: null
     });
     const [chores, setChores] = useState([]);
     const [expenses, setExpenses] = useState([]);
@@ -61,38 +58,8 @@ export const AppDataProvider = ({ children }) => {
         setChores(chores.filter(chore => chore.id !== id));
     };
 
-    const updateUser = async (updatedUser) => {
-        try {
-            // If user has no ID (e.g. default mock user), just update local state
-            if (!user.id) {
-                const newUser = { ...user, ...updatedUser };
-                setUser(newUser);
-                localStorage.setItem('user', JSON.stringify(newUser));
-                return;
-            }
-
-            const response = await fetch(`http://localhost:8080/api/users/${user.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedUser),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update user');
-            }
-
-            const data = await response.json();
-            setUser(data);
-            localStorage.setItem('user', JSON.stringify(data));
-        } catch (error) {
-            console.error('Error updating user:', error);
-            // Fallback to local update if API fails (optional, but good for UX if backend is down)
-            const newUser = { ...user, ...updatedUser };
-            setUser(newUser);
-            localStorage.setItem('user', JSON.stringify(newUser));
-        }
+    const updateUser = (updatedUser) => {
+        setUser({ ...user, ...updatedUser });
     };
 
     // Group Management Functions
@@ -101,7 +68,7 @@ export const AppDataProvider = ({ children }) => {
             id: Date.now(),
             name: groupName,
             code: `GRP${Math.floor(Math.random() * 1000)}`,
-            members: [{ id: Date.now(), name: user.fullName }]
+            members: [{ id: Date.now(), name: user.name }]
         };
         setGroups([...groups, newGroup]);
     };
@@ -143,6 +110,16 @@ export const AppDataProvider = ({ children }) => {
         }));
     };
 
+    const [toastMessage, setToastMessage] = useState(null);
+
+    const showToast = (message) => {
+        setToastMessage(message);
+    };
+
+    const hideToast = () => {
+        setToastMessage(null);
+    };
+
     return (
         <AppDataContext.Provider value={{
             user,
@@ -150,6 +127,9 @@ export const AppDataProvider = ({ children }) => {
             expenses,
             groups,
             budget,
+            toastMessage,
+            showToast,
+            hideToast,
             updateUser,
             updateBudget,
             addChore,

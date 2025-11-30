@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { loginUser } from '../api/users';
-import { useAppData } from '../context/AppDataContext';
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { updateUser } = useAppData();
 
   const validate = () => {
     const newErrors = {};
@@ -22,23 +18,16 @@ const Login = () => {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
-    try {
-      const user = await loginUser({ email, password });
-      updateUser(user);
-      console.log('Login successful');
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Login failed:', error);
-      setErrors({ submit: 'Invalid email or password' });
-    }
+    // Handle login logic here
+    console.log('Login:', { email, password });
+    navigate('/dashboard');
   };
 
   return (
@@ -77,7 +66,6 @@ const Login = () => {
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
           <button type="submit" className="auth-button">Login</button>
-          {errors.submit && <div className="error-message" style={{ marginTop: '10px', textAlign: 'center' }}>{errors.submit}</div>}
         </form>
         <p className="auth-footer">
           Don't have an account? <Link to="/register">Register here</Link>
