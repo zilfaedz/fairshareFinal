@@ -4,7 +4,7 @@ import { useAppData } from '../context/AppDataContext';
 const UserProfile = () => {
     const { user, updateUser } = useAppData();
     const [formData, setFormData] = useState({
-        name: '',
+        fullName: '',
         email: ''
     });
     const [isEditing, setIsEditing] = useState(false);
@@ -12,7 +12,7 @@ const UserProfile = () => {
     useEffect(() => {
         if (user) {
             setFormData({
-                name: user.name,
+                fullName: user.fullName,
                 email: user.email
             });
         }
@@ -48,7 +48,7 @@ const UserProfile = () => {
                     <div className="profile-avatar-large"></div>
                     {!isEditing ? (
                         <div className="profile-info-display">
-                            <h2>{user.name}</h2>
+                            <h2>{user.fullName}</h2>
                             <p>{user.email}</p>
                         </div>
                     ) : (
@@ -58,8 +58,8 @@ const UserProfile = () => {
                                     <label>Name</label>
                                     <input
                                         type="text"
-                                        name="name"
-                                        value={formData.name}
+                                        name="fullName"
+                                        value={formData.fullName}
                                         onChange={handleInputChange}
                                         required
                                     />
@@ -81,7 +81,7 @@ const UserProfile = () => {
                                         className="action-button cancel"
                                         onClick={() => {
                                             setIsEditing(false);
-                                            setFormData({ name: user.name, email: user.email });
+                                            setFormData({ fullName: user.fullName, email: user.email });
                                         }}
                                     >
                                         Cancel

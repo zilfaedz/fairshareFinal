@@ -33,7 +33,7 @@ const Dashboard = () => {
         <div className="dashboard-container">
             <div className="welcome-banner">
                 <div className="welcome-text">
-                    <h1>Hello, <strong>{user.name}!</strong></h1>
+                    <h1>Hello, <strong>{user.fullName}!</strong></h1>
                     <p>You're holding up your end of the bargain. Check your Chore Queue to keep the balance.</p>
                 </div>
                 <div className="welcome-circle"></div>

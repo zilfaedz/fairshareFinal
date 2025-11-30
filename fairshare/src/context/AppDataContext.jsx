@@ -5,22 +5,94 @@ const AppDataContext = createContext();
 export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }) => {
-    // Initialize state with empty arrays (transient state)
-    const [user, setUser] = useState({
-        name: 'John Doe',
-        email: 'user@email.com',
-        dateOfBirth: '2000-01-01',
-        gender: 'Male',
-        username: 'username',
-        password: 'password123',
-        profilePicture: null
+    // Initialize user from localStorage if available
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
     });
+
     const [chores, setChores] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [groups, setGroups] = useState([]);
     const [budget, setBudget] = useState(0);
+    const [toastMessage, setToastMessage] = useState(null);
 
-    // No persistence (localStorage removed)
+    // Persist user to localStorage whenever it changes
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('user');
+        }
+    }, [user]);
+
+    const login = async (email, password) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data);
+                return { success: true };
+            } else {
+                const errorText = await response.text();
+                return {
+                    success: false,
+                    message: errorText || "Login failed. Please check your credentials."
+                };
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
+            return {
+                success: false,
+                message: "Network error. Please try again."
+            };
+        }
+    };
+
+    const register = async (fullName, email, password) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fullName, email, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data); // Automatically log in after registration
+                return { success: true };
+            } else {
+                const errorText = await response.text();
+                return {
+                    success: false,
+                    message: errorText || "Registration failed. Please try again."
+                };
+            }
+        } catch (error) {
+            console.error("Registration failed:", error);
+            return {
+                success: false,
+                message: "Network error. Please try again."
+            };
+        }
+    };
+
+    const logout = () => {
+        setUser(null);
+        setChores([]);
+        setExpenses([]);
+        setGroups([]);
+        // Clear any other user-specific state here
+    };
 
     const updateBudget = (newBudget) => {
         setBudget(newBudget);
@@ -68,7 +140,7 @@ export const AppDataProvider = ({ children }) => {
             id: Date.now(),
             name: groupName,
             code: `GRP${Math.floor(Math.random() * 1000)}`,
-            members: [{ id: Date.now(), name: user.name }]
+            members: [{ id: Date.now(), name: user.fullName }]
         };
         setGroups([...groups, newGroup]);
     };
@@ -110,8 +182,6 @@ export const AppDataProvider = ({ children }) => {
         }));
     };
 
-    const [toastMessage, setToastMessage] = useState(null);
-
     const showToast = (message) => {
         setToastMessage(message);
     };
@@ -123,6 +193,9 @@ export const AppDataProvider = ({ children }) => {
     return (
         <AppDataContext.Provider value={{
             user,
+            login,
+            register,
+            logout,
             chores,
             expenses,
             groups,

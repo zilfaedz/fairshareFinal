@@ -308,8 +308,8 @@ const Settings = () => {
                                     <input
                                         type="text"
                                         className="settings-input"
-                                        value={editFormData.name || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                                        value={editFormData.fullName || ''}
+                                        onChange={(e) => setEditFormData({ ...editFormData, fullName: e.target.value })}
                                     />
                                 </div>
                                 <div className="info-row">
@@ -352,7 +352,7 @@ const Settings = () => {
                             <>
                                 <div className="info-row">
                                     <span className="info-label">Name</span>
-                                    <span className="info-value">{user.name}</span>
+                                    <span className="info-value">{user.fullName}</span>
                                 </div>
                                 <div className="info-row">
                                     <span className="info-label">Date of Birth</span>

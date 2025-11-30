@@ -30,10 +30,14 @@ public class UserController {
     @PostMapping("/login")
     public org.springframework.http.ResponseEntity<?> login(@RequestBody User loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail());
-        if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
-            return org.springframework.http.ResponseEntity.ok(user);
+        if (user == null) {
+            return org.springframework.http.ResponseEntity.status(404)
+                    .body("This account doesn’t exist. Please Sign Up first.");
         }
-        return org.springframework.http.ResponseEntity.status(401).body("Invalid credentials");
+        if (!user.getPassword().equals(loginRequest.getPassword())) {
+            return org.springframework.http.ResponseEntity.status(401).body("Invalid credentials");
+        }
+        return org.springframework.http.ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")

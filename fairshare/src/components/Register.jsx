@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppData } from '../context/AppDataContext';
 
 const Register = () => {
     const [fullName, setFullName] = useState('');
@@ -7,6 +8,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const { register } = useAppData();
     const navigate = useNavigate();
 
     const validate = () => {
@@ -28,16 +30,20 @@ const Register = () => {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
-        // Handle registration logic here
-        console.log('Register:', { fullName, email, password });
-        navigate('/dashboard');
+
+        const result = await register(fullName, email, password);
+        if (result.success) {
+            navigate('/dashboard');
+        } else {
+            setErrors({ form: result.message });
+        }
     };
 
     return (
@@ -48,6 +54,7 @@ const Register = () => {
             </div>
             <div className="auth-card">
                 <h2 className="auth-title">Register</h2>
+                {errors.form && <div className="error-message global-error">{errors.form}</div>}
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="form-group">
                         <label htmlFor="fullName">Full Name</label>
@@ -58,6 +65,7 @@ const Register = () => {
                             onChange={(e) => {
                                 setFullName(e.target.value);
                                 if (errors.fullName) setErrors({ ...errors, fullName: '' });
+                                if (errors.form) setErrors({ ...errors, form: '' });
                             }}
                         />
                         {errors.fullName && <span className="error-message">{errors.fullName}</span>}
@@ -71,6 +79,7 @@ const Register = () => {
                             onChange={(e) => {
                                 setEmail(e.target.value);
                                 if (errors.email) setErrors({ ...errors, email: '' });
+                                if (errors.form) setErrors({ ...errors, form: '' });
                             }}
                         />
                         {errors.email && <span className="error-message">{errors.email}</span>}
@@ -84,6 +93,7 @@ const Register = () => {
                             onChange={(e) => {
                                 setPassword(e.target.value);
                                 if (errors.password) setErrors({ ...errors, password: '' });
+                                if (errors.form) setErrors({ ...errors, form: '' });
                             }}
                         />
                         {errors.password && <span className="error-message">{errors.password}</span>}
@@ -97,6 +107,7 @@ const Register = () => {
                             onChange={(e) => {
                                 setConfirmPassword(e.target.value);
                                 if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: '' });
+                                if (errors.form) setErrors({ ...errors, form: '' });
                             }}
                         />
                         {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
@@ -104,7 +115,7 @@ const Register = () => {
                     <button type="submit" className="auth-button">Register</button>
                 </form>
                 <p className="auth-footer">
-                    Already have an account? <Link to="/">Login here</Link>
+                    Already have an account? <Link to="/Login">Login here</Link>
                 </p>
             </div>
         </div>

@@ -7,7 +7,7 @@ import Toast from './Toast';
 const Layout = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user, groups, toastMessage, showToast, hideToast } = useAppData();
+    const { user, groups, toastMessage, showToast, hideToast, logout } = useAppData();
 
     const isActive = (path) => location.pathname === path;
     const hasGroup = groups && groups.length > 0;
@@ -20,7 +20,8 @@ const Layout = ({ children }) => {
     }, [hasGroup, location.pathname, navigate]);
 
     const handleLogout = () => {
-        navigate('/');
+        logout();
+        navigate('/login');
     };
 
     const handleRestrictedClick = (e, path) => {
@@ -82,7 +83,7 @@ const Layout = ({ children }) => {
                             ) : (
                                 <div className="user-avatar"></div>
                             )}
-                            <span className="user-name">{user.name}</span>
+                            <span className="user-name">{user.fullName}</span>
                         </Link>
                     </div>
                 </header>

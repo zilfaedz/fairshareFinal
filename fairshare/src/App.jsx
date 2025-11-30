@@ -9,6 +9,7 @@ import Chores from './components/Chores';
 import Expenses from './components/Expenses';
 import Settings from './components/Settings';
 import LandingPage from './components/LandingPage';
+import RequireAuth from './components/RequireAuth';
 import './App.css';
 
 function App() {
@@ -46,10 +47,26 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-            <Route path="/chores" element={<Layout><Chores /></Layout>} />
-            <Route path="/expenses" element={<Layout><Expenses /></Layout>} />
-            <Route path="/settings" element={<Layout><Settings /></Layout>} />
+            <Route path="/dashboard" element={
+              <RequireAuth>
+                <Layout><Dashboard /></Layout>
+              </RequireAuth>
+            } />
+            <Route path="/chores" element={
+              <RequireAuth>
+                <Layout><Chores /></Layout>
+              </RequireAuth>
+            } />
+            <Route path="/expenses" element={
+              <RequireAuth>
+                <Layout><Expenses /></Layout>
+              </RequireAuth>
+            } />
+            <Route path="/settings" element={
+              <RequireAuth>
+                <Layout><Settings /></Layout>
+              </RequireAuth>
+            } />
           </Routes>
         </div>
       </Router>
