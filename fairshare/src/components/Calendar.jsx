@@ -43,31 +43,49 @@ const Calendar = () => {
             const isToday = dateStr === new Date().toISOString().split('T')[0];
 
             // Filter events for this day
-            const dayChores = chores.filter(chore => chore.date === dateStr);
+            const dayChores = chores.filter(chore => {
+                const choreDate = (chore.dueDate || '').split(' ')[0];
+                return choreDate === dateStr;
+            });
             const dayExpenses = expenses.filter(expense => expense.date === dateStr);
 
+            // Determine background style
+            let backgroundStyle = {};
+            const hasChores = dayChores.length > 0;
+            const hasExpenses = dayExpenses.length > 0;
+
+            if (hasChores && hasExpenses) {
+                backgroundStyle = { background: 'linear-gradient(135deg, #F0F7FF 0%, #FFE9CC' };
+            } else if (hasChores) {
+                backgroundStyle = { backgroundColor: '#FFE9CC' }; // Light Orange
+            } else if (hasExpenses) {
+                backgroundStyle = { backgroundColor: '#F0F7FF' }; // Light Blue
+            }
+
             days.push(
-                <div key={day} className={`calendar-day ${isToday ? 'today' : ''}`}>
+                <div key={day} className={`calendar-day ${isToday ? 'today' : ''}`} style={backgroundStyle}>
                     <span className="day-number">{day}</span>
                     <div className="calendar-events">
                         {dayChores.map(chore => {
                             let statusClass = 'chore';
+                            const choreDate = (chore.dueDate || '').split(' ')[0];
                             if (chore.status === 'completed') statusClass += ' completed';
-                            else if (chore.date < new Date().toISOString().split('T')[0]) statusClass += ' overdue';
+                            else if (choreDate < new Date().toISOString().split('T')[0]) statusClass += ' overdue';
 
                             return (
                                 <div key={`chore-${chore.id}`} className={`event-item ${statusClass}`} title={chore.title}>
                                     {chore.status === 'completed' ? <CheckCircle size={10} /> :
-                                        chore.date < new Date().toISOString().split('T')[0] ? <AlertCircle size={10} /> :
+                                        choreDate < new Date().toISOString().split('T')[0] ? <AlertCircle size={10} /> :
                                             <Clock size={10} />}
                                     {chore.title}
                                 </div>
                             );
                         })}
                         {dayExpenses.map(expense => (
-                            <div key={`expense-${expense.id}`} className="event-item expense" title={`${expense.description}: $${expense.amount}`}>
+                            <div key={`expense-${expense.id}`} className="event-item expense" title={`${expense.title}: ₱${expense.amount}`}>
                                 <DollarSign size={10} />
-                                {expense.description}
+                                <span className="expense-title">{expense.title}</span>
+                                <span className="expense-amount"> - ₱{expense.amount}</span>
                             </div>
                         ))}
                     </div>

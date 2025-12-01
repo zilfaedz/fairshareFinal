@@ -123,13 +123,13 @@ const Settings = () => {
         }
     };
 
-    const handleAddMember = (groupId) => {
-        if (newMemberName.trim()) {
-            addGroupMember(groupId, newMemberName);
-            setNewMemberName('');
-            setActiveGroupId(null);
-        }
-    };
+    // const handleAddMember = (groupId) => {
+    //     if (newMemberName.trim()) {
+    //         addGroupMember(groupId, newMemberName);
+    //         setNewMemberName('');
+    //         setActiveGroupId(null);
+    //     }
+    // };
 
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
@@ -230,7 +230,7 @@ const Settings = () => {
                                     ))}
                                 </div>
 
-                                <div className="add-member-section">
+                                {/* <div className="add-member-section">
                                     <p className="card-description">Add Member</p>
                                     <div className="settings-form-row">
                                         <input
@@ -250,7 +250,7 @@ const Settings = () => {
                                             + Add
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div className="group-footer-actions">
                                     <button className="settings-button white" onClick={() => alert('Save functionality to be implemented')}>Save</button>

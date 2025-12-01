@@ -108,9 +108,9 @@
 }
 
 .event-item.chore {
-    background-color: #e3f2fd;
-    color: #1565c0;
-    border-left: 3px solid #1565c0;
+    background-color: #fff3e0;
+    color: #ef6c00;
+    border-left: 3px solid #ef6c00;
 }
 
 .event-item.chore.completed {
@@ -127,9 +127,9 @@
 }
 
 .event-item.expense {
-    background-color: #fff3e0;
-    color: #ef6c00;
-    border-left: 3px solid #ef6c00;
+    background-color: #e3f2fd;
+    color: #1565c0;
+    border-left: 3px solid #1565c0;
 }
 
 .legend {
