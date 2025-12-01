@@ -2,6 +2,10 @@ package com.example.mzp.fairshare1.models;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,6 +25,16 @@ public class User {
 
     @Column(columnDefinition = "LONGTEXT")
     private String profilePicture;
+
+    @Column(name = "birthdate")
+    private String birthdate;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @ManyToMany(mappedBy = "members")
+    @JsonIgnore
+    private Set<Group> groups = new HashSet<>();
 
     public User() {
     }
@@ -71,6 +85,30 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -78,6 +116,8 @@ public class User {
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", birthdate='" + birthdate + '\'' +
+                ", gender='" + gender + '\'' +
                 '}';
     }
 }

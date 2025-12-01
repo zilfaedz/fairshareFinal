@@ -1,0 +1,154 @@
+.calendar-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.calendar-header h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 0;
+}
+
+.month-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: #e0e0e0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.calendar-day-header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    color: #666;
+}
+
+.calendar-day {
+    background-color: white;
+    min-height: 120px;
+    padding: 0.5rem;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.calendar-day:hover {
+    background-color: #fafafa;
+}
+
+.calendar-day.other-month {
+    background-color: #f9f9f9;
+    color: #ccc;
+}
+
+.calendar-day.today {
+    background-color: #fff9e6;
+}
+
+.day-number {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 0.9rem;
+}
+
+.today .day-number {
+    color: #d97706;
+}
+
+.calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.event-item {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.event-item.chore {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    border-left: 3px solid #1565c0;
+}
+
+.event-item.chore.completed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-left-color: #2e7d32;
+    text-decoration: line-through;
+}
+
+.event-item.chore.overdue {
+    background-color: #ffebee;
+    color: #c62828;
+    border-left-color: #c62828;
+}
+
+.event-item.expense {
+    background-color: #fff3e0;
+    color: #ef6c00;
+    border-left: 3px solid #ef6c00;
+}
+
+.legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}

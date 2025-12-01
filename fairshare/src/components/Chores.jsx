@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAppData } from '../context/AppDataContext';
 import { Plus, Calendar, Clock, CheckCircle, Trash2, Edit2, X } from 'lucide-react';
 
 const Chores = () => {
-    const { chores, addChore, updateChore, deleteChore, toggleChoreStatus, groups } = useAppData();
+    const { chores, addChore, updateChore, deleteChore, toggleChoreStatus, currentGroup } = useAppData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedChore, setSelectedChore] = useState(null);
     const [newChore, setNewChore] = useState({
-        task: '',
-        area: '',
-        assignee: '',
+        title: '',
+        description: '',
+        assignedToId: '',
         date: new Date().toISOString().split('T')[0],
         time: '12:00'
     });
@@ -23,9 +24,9 @@ const Chores = () => {
     const handleAddClick = () => {
         setSelectedChore(null);
         setNewChore({
-            task: '',
-            area: '',
-            assignee: '',
+            title: '',
+            description: '',
+            assignedToId: '',
             date: new Date().toISOString().split('T')[0],
             time: '12:00'
         });
@@ -35,7 +36,14 @@ const Chores = () => {
 
     const handleChoreClick = (chore) => {
         setSelectedChore(chore);
-        setNewChore(chore);
+        // Parse dueDate back to date and time if possible, or just set date
+        const [date, time] = (chore.dueDate || '').split(' ');
+        setNewChore({
+            ...chore,
+            date: date || new Date().toISOString().split('T')[0],
+            time: time || '12:00',
+            assignedToId: chore.assignedTo ? chore.assignedTo.id : ''
+        });
         setIsEditMode(false);
         setIsModalOpen(true);
     };
@@ -62,25 +70,41 @@ const Chores = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const chorePayload = {
+            ...newChore,
+            dueDate: `${newChore.date} ${newChore.time}`,
+            status: newChore.status || 'pending'
+        };
+
         if (selectedChore) {
-            updateChore({ ...newChore, id: selectedChore.id });
+            updateChore({ ...chorePayload, id: selectedChore.id });
         } else {
-            addChore(newChore);
+            addChore(chorePayload);
         }
         setIsModalOpen(false);
     };
 
     const [activeTab, setActiveTab] = useState('upcoming');
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const filter = params.get('filter');
+        if (filter && ['upcoming', 'completed', 'overdue'].includes(filter)) {
+            setActiveTab(filter);
+        }
+    }, [location.search]);
 
     const filterChores = (chores) => {
         const today = new Date().toISOString().split('T')[0];
         return chores.filter(chore => {
+            const choreDate = (chore.dueDate || '').split(' ')[0];
             if (activeTab === 'upcoming') {
-                return chore.date >= today && chore.status !== 'completed';
+                return choreDate >= today && chore.status !== 'completed';
             } else if (activeTab === 'completed') {
                 return chore.status === 'completed';
             } else if (activeTab === 'overdue') {
-                return chore.date < today && chore.status !== 'completed';
+                return choreDate < today && chore.status !== 'completed';
             }
             return true;
         });
@@ -89,7 +113,7 @@ const Chores = () => {
     const filteredChores = filterChores(chores);
 
     const groupedChores = filteredChores.reduce((acc, chore) => {
-        const date = chore.date;
+        const date = (chore.dueDate || '').split(' ')[0];
         if (!acc[date]) acc[date] = [];
         acc[date].push(chore);
         return acc;
@@ -105,10 +129,7 @@ const Chores = () => {
         return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
     };
 
-    // Get all unique members from all groups
-    const roommates = Array.from(new Set(
-        groups.flatMap(group => group.members.map(member => member.name))
-    )).sort();
+    const groupMembers = currentGroup ? currentGroup.members : [];
 
     return (
         <div className="page-container">
@@ -152,10 +173,10 @@ const Chores = () => {
                             {groupedChores[date].map(chore => (
                                 <div key={chore.id} className={`chore-item ${chore.status}`} onClick={() => handleChoreClick(chore)}>
                                     <div className="chore-info">
-                                        <span className="chore-name">{chore.task}</span>
-                                        {chore.area && <span className="chore-area">({chore.area})</span>}
+                                        <span className="chore-name">{chore.title}</span>
+                                        {chore.description && <span className="chore-area">({chore.description})</span>}
                                     </div>
-                                    <span className="chore-time">{chore.time}</span>
+                                    <span className="chore-time">{(chore.dueDate || '').split(' ')[1] || ''}</span>
                                 </div>
                             ))}
                         </div>
@@ -175,23 +196,19 @@ const Chores = () => {
                             <div className="chore-details">
                                 <div className="detail-row">
                                     <span className="label">Task:</span>
-                                    <span className="value">{selectedChore.task}</span>
+                                    <span className="value">{selectedChore.title}</span>
                                 </div>
                                 <div className="detail-row">
-                                    <span className="label">Area:</span>
-                                    <span className="value">{selectedChore.area || '-'}</span>
+                                    <span className="label">Description:</span>
+                                    <span className="value">{selectedChore.description || '-'}</span>
                                 </div>
                                 <div className="detail-row">
                                     <span className="label">Assignee:</span>
-                                    <span className="value">{selectedChore.assignee || '-'}</span>
+                                    <span className="value">{selectedChore.assignedTo ? (selectedChore.assignedTo.fullName || selectedChore.assignedTo.name) : '-'}</span>
                                 </div>
                                 <div className="detail-row">
-                                    <span className="label">Date:</span>
-                                    <span className="value">{new Date(selectedChore.date).toLocaleDateString()}</span>
-                                </div>
-                                <div className="detail-row">
-                                    <span className="label">Time:</span>
-                                    <span className="value">{selectedChore.time || '-'}</span>
+                                    <span className="label">Due Date:</span>
+                                    <span className="value">{selectedChore.dueDate}</span>
                                 </div>
                                 <div className="modal-actions">
                                     {selectedChore.status !== 'completed' && (
@@ -204,35 +221,35 @@ const Chores = () => {
                         ) : (
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
-                                    <label>Task</label>
+                                    <label>Task Title</label>
                                     <input
                                         type="text"
-                                        name="task"
-                                        value={newChore.task}
+                                        name="title"
+                                        value={newChore.title}
                                         onChange={handleInputChange}
                                         required
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Area</label>
+                                    <label>Description</label>
                                     <input
                                         type="text"
-                                        name="area"
-                                        value={newChore.area}
+                                        name="description"
+                                        value={newChore.description}
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label>Assigned Housemate</label>
                                     <select
-                                        name="assignee"
-                                        value={newChore.assignee}
+                                        name="assignedToId"
+                                        value={newChore.assignedToId}
                                         onChange={handleInputChange}
                                         className="form-select"
                                     >
                                         <option value="">Select a housemate</option>
-                                        {roommates.map(name => (
-                                            <option key={name} value={name}>{name}</option>
+                                        {groupMembers.map(member => (
+                                            <option key={member.id} value={member.id}>{member.fullName || member.name}</option>
                                         ))}
                                     </select>
                                 </div>

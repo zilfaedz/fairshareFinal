@@ -7,6 +7,7 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Chores from './components/Chores';
 import Expenses from './components/Expenses';
+import Calendar from './components/Calendar';
 import Settings from './components/Settings';
 import LandingPage from './components/LandingPage';
 import RequireAuth from './components/RequireAuth';
@@ -60,6 +61,11 @@ function App() {
             <Route path="/expenses" element={
               <RequireAuth>
                 <Layout><Expenses /></Layout>
+              </RequireAuth>
+            } />
+            <Route path="/calendar" element={
+              <RequireAuth>
+                <Layout><Calendar /></Layout>
               </RequireAuth>
             } />
             <Route path="/settings" element={

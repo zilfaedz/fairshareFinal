@@ -3,7 +3,7 @@ import { useAppData } from '../context/AppDataContext';
 import { Plus, DollarSign, Calendar, Check, X, FileText } from 'lucide-react';
 
 const Expenses = () => {
-    const { expenses, addExpense, markExpensePaid, budget, updateBudget, groups } = useAppData();
+    const { expenses, addExpense, markExpensePaid, budget, updateBudget, currentGroup } = useAppData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
@@ -18,9 +18,7 @@ const Expenses = () => {
     });
 
     // Calculate unique members
-    const roommates = Array.from(new Set(
-        groups.flatMap(group => group.members.map(member => member.name))
-    ));
+    const roommates = currentGroup ? currentGroup.members : [];
     const memberCount = roommates.length > 0 ? roommates.length : 1;
 
     const handleInputChange = (e) => {

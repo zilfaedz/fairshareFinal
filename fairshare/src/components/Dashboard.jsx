@@ -79,15 +79,15 @@ const Dashboard = () => {
             </div>
 
             <div className="summary-grid">
-                <div className="summary-card">
+                <div className="summary-card interactive-card" onClick={() => navigate('/chores?filter=completed')}>
                     <h4>Tasks Completed</h4>
                     <div className="summary-value-box">{tasksCompleted}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card interactive-card" onClick={() => navigate('/chores?filter=overdue')}>
                     <h4>Tasks Overdue</h4>
                     <div className="summary-value-box">{tasksOverdue}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card interactive-card" onClick={() => navigate('/calendar')}>
                     <h4>Date</h4>
                     <div className="summary-value-box date-box">
                         {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}

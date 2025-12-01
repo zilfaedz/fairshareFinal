@@ -45,12 +45,25 @@ public class UserController {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        user.setFullName(userDetails.getFullName());
-        user.setEmail(userDetails.getEmail());
-        if (userDetails.getProfilePicture() != null) {
+        System.out.println("Updating user: " + id);
+        System.out.println("Received details: " + userDetails);
+
+        if (userDetails.getFullName() != null)
+            user.setFullName(userDetails.getFullName());
+        if (userDetails.getEmail() != null)
+            user.setEmail(userDetails.getEmail());
+        if (userDetails.getProfilePicture() != null)
             user.setProfilePicture(userDetails.getProfilePicture());
+        if (userDetails.getBirthdate() != null)
+            user.setBirthdate(userDetails.getBirthdate());
+        if (userDetails.getGender() != null)
+            user.setGender(userDetails.getGender());
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+            user.setPassword(userDetails.getPassword());
         }
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        System.out.println("Saved user: " + savedUser);
+        return savedUser;
     }
 }

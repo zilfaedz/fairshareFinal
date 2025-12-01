@@ -27,11 +27,12 @@ const Settings = () => {
 
     const [isEditingAccountInfo, setIsEditingAccountInfo] = useState(false);
     const [accountEditFormData, setAccountEditFormData] = useState({
-        username: '',
         newPassword: '',
         currentPassword: ''
     });
     const [passwordError, setPasswordError] = useState('');
+
+    const { showToast } = useAppData();
 
     const handleEditBasicInfo = () => {
         setEditFormData({ ...user });
@@ -68,7 +69,6 @@ const Settings = () => {
 
     const handleEditAccountInfo = () => {
         setAccountEditFormData({
-            username: user.username,
             newPassword: '',
             currentPassword: ''
         });
@@ -89,10 +89,8 @@ const Settings = () => {
             }
         }
 
-        // Update user with new username and/or password
-        const updatedData = {
-            username: accountEditFormData.username
-        };
+        // Update user with new password
+        const updatedData = {};
 
         // Only update password if a new one was provided
         if (accountEditFormData.newPassword) {
@@ -131,6 +129,14 @@ const Settings = () => {
             setNewMemberName('');
             setActiveGroupId(null);
         }
+    };
+
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast("Code copied to clipboard!");
+        }, (err) => {
+            console.error('Could not copy text: ', err);
+        });
     };
 
     return (
@@ -177,7 +183,7 @@ const Settings = () => {
                             </div>
 
                             <div className="settings-card pink-bg">
-                                <h3>Create New Group</h3>
+                                <h3 style={{ marginTop: '20px' }}>Create New Group</h3>
                                 <p className="card-description">Group Name</p>
                                 <form onSubmit={handleCreateGroup} className="settings-form-row">
                                     <input
@@ -200,18 +206,20 @@ const Settings = () => {
                                 <div className="group-header">
                                     <div>
                                         <h3>{group.name}</h3>
-                                        <p className="member-count">{group.members.length} members</p>
+                                        <p className="member-count">{group.members ? group.members.length : 0} members</p>
                                     </div>
                                     <div className="group-actions-top">
                                         <span className="room-code">{group.code}</span>
-                                        <button className="icon-button copy-button"><Copy size={16} /></button>
+                                        <button className="icon-button copy-button" onClick={() => copyToClipboard(group.code)}>
+                                            <Copy size={16} />
+                                        </button>
                                     </div>
                                 </div>
 
                                 <div className="members-list">
-                                    {group.members.map((member) => (
+                                    {group.members && group.members.map((member) => (
                                         <div key={member.id} className="member-item">
-                                            <span>{member.name}</span>
+                                            <span>{member.fullName || member.name}</span>
                                             <button
                                                 className="icon-button delete-button"
                                                 onClick={() => removeGroupMember(group.id, member.id)}
@@ -317,8 +325,8 @@ const Settings = () => {
                                     <input
                                         type="date"
                                         className="settings-input"
-                                        value={editFormData.dateOfBirth || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, dateOfBirth: e.target.value })}
+                                        value={editFormData.birthdate || ''}
+                                        onChange={(e) => setEditFormData({ ...editFormData, birthdate: e.target.value })}
                                     />
                                 </div>
                                 <div className="info-row">
@@ -328,6 +336,7 @@ const Settings = () => {
                                         value={editFormData.gender || ''}
                                         onChange={(e) => setEditFormData({ ...editFormData, gender: e.target.value })}
                                     >
+                                        <option value="" disabled>Select Gender</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                         <option value="Other">Other</option>
@@ -356,11 +365,11 @@ const Settings = () => {
                                 </div>
                                 <div className="info-row">
                                     <span className="info-label">Date of Birth</span>
-                                    <span className="info-value">{new Date(user.dateOfBirth).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                                    <span className="info-value">{user.birthdate ? new Date(user.birthdate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</span>
                                 </div>
                                 <div className="info-row">
                                     <span className="info-label">Gender</span>
-                                    <span className="info-value">{user.gender}</span>
+                                    <span className="info-value">{user.gender || 'Not set'}</span>
                                 </div>
                                 <div className="info-row">
                                     <span className="info-label">Email</span>
@@ -377,15 +386,6 @@ const Settings = () => {
                         <h3>Account info</h3>
                         {isEditingAccountInfo ? (
                             <div className="edit-form-grid">
-                                <div className="info-row">
-                                    <span className="info-label">Username</span>
-                                    <input
-                                        type="text"
-                                        className="settings-input"
-                                        value={accountEditFormData.username || ''}
-                                        onChange={(e) => setAccountEditFormData({ ...accountEditFormData, username: e.target.value })}
-                                    />
-                                </div>
                                 <div className="info-row">
                                     <span className="info-label">Current Password</span>
                                     <input
@@ -425,10 +425,6 @@ const Settings = () => {
                             </div>
                         ) : (
                             <>
-                                <div className="info-row">
-                                    <span className="info-label">Username</span>
-                                    <span className="info-value">{user.username}</span>
-                                </div>
                                 <div className="info-row">
                                     <span className="info-label">Password</span>
                                     <span className="info-value">••••••••••</span>
