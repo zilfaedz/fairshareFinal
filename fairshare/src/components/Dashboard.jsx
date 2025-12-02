@@ -9,7 +9,10 @@ const Dashboard = () => {
 
     // Calculate stats
     const today = new Date().toISOString().split('T')[0];
-    const tasksDueToday = chores.filter(chore => chore.date === today && chore.status !== 'completed').length;
+    const tasksDueToday = chores.filter(chore => {
+        const choreDate = (chore.dueDate || '').split(' ')[0];
+        return choreDate === today && chore.status !== 'completed';
+    }).length;
 
     const currentMonth = new Date().getMonth();
     const monthlyExpense = expenses
@@ -19,7 +22,10 @@ const Dashboard = () => {
     const budgetRemaining = budget - monthlyExpense;
 
     const tasksCompleted = chores.filter(chore => chore.status === 'completed').length;
-    const tasksOverdue = chores.filter(chore => chore.date < today && chore.status !== 'completed').length;
+    const tasksOverdue = chores.filter(chore => {
+        const choreDate = (chore.dueDate || '').split(' ')[0];
+        return choreDate < today && chore.status !== 'completed';
+    }).length;
 
     const handleRestrictedNavigate = (path) => {
         if (groups && groups.length > 0) {
@@ -36,7 +42,6 @@ const Dashboard = () => {
                     <h1>Hello, <strong>{user.fullName}!</strong></h1>
                     <p>You're holding up your end of the bargain. Check your Chore Queue to keep the balance.</p>
                 </div>
-                <div className="welcome-circle"></div>
             </div>
 
             <div className="dashboard-grid">

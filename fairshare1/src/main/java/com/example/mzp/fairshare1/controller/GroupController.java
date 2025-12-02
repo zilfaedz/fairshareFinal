@@ -71,6 +71,18 @@ public class GroupController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         groupService.removeMember(groupId, user);
+
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{groupId}")
+    public ResponseEntity<?> updateGroup(@PathVariable Long groupId, @RequestBody Map<String, Object> payload) {
+        String name = (String) payload.get("name");
+        try {
+            Group group = groupService.updateGroup(groupId, name);
+            return ResponseEntity.ok(group);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

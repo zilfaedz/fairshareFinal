@@ -158,6 +158,16 @@ export const AppDataProvider = ({ children }) => {
             return;
         }
         try {
+            // Validate required fields
+            if (!chore.title || !chore.title.trim()) {
+                showToast("Please enter a chore title.");
+                return;
+            }
+            if (!chore.date) {
+                showToast("Please select a due date.");
+                return;
+            }
+            
             const response = await fetch(`http://localhost:8080/api/chores/group/${currentGroup.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -167,6 +177,10 @@ export const AppDataProvider = ({ children }) => {
                 const newChore = await response.json();
                 setChores([...chores, newChore]);
                 showToast("Chore added successfully!");
+            } else {
+                const errorText = await response.text();
+                console.error('Add chore failed:', errorText);
+                showToast(errorText || "Failed to add chore.");
             }
         } catch (error) {
             console.error("Failed to add chore:", error);
@@ -199,16 +213,37 @@ export const AppDataProvider = ({ children }) => {
             showToast("Please join a group first.");
             return;
         }
+        if (!user) {
+            showToast("Please log in to add an expense.");
+            return;
+        }
         try {
+            // Filter out fields that backend doesn't need
+            const { split, ...cleanedExpense } = expense;
+            
+            // Validate required fields
+            if (!cleanedExpense.title || !cleanedExpense.title.trim()) {
+                showToast("Please enter an expense title.");
+                return;
+            }
+            if (!cleanedExpense.amount || isNaN(parseFloat(cleanedExpense.amount)) || parseFloat(cleanedExpense.amount) <= 0) {
+                showToast("Please enter a valid amount greater than 0.");
+                return;
+            }
+            
             const response = await fetch(`http://localhost:8080/api/expenses/group/${currentGroup.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...expense, paidById: user.id }),
+                body: JSON.stringify({ ...cleanedExpense, paidById: user && user.id ? user.id : null }),
             });
             if (response.ok) {
                 const newExpense = await response.json();
                 setExpenses([...expenses, newExpense]);
                 showToast("Expense added successfully!");
+            } else {
+                const errorText = await response.text();
+                console.error('Add expense failed:', errorText);
+                showToast(errorText || "Failed to add expense.");
             }
         } catch (error) {
             console.error("Failed to add expense:", error);
@@ -304,6 +339,32 @@ export const AppDataProvider = ({ children }) => {
         }
     };
 
+    const updateGroup = async (groupId, name) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/groups/${groupId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name }),
+            });
+
+            if (response.ok) {
+                const updatedGroup = await response.json();
+                setGroups(groups.map(g => g.id === groupId ? updatedGroup : g));
+                showToast("Group updated successfully!");
+                return { success: true };
+            } else {
+                showToast("Failed to update group.");
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Update group failed:", error);
+            showToast("Network error.");
+            return { success: false };
+        }
+    };
+
     const joinGroup = async (code) => {
         try {
             const response = await fetch('http://localhost:8080/api/groups/join', {
@@ -330,19 +391,25 @@ export const AppDataProvider = ({ children }) => {
 
     const deleteGroup = async (groupId) => {
         try {
+            console.log('Attempting to delete group:', groupId);
             const response = await fetch(`http://localhost:8080/api/groups/${groupId}`, {
                 method: 'DELETE',
             });
+
+            console.log('Delete response status:', response.status);
+            console.log('Delete response ok:', response.ok);
 
             if (response.ok) {
                 setGroups(groups.filter(g => g.id !== groupId));
                 showToast("Group deleted successfully.");
             } else {
-                showToast("Failed to delete group.");
+                const errorText = await response.text();
+                console.error('Delete failed with error:', errorText);
+                showToast(`Failed to delete group: ${errorText || 'Unknown error'}`);
             }
         } catch (error) {
             console.error("Delete group failed:", error);
-            showToast("Network error.");
+            showToast("Network error: " + error.message);
         }
     };
 
@@ -360,6 +427,13 @@ export const AppDataProvider = ({ children }) => {
 
             if (response.ok) {
                 setGroups(groups.filter(g => g.id !== groupId));
+                // If the user left the currently selected group, clear group-scoped data
+                if (currentGroup && currentGroup.id === groupId) {
+                    setCurrentGroup(null);
+                    setBudget(0);
+                    setExpenses([]);
+                    setChores([]);
+                }
                 showToast("Left group successfully.");
             } else {
                 showToast("Failed to leave group.");
@@ -370,12 +444,7 @@ export const AppDataProvider = ({ children }) => {
         }
     };
 
-    const addGroupMember = (groupId, memberName) => {
-        // This feature (adding by name directly) might not be supported by backend if we require users to exist
-        // For now, we'll keep it as a placeholder or remove it if not needed by the new flow (joining by code)
-        // The user request emphasized "joining or creating", not manual adding by name without user account
-        showToast("Invite members by sharing the group code!");
-    };
+
 
     const removeGroupMember = async (groupId, memberId) => {
         try {
@@ -437,10 +506,10 @@ export const AppDataProvider = ({ children }) => {
             addExpense,
             markExpensePaid,
             createGroup,
+            updateGroup,
             joinGroup,
             deleteGroup,
             leaveGroup,
-            addGroupMember,
             removeGroupMember,
             currentGroup,
             setCurrentGroup

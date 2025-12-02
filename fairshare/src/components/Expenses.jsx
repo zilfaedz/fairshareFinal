@@ -31,6 +31,21 @@ const Expenses = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Client-side validation
+        if (!newExpense.title || !newExpense.title.trim()) {
+            alert("Please enter an expense title.");
+            return;
+        }
+        if (!newExpense.amount || isNaN(parseFloat(newExpense.amount)) || parseFloat(newExpense.amount) <= 0) {
+            alert("Please enter a valid amount greater than 0.");
+            return;
+        }
+        if (!newExpense.date) {
+            alert("Please select a date.");
+            return;
+        }
+        
         addExpense(newExpense);
         setIsModalOpen(false);
         setNewExpense({

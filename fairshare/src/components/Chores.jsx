@@ -70,6 +70,17 @@ const Chores = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Client-side validation
+        if (!newChore.title || !newChore.title.trim()) {
+            alert("Please enter a chore title.");
+            return;
+        }
+        if (!newChore.date) {
+            alert("Please select a due date.");
+            return;
+        }
+        
         const chorePayload = {
             ...newChore,
             dueDate: `${newChore.date} ${newChore.time}`,

@@ -1,25 +1,25 @@
 import React, { useState, useRef } from 'react';
 import { useAppData } from '../context/AppDataContext';
-import { User, Users, LogOut, Trash2, Copy, Plus, Camera, X } from 'lucide-react';
+import { User, Users, LogOut, Trash2, Copy, Camera, X } from 'lucide-react';
 
 const Settings = () => {
     const {
         user,
         updateUser,
+        updateGroup,
         groups,
         createGroup,
         joinGroup,
         deleteGroup,
         leaveGroup,
-        addGroupMember,
+
         removeGroupMember,
     } = useAppData();
 
     const [activeTab, setActiveTab] = useState('account');
     const [joinCode, setJoinCode] = useState('');
     const [newGroupName, setNewGroupName] = useState('');
-    const [newMemberName, setNewMemberName] = useState('');
-    const [activeGroupId, setActiveGroupId] = useState(null);
+
 
     const [isEditingBasicInfo, setIsEditingBasicInfo] = useState(false);
     const [editFormData, setEditFormData] = useState({});
@@ -60,7 +60,7 @@ const Settings = () => {
     };
 
     const handleRemoveProfilePicture = () => {
-        setEditFormData((prev) => ({ ...prev, profilePicture: null }));
+        setEditFormData((prev) => ({ ...prev, profilePicture: "" }));
     };
 
     const triggerFileUpload = () => {
@@ -123,13 +123,7 @@ const Settings = () => {
         }
     };
 
-    // const handleAddMember = (groupId) => {
-    //     if (newMemberName.trim()) {
-    //         addGroupMember(groupId, newMemberName);
-    //         setNewMemberName('');
-    //         setActiveGroupId(null);
-    //     }
-    // };
+
 
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
@@ -137,6 +131,28 @@ const Settings = () => {
         }, (err) => {
             console.error('Could not copy text: ', err);
         });
+    };
+
+    const [editingGroupId, setEditingGroupId] = useState(null);
+    const [editedGroupName, setEditedGroupName] = useState('');
+
+    const handleEditGroup = (group) => {
+        setEditingGroupId(group.id);
+        setEditedGroupName(group.name);
+    };
+
+    const handleSaveGroup = async (groupId) => {
+        if (editedGroupName.trim()) {
+            const result = await updateGroup(groupId, editedGroupName);
+            if (result.success) {
+                setEditingGroupId(null);
+            }
+        }
+    };
+
+    const handleCancelEditGroup = () => {
+        setEditingGroupId(null);
+        setEditedGroupName('');
     };
 
     return (
@@ -204,8 +220,18 @@ const Settings = () => {
                         groups.map((group) => (
                             <div key={group.id} className="settings-card pink-bg group-card">
                                 <div className="group-header">
-                                    <div>
-                                        <h3>{group.name}</h3>
+                                    <div style={{ flex: 1 }}>
+                                        {editingGroupId === group.id ? (
+                                            <input
+                                                type="text"
+                                                value={editedGroupName}
+                                                onChange={(e) => setEditedGroupName(e.target.value)}
+                                                className="settings-input"
+                                                autoFocus
+                                            />
+                                        ) : (
+                                            <h3>{group.name}</h3>
+                                        )}
                                         <p className="member-count">{group.members ? group.members.length : 0} members</p>
                                     </div>
                                     <div className="group-actions-top">
@@ -230,30 +256,16 @@ const Settings = () => {
                                     ))}
                                 </div>
 
-                                {/* <div className="add-member-section">
-                                    <p className="card-description">Add Member</p>
-                                    <div className="settings-form-row">
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Member Name"
-                                            value={activeGroupId === group.id ? newMemberName : ''}
-                                            onChange={(e) => {
-                                                setActiveGroupId(group.id);
-                                                setNewMemberName(e.target.value);
-                                            }}
-                                            className="settings-input"
-                                        />
-                                        <button
-                                            className="settings-button primary"
-                                            onClick={() => handleAddMember(group.id)}
-                                        >
-                                            + Add
-                                        </button>
-                                    </div>
-                                </div> */}
 
                                 <div className="group-footer-actions">
-                                    <button className="settings-button white" onClick={() => alert('Save functionality to be implemented')}>Save</button>
+                                    {editingGroupId === group.id ? (
+                                        <>
+                                            <button className="settings-button white" onClick={handleCancelEditGroup}>Cancel</button>
+                                            <button className="settings-button primary" onClick={() => handleSaveGroup(group.id)}>Save</button>
+                                        </>
+                                    ) : (
+                                        <button className="settings-button white" onClick={() => handleEditGroup(group)}>Edit Name</button>
+                                    )}
                                     <button className="settings-button secondary" onClick={() => deleteGroup(group.id)}>Delete Group</button>
                                     <button className="settings-button danger" onClick={() => leaveGroup(group.id)}>Leave Group</button>
                                 </div>

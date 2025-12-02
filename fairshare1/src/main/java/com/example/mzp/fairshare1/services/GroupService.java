@@ -5,6 +5,7 @@ import com.example.mzp.fairshare1.models.User;
 import com.example.mzp.fairshare1.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,15 @@ public class GroupService {
 
     @Autowired
     private GroupRepository groupRepository;
+
+    @Autowired
+    private com.example.mzp.fairshare1.repositories.UserRepository userRepository;
+
+    @Autowired
+    private com.example.mzp.fairshare1.repositories.ChoreRepository choreRepository;
+
+    @Autowired
+    private com.example.mzp.fairshare1.repositories.ExpenseRepository expenseRepository;
 
     public Group createGroup(String name, User creator) {
         String code = generateUniqueCode();
@@ -42,7 +52,15 @@ public class GroupService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteGroup(Long groupId) {
+        // First, delete all chores associated with this group
+        choreRepository.deleteByGroupId(groupId);
+
+        // Delete all expenses associated with this group
+        expenseRepository.deleteByGroupId(groupId);
+
+        // Now we can safely delete the group
         groupRepository.deleteById(groupId);
     }
 
@@ -51,6 +69,13 @@ public class GroupService {
                 .orElseThrow(() -> new RuntimeException("Group not found"));
         group.removeMember(user);
         groupRepository.save(group);
+    }
+
+    public Group updateGroup(Long groupId, String name) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        group.setName(name);
+        return groupRepository.save(group);
     }
 
     private String generateUniqueCode() {
