@@ -85,7 +85,7 @@ const LandingPage = () => {
         const animatedElements = document.querySelectorAll(
             '.feature-card, .team-member, .hero-text, .hero-image, .section-header'
         );
-        
+
         animatedElements.forEach(el => observer.observe(el));
 
         return () => {
@@ -121,8 +121,8 @@ const LandingPage = () => {
                             <div className="hero-text">
                                 <h1>Chore-rect sharing.<br />Cent-sational splitting</h1>
                                 <p>
-                                    With FairShare, housemates stay in sync. Chores are shared fairly, 
-                                    expenses are split cleanly, and everyone can see how evenly responsibilities 
+                                    With FairShare, housemates stay in sync. Chores are shared fairly,
+                                    expenses are split cleanly, and everyone can see how evenly responsibilities
                                     are distributed. It's fairness made effortless.
                                 </p>
                                 <div className="hero-cta">
@@ -133,10 +133,10 @@ const LandingPage = () => {
                             <div className="hero-image">
                                 <div className="image-wrapper">
                                     {/* Placeholder for Laptop Image */}
-                                    <div style={{ 
-                                        width: '100%', 
-                                        height: '300px', 
-                                        background: '#E69FB8', 
+                                    <div style={{
+                                        width: '100%',
+                                        height: '300px',
+                                        background: '#E69FB8',
                                         borderRadius: '16px',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -156,30 +156,30 @@ const LandingPage = () => {
                     <div className="container">
                         <div className="section-header">
                             <span className="section-tag">Features</span>
-                            <h2>lorem ipsum <span className="highlight">dolor sit amet</span></h2>
-                            <p className="section-description">Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                            <h2>Live Fair, <span className="highlight">Live Easy</span></h2>
+                            <p className="section-description">Everything you need to keep tasks and expenses running smoothly.</p>
                         </div>
                         <div className="features-grid">
                             <div className="feature-card">
                                 <div className="feature-icon-wrapper">
                                     <span style={{ fontSize: '64px' }}>🧹</span>
                                 </div>
-                                <h3>lorem ipsum</h3>
-                                <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                                <h3>Fair Chore Management</h3>
+                                <p>Log chores, track completion, and ensure fair contribution.</p>
                             </div>
                             <div className="feature-card">
                                 <div className="feature-icon-wrapper">
                                     <span style={{ fontSize: '64px' }}>🤝</span>
                                 </div>
-                                <h3>lorem ipsum</h3>
-                                <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                                <h3>Fairness at a Glance</h3>
+                                <p>Clear visual score of shared tasks and expenses.</p>
                             </div>
                             <div className="feature-card">
                                 <div className="feature-icon-wrapper">
                                     <span style={{ fontSize: '64px' }}>💰</span>
                                 </div>
-                                <h3>lorem ipsum</h3>
-                                <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                                <h3>Clear Expense Splitting</h3>
+                                <p>FairShare provides simple, transparent expense breakdowns.</p>
                             </div>
                         </div>
                     </div>
@@ -189,10 +189,10 @@ const LandingPage = () => {
                     <div className="container">
                         <div className="section-header">
                             <span className="section-tag">Our Team</span>
-                            <h2>lorem ipsum <span className="highlight">dolor sit amet</span></h2>
-                            <p className="section-description">Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+                            <h2>The minds behind <span className="highlight">FairShare</span></h2>
+                            <p className="section-description">A dedicated team committed to ending roommate resentment over chores and bills.</p>
                         </div>
-                        
+
                         <div className="team-grid">
                             <div className="team-member">
                                 <div className="avatar">
@@ -201,7 +201,7 @@ const LandingPage = () => {
                                 </div>
                                 <div className="member-info">
                                     <h4>Cosina, Lily Phoebe</h4>
-                                    <p>Lorem ipsum dolor sit amet.</p>
+                                    <p>Frontend Developer</p>
                                 </div>
                             </div>
                             <div className="team-member">
@@ -210,7 +210,7 @@ const LandingPage = () => {
                                 </div>
                                 <div className="member-info">
                                     <h4>Quirante, Zilfa Edz</h4>
-                                    <p>Lorem ipsum dolor sit amet.</p>
+                                    <p>Backend Developer</p>
                                 </div>
                             </div>
                             <div className="team-member">
@@ -219,7 +219,7 @@ const LandingPage = () => {
                                 </div>
                                 <div className="member-info">
                                     <h4>Tuazon, Marishka</h4>
-                                    <p>Lorem ipsum dolor sit amet.</p>
+                                    <p>Lead Developer</p>
                                 </div>
                             </div>
                         </div>

@@ -4,48 +4,52 @@
 
 :root {
     /* Primary Colors - Pink Theme based on FairShare image */
-    --primary-color: #E69FB8; /* Muted Pink */
+    --primary-color: #E69FB8;
+    /* Muted Pink */
     --primary-color-light: #F2Cbd9;
     --primary-color-dark: #C47A94;
     --primary-color-subtle: #FDF0F5;
-    
+
     /* Secondary/Accent */
-    --accent-brown: #4A3B3B; /* Dark Brown for text/contrast */
-    
+    --accent-brown: #4A3B3B;
+    /* Dark Brown for text/contrast */
+
     /* Neutrals */
-    --neutral-50: #FDF0F5; /* Light Pinkish White */
+    --neutral-50: #FDF0F5;
+    /* Light Pinkish White */
     --neutral-100: #F8E1E9;
     --neutral-200: #E5E7EB;
     --neutral-300: #D1D5DB;
     --neutral-400: #9CA3AF;
     --neutral-500: #6B7280;
-    --neutral-600: #4A3B3B; /* Using Brown for text */
+    --neutral-600: #4A3B3B;
+    /* Using Brown for text */
     --neutral-700: #372C2C;
     --neutral-800: #261E1E;
     --neutral-900: #1A1414;
-    
+
     /* Dark Theme (if needed, but design is light) */
     --dark-bg: #4A3B3B;
     --dark-bg-light: #5C4A4A;
-    
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #E69FB8 0%, #C47A94 100%);
     --gradient-hero: linear-gradient(135deg, rgba(230, 159, 184, 0.1) 0%, rgba(196, 122, 148, 0.1) 100%);
-    
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgba(74, 59, 59, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(74, 59, 59, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(74, 59, 59, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(74, 59, 59, 0.1);
     --shadow-pink: 0 8px 20px rgba(230, 159, 184, 0.25);
-    
+
     /* Border Radius */
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
     --radius-xl: 24px;
     --radius-full: 9999px;
-    
+
     /* Transitions */
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -86,7 +90,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 48px;
-    background: transparent; /* Transparent initially */
+    background: transparent;
+    /* Transparent initially */
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -94,7 +99,8 @@ body {
 }
 
 .site-header.scrolled {
-    background: rgba(253, 240, 245, 0.95); /* Light pink background on scroll */
+    background: rgba(253, 240, 245, 0.95);
+    /* Light pink background on scroll */
     backdrop-filter: blur(10px);
     padding: 16px 48px;
     box-shadow: var(--shadow-md);
@@ -151,7 +157,7 @@ body {
     transition: width var(--transition-base);
 }
 
-.nav-links a:hover::after,
+.nav-links a:hover,
 .nav-links a.active::after {
     width: 100%;
 }
@@ -210,6 +216,7 @@ main {
         opacity: 0;
         transform: translateX(-40px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -293,6 +300,7 @@ main {
         opacity: 0;
         transform: translateX(40px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -305,9 +313,10 @@ main {
     justify-content: center;
 }
 
-.hero-img {
+.hero-img,
+.laptop-image {
     width: 100%;
-    max-width: 550px;
+    max-width: 650px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
@@ -523,6 +532,7 @@ main {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -537,11 +547,11 @@ main {
     .hero-content {
         gap: 60px;
     }
-    
+
     .hero-text h1 {
         font-size: 48px;
     }
-    
+
     .features-grid {
         grid-template-columns: 1fr;
         gap: 40px;
