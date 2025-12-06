@@ -316,10 +316,12 @@ main {
 .hero-img,
 .laptop-image {
     width: 100%;
-    max-width: 650px;
+    max-width: 620px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+    margin-left: 24px;
+    margin-bottom: 60px;
 }
 
 /* =========================================
@@ -399,7 +401,7 @@ main {
 
 .feature-img {
     width: 100%;
-    max-width: 200px;
+    max-width: 140px;
     height: auto;
     object-fit: contain;
     transition: transform var(--transition-slow);
@@ -592,6 +594,12 @@ main {
     .btn-secondary {
         text-align: center;
         width: 100%;
+    }
+
+    .laptop-image {
+        max-width: 420px;
+        margin-left: 0;
+        margin: 0 auto;
     }
 
     .section-header h2 {

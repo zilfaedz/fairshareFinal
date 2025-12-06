@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
+import landingLaptop from '../img/landing-laptop.png';
+import landingChores from '../img/landing-chores.png';
+import landingFair from '../img/landing-fair.png';
+import landingExpenses from '../img/landing-expenses.png';
+import fairshareLogo from '../img/fairshare-logo.png';
 
 const LandingPage = () => {
     const headerRef = useRef(null);
@@ -99,8 +104,7 @@ const LandingPage = () => {
         <div className="landing-page">
             <header className="site-header" ref={headerRef}>
                 <Link to="/" className="logo">
-                    {/* Placeholder for Logo Icon */}
-                    <span style={{ fontSize: '24px' }}>🌸</span>
+                    <img src={fairshareLogo} alt="FairShare logo" className="logo-img" />
                     <span>FairShare</span>
                 </Link>
                 <nav>
@@ -132,20 +136,7 @@ const LandingPage = () => {
                             </div>
                             <div className="hero-image">
                                 <div className="image-wrapper">
-                                    {/* Placeholder for Laptop Image */}
-                                    <div style={{
-                                        width: '100%',
-                                        height: '300px',
-                                        background: '#E69FB8',
-                                        borderRadius: '16px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontSize: '24px'
-                                    }}>
-                                        Laptop Mockup Placeholder
-                                    </div>
+                                    <img src={landingLaptop} alt="FairShare laptop illustration" className="laptop-image" />
                                 </div>
                             </div>
                         </div>
@@ -162,21 +153,21 @@ const LandingPage = () => {
                         <div className="features-grid">
                             <div className="feature-card">
                                 <div className="feature-icon-wrapper">
-                                    <span style={{ fontSize: '64px' }}>🧹</span>
+                                    <img src={landingChores} alt="Chores icon" className="feature-img" />
                                 </div>
                                 <h3>Fair Chore Management</h3>
                                 <p>Log chores, track completion, and ensure fair contribution.</p>
                             </div>
                             <div className="feature-card">
                                 <div className="feature-icon-wrapper">
-                                    <span style={{ fontSize: '64px' }}>🤝</span>
+                                    <img src={landingFair} alt="Fairness icon" className="feature-img" />
                                 </div>
                                 <h3>Fairness at a Glance</h3>
                                 <p>Clear visual score of shared tasks and expenses.</p>
                             </div>
                             <div className="feature-card">
                                 <div className="feature-icon-wrapper">
-                                    <span style={{ fontSize: '64px' }}>💰</span>
+                                    <img src={landingExpenses} alt="Expenses icon" className="feature-img" />
                                 </div>
                                 <h3>Clear Expense Splitting</h3>
                                 <p>FairShare provides simple, transparent expense breakdowns.</p>
@@ -230,7 +221,7 @@ const LandingPage = () => {
                     <div className="container">
                         <div className="footer-content">
                             <div className="logo">
-                                <span style={{ fontSize: '24px', marginRight: '8px' }}>🌸</span>
+                                <img src={fairshareLogo} alt="FairShare logo" className="logo-img" />
                                 <span>FairShare</span>
                             </div>
                             <div className="footer-links">
