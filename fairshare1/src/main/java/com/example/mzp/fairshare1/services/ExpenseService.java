@@ -41,6 +41,10 @@ public class ExpenseService {
         return expenseRepository.findByGroupId(groupId);
     }
 
+    public List<Expense> getGroupExpensesForUser(Long groupId, Long userId) {
+        return expenseRepository.findByGroupIdAndUserIdOrSplit(groupId, userId);
+    }
+
     public void deleteExpense(Long id) {
         expenseRepository.deleteById(id);
     }
@@ -49,11 +53,18 @@ public class ExpenseService {
         Expense existing = expenseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Expense not found"));
 
-        if (updated.getTitle() != null) existing.setTitle(updated.getTitle());
-        if (updated.getDescription() != null) existing.setDescription(updated.getDescription());
-        if (updated.getAmount() != null) existing.setAmount(updated.getAmount());
-        if (updated.getDate() != null) existing.setDate(updated.getDate());
-        if (updated.getPaidBy() != null) existing.setPaidBy(updated.getPaidBy());
+        if (updated.getTitle() != null)
+            existing.setTitle(updated.getTitle());
+        if (updated.getDescription() != null)
+            existing.setDescription(updated.getDescription());
+        if (updated.getAmount() != null)
+            existing.setAmount(updated.getAmount());
+        if (updated.getDate() != null)
+            existing.setDate(updated.getDate());
+        if (updated.getPaidBy() != null)
+            existing.setPaidBy(updated.getPaidBy());
+        if (updated.getIsSplit() != null)
+            existing.setIsSplit(updated.getIsSplit());
 
         return expenseRepository.save(existing);
     }

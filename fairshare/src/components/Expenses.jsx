@@ -3,10 +3,17 @@ import { useAppData } from '../context/AppDataContext';
 import { Plus, DollarSign, Calendar, Check, X, FileText, Clock, Edit2, Trash2 } from 'lucide-react';
 
 const Expenses = () => {
-    const { expenses, addExpense, markExpensePaid, budget, updateBudget, currentGroup, user } = useAppData();
+    const { expenses, addExpense, updateExpense, deleteExpense, markExpensePaid, budget, updateBudget, currentGroup, user } = useAppData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    // Edit Mode State
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editingExpenseId, setEditingExpenseId] = useState(null);
+    const [expenseToDelete, setExpenseToDelete] = useState(null);
+
     const [tempBudget, setTempBudget] = useState('');
     const [expenseToConfirm, setExpenseToConfirm] = useState(null);
     const [newExpense, setNewExpense] = useState({
@@ -46,8 +53,19 @@ const Expenses = () => {
             return;
         }
 
-        addExpense(newExpense);
+        if (isEditMode) {
+            updateExpense({ ...newExpense, id: editingExpenseId });
+        } else {
+            addExpense(newExpense);
+        }
+
+        handleCloseModal();
+    };
+
+    const handleCloseModal = () => {
         setIsModalOpen(false);
+        setIsEditMode(false);
+        setEditingExpenseId(null);
         setNewExpense({
             title: '',
             description: '',
@@ -55,6 +73,32 @@ const Expenses = () => {
             date: new Date().toISOString().split('T')[0],
             split: false
         });
+    };
+
+    const handleEditClick = (expense) => {
+        setNewExpense({
+            title: expense.title,
+            description: expense.description || '',
+            amount: expense.amount,
+            date: expense.date,
+            split: expense.isSplit || false
+        });
+        setIsEditMode(true);
+        setEditingExpenseId(expense.id);
+        setIsModalOpen(true);
+    };
+
+    const handleDeleteClick = (expense) => {
+        setExpenseToDelete(expense);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (expenseToDelete) {
+            deleteExpense(expenseToDelete.id);
+            setIsDeleteModalOpen(false);
+            setExpenseToDelete(null);
+        }
     };
 
     const handleStatusClick = (expense) => {
@@ -182,14 +226,35 @@ const Expenses = () => {
                                 <div className="task-card-header">
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <h4 className="task-custom-title">{expense.title}</h4>
-                                        {/* Show your share if split, otherwise show total amount */}
-                                        {expense.split && user ? (
-                                            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>
-                                                ₱{(parseFloat(expense.amount) / (roommates.length || 1)).toFixed(2)}
-                                            </span>
-                                        ) : (
-                                            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>₱{parseFloat(expense.amount).toFixed(2)}</span>
-                                        )}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            {/* Show your share if split, otherwise show total amount */}
+                                            {expense.isSplit && user ? (
+                                                <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>
+                                                    ₱{(parseFloat(expense.amount) / (roommates.length || 1)).toFixed(2)}
+                                                </span>
+                                            ) : (
+                                                <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>₱{parseFloat(expense.amount).toFixed(2)}</span>
+                                            )}
+
+                                            <div style={{ display: 'flex', gap: '5px' }}>
+                                                <button
+                                                    className="btn-icon"
+                                                    onClick={() => handleEditClick(expense)}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}
+                                                    title="Edit"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button
+                                                    className="btn-icon"
+                                                    onClick={() => handleDeleteClick(expense)}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d93025' }}
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <span className="task-time">{new Date(expense.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
                                 </div>
@@ -199,7 +264,7 @@ const Expenses = () => {
                                 )}
 
                                 <div className="task-meta-row" style={{ flexDirection: 'column', gap: '5px' }}>
-                                    {expense.split && (
+                                    {expense.isSplit && (
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <span style={{ fontWeight: 600 }}>Total</span>
@@ -245,8 +310,8 @@ const Expenses = () => {
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h2>Add Expense</h2>
-                            <button className="close-button" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+                            <h2>{isEditMode ? 'Edit Expense' : 'Add Expense'}</h2>
+                            <button className="close-button" onClick={handleCloseModal}><X size={20} /></button>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
@@ -300,6 +365,7 @@ const Expenses = () => {
                                     />
                                 </div>
                             </div>
+
                             <div className="form-group toggle-group">
                                 <label>Split expense</label>
                                 <label className="switch">
@@ -312,35 +378,9 @@ const Expenses = () => {
                                     <span className="slider round"></span>
                                 </label>
                             </div>
-                            {newExpense.split && (
-                                <div className="form-group" style={{ marginTop: 8 }}>
-                                    <label style={{ marginBottom: 6 }}>Split preview</label>
-                                    <div style={{ padding: '8px 12px', border: '1px solid #eee', borderRadius: 6, background: '#fafafa' }}>
-                                        {(!newExpense.amount || isNaN(parseFloat(newExpense.amount))) ? (
-                                            <div style={{ color: '#666' }}>Enter an amount to see per-member share</div>
-                                        ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600 }}>
-                                                    <span>Each member</span>
-                                                    <span>₱{(parseFloat(newExpense.amount) / (memberCount || 1)).toFixed(2)}</span>
-                                                </div>
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 6 }}>
-                                                    {roommates.map(member => {
-                                                        const share = (parseFloat(newExpense.amount) / (memberCount || 1)).toFixed(2);
-                                                        const isYou = user && member && user.id === member.id;
-                                                        return (
-                                                            <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', color: isYou ? '#0b6623' : '#333' }}>
-                                                                <span style={{ fontWeight: isYou ? 700 : 500 }}>{isYou ? `${member.fullName || member.name} (You)` : (member.fullName || member.name)}</span>
-                                                                <span style={{ fontWeight: 600 }}>₱{share}</span>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+
+
+
                             <button type="submit" className="modal-submit-button">Save</button>
                         </form>
                     </div>
@@ -358,6 +398,22 @@ const Expenses = () => {
                         <div className="modal-actions">
                             <button className="action-button completed" onClick={confirmPayment}>Yes</button>
                             <button className="action-button cancel" onClick={() => setIsConfirmModalOpen(false)}>No</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {isDeleteModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Confirm Delete</h2>
+                            <button className="close-button" onClick={() => setIsDeleteModalOpen(false)}><X size={20} /></button>
+                        </div>
+                        <p>Are you sure you want to delete this expense?</p>
+                        <div className="modal-actions">
+                            <button className="action-button delete" style={{ backgroundColor: '#d93025', color: 'white' }} onClick={confirmDelete}>Delete</button>
+                            <button className="action-button cancel" onClick={() => setIsDeleteModalOpen(false)}>Cancel</button>
                         </div>
                     </div>
                 </div>

@@ -39,6 +39,10 @@ public class ExpenseController {
 
         expense.setDate((String) payload.get("date"));
 
+        if (payload.containsKey("isSplit")) {
+            expense.setIsSplit((Boolean) payload.get("isSplit"));
+        }
+
         Object paidByIdObj = payload.get("paidById");
         Long paidById = null;
         if (paidByIdObj != null && !paidByIdObj.toString().isEmpty()) {
@@ -61,7 +65,10 @@ public class ExpenseController {
     }
 
     @GetMapping("/group/{groupId}")
-    public List<Expense> getGroupExpenses(@PathVariable Long groupId) {
+    public List<Expense> getGroupExpenses(@PathVariable Long groupId, @RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return expenseService.getGroupExpensesForUser(groupId, userId);
+        }
         return expenseService.getGroupExpenses(groupId);
     }
 
@@ -86,6 +93,10 @@ public class ExpenseController {
         }
 
         updated.setDate((String) payload.get("date"));
+
+        if (payload.containsKey("isSplit")) {
+            updated.setIsSplit((Boolean) payload.get("isSplit"));
+        }
 
         Object paidByIdObj = payload.get("paidById");
         Long paidById = null;

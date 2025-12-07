@@ -70,7 +70,11 @@ export const AppDataProvider = ({ children }) => {
 
     const fetchGroupExpenses = async (groupId) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/expenses/group/${groupId}`);
+            let url = `http://localhost:8080/api/expenses/group/${groupId}`;
+            if (user && user.id) {
+                url += `?userId=${user.id}`;
+            }
+            const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
                 setExpenses(data);
@@ -234,7 +238,7 @@ export const AppDataProvider = ({ children }) => {
             const response = await fetch(`http://localhost:8080/api/expenses/group/${currentGroup.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...cleanedExpense, paidById: user && user.id ? user.id : null }),
+                body: JSON.stringify({ ...cleanedExpense, isSplit: split, paidById: user && user.id ? user.id : null }),
             });
             if (response.ok) {
                 const newExpense = await response.json();
@@ -254,10 +258,17 @@ export const AppDataProvider = ({ children }) => {
     const updateExpense = async (updatedExpense) => {
         if (!updatedExpense || !updatedExpense.id) return;
         try {
+            // Ensure isSplit is sent if split exists
+            const payload = { ...updatedExpense };
+            if (payload.split !== undefined) {
+                payload.isSplit = payload.split;
+                delete payload.split;
+            }
+
             const response = await fetch(`http://localhost:8080/api/expenses/${updatedExpense.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedExpense),
+                body: JSON.stringify(payload),
             });
             if (response.ok) {
                 const data = await response.json();
@@ -703,6 +714,8 @@ export const AppDataProvider = ({ children }) => {
             deleteChore,
             toggleChoreStatus,
             addExpense,
+            updateExpense,
+            deleteExpense,
             markExpensePaid,
 
             createGroup,

@@ -20,6 +20,9 @@ public class Expense {
 
     private String date;
 
+    @Column(name = "is_split")
+    private Boolean isSplit;
+
     @ManyToOne
     @JoinColumn(name = "paid_by_id")
     private User paidBy;
@@ -77,6 +80,14 @@ public class Expense {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public Boolean getIsSplit() {
+        return isSplit;
+    }
+
+    public void setIsSplit(Boolean split) {
+        isSplit = split;
     }
 
     public User getPaidBy() {

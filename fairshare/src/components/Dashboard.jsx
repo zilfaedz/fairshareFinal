@@ -4,7 +4,7 @@ import { useAppData } from '../context/AppDataContext';
 import { CheckCircle, AlertCircle, Calendar, DollarSign, PieChart, TrendingUp } from 'lucide-react';
 
 const Dashboard = () => {
-    const { chores, expenses, user, budget, groups, showToast } = useAppData();
+    const { chores, expenses, user, budget, groups, showToast, currentGroup } = useAppData();
     const navigate = useNavigate();
 
     // Calculate stats
@@ -15,9 +15,19 @@ const Dashboard = () => {
     }).length;
 
     const currentMonth = new Date().getMonth();
+
+    // Calculate member count for splitting
+    const memberCount = currentGroup && currentGroup.members ? (currentGroup.members.length || 1) : 1;
+
     const monthlyExpense = expenses
         .filter(expense => new Date(expense.date).getMonth() === currentMonth)
-        .reduce((sum, expense) => sum + parseFloat(expense.amount || 0), 0);
+        .reduce((sum, expense) => {
+            let amount = parseFloat(expense.amount || 0);
+            if (expense.isSplit) {
+                amount = amount / memberCount;
+            }
+            return sum + amount;
+        }, 0);
 
     const budgetRemaining = budget - monthlyExpense;
 
