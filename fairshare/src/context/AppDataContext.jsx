@@ -251,6 +251,52 @@ export const AppDataProvider = ({ children }) => {
         }
     };
 
+    const updateExpense = async (updatedExpense) => {
+        if (!updatedExpense || !updatedExpense.id) return;
+        try {
+            const response = await fetch(`http://localhost:8080/api/expenses/${updatedExpense.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedExpense),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setExpenses(expenses.map(e => e.id === data.id ? data : e));
+                showToast('Expense updated successfully!');
+                return { success: true, data };
+            } else {
+                const errorText = await response.text();
+                showToast(errorText || 'Failed to update expense.');
+                return { success: false, message: errorText };
+            }
+        } catch (error) {
+            console.error('Failed to update expense:', error);
+            showToast('Failed to update expense.');
+            return { success: false, message: error.message };
+        }
+    };
+
+    const deleteExpense = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/expenses/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                setExpenses(expenses.filter(e => e.id !== id));
+                showToast('Expense deleted successfully.');
+                return { success: true };
+            } else {
+                const errorText = await response.text();
+                showToast(errorText || 'Failed to delete expense.');
+                return { success: false, message: errorText };
+            }
+        } catch (error) {
+            console.error('Failed to delete expense:', error);
+            showToast('Failed to delete expense.');
+            return { success: false, message: error.message };
+        }
+    };
+
     const markExpensePaid = (id) => {
         // Implement if backend supports status update for expenses, currently Expense entity doesn't have status
         // Assuming for now we just keep it local or remove if not needed
@@ -450,15 +496,25 @@ export const AppDataProvider = ({ children }) => {
 
 
     const [notifications, setNotifications] = useState([]);
+    const [lastSeenNotificationsAt, setLastSeenNotificationsAt] = useState(null);
 
     useEffect(() => {
         if (user) {
             fetchNotifications();
             // Poll for notifications every 30 seconds
             const interval = setInterval(fetchNotifications, 30000);
+            // Load last seen timestamp for this user from localStorage
+            try {
+                const key = `lastSeenNotifications_${user.id}`;
+                const stored = localStorage.getItem(key);
+                if (stored) setLastSeenNotificationsAt(stored);
+            } catch (e) {
+                console.warn('Failed to load lastSeenNotificationsAt', e);
+            }
             return () => clearInterval(interval);
         } else {
             setNotifications([]);
+            setLastSeenNotificationsAt(null);
         }
     }, [user]);
 
@@ -562,7 +618,11 @@ export const AppDataProvider = ({ children }) => {
         // If caller provided an explicit type, use it. Otherwise, try to infer.
         if (!type) {
             const m = String(message).toLowerCase();
-            if (m.includes('success') || m.includes('successfully') || m.includes('joined') || m.includes('accepted') || m.includes('copied') || m.includes('created') || m.includes('updated') || m.includes('sent') || m.includes('left') || m.includes('deleted')) {
+
+            // If message mentions deletion/removal, keep it red per preference
+            if (m.includes('delete') || m.includes('deleted') || m.includes('remove') || m.includes('removed')) {
+                type = 'error';
+            } else if (m.includes('success') || m.includes('successfully') || m.includes('joined') || m.includes('accepted') || m.includes('copied') || m.includes('created') || m.includes('updated') || m.includes('sent') || m.includes('left')) {
                 type = 'success';
             } else if (m.includes('failed') || m.includes('error') || m.includes('network') || m.includes('please')) {
                 type = 'error';
@@ -580,17 +640,48 @@ export const AppDataProvider = ({ children }) => {
 
     const markNotificationsRead = async () => {
         if (!user) return;
+        // Optimistically mark all notifications as read locally so the counter resets immediately
+        setNotifications(prev => prev ? prev.map(n => ({ ...n, isRead: true, read: true })) : prev);
+        // Update last-seen timestamp so the counter counts only notifications after this moment
+        const nowIso = new Date().toISOString();
+        setLastSeenNotificationsAt(nowIso);
+        try {
+            const key = `lastSeenNotifications_${user.id}`;
+            localStorage.setItem(key, nowIso);
+        } catch (e) {
+            console.warn('Failed to persist lastSeenNotificationsAt', e);
+        }
         try {
             const response = await fetch(`http://localhost:8080/api/notifications/mark-read/${user.id}`, {
                 method: 'POST'
             });
             if (response.ok) {
+                // Refresh from server to ensure local state matches server
+                fetchNotifications();
+            } else {
+                // If server failed, re-fetch to get authoritative state
                 fetchNotifications();
             }
         } catch (error) {
             console.error('Error marking notifications read:', error);
+            // On network error, still keep optimistic local change but try to refresh later
         }
     };
+
+    // Compute pending count based on notifications that are newer than lastSeenNotificationsAt
+    const pendingCount = (() => {
+        if (!notifications || notifications.length === 0) return 0;
+        const last = lastSeenNotificationsAt ? new Date(lastSeenNotificationsAt) : new Date(0);
+        try {
+            return notifications.filter(n => {
+                if (!n.createdAt) return false;
+                const created = new Date(n.createdAt);
+                return created > last;
+            }).length;
+        } catch (e) {
+            return 0;
+        }
+    })();
 
     return (
         <AppDataContext.Provider value={{
@@ -626,7 +717,8 @@ export const AppDataProvider = ({ children }) => {
             fetchNotifications,
             sendInvite,
             respondToInvite,
-            markNotificationsRead
+            markNotificationsRead,
+            pendingCount
         }}>
             {children}
         </AppDataContext.Provider>

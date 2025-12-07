@@ -26,6 +26,9 @@ public class GroupService {
     @Autowired
     private com.example.mzp.fairshare1.repositories.ExpenseRepository expenseRepository;
 
+    @Autowired
+    private com.example.mzp.fairshare1.repositories.NotificationRepository notificationRepository;
+
     public Group createGroup(String name, User creator) {
         String code = generateUniqueCode();
         Group group = new Group(name, code);
@@ -66,6 +69,9 @@ public class GroupService {
 
         // Delete all expenses associated with this group
         expenseRepository.deleteByGroupId(groupId);
+
+        // Delete notifications associated with this group (to avoid FK constraint)
+        notificationRepository.deleteByGroupId(groupId);
 
         // Now we can safely delete the group
         groupRepository.deleteById(groupId);

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useAppData } from '../context/AppDataContext';
-import { Plus, DollarSign, Calendar, Check, X, FileText, Clock } from 'lucide-react';
+import { Plus, DollarSign, Calendar, Check, X, FileText, Clock, Edit2, Trash2 } from 'lucide-react';
 
 const Expenses = () => {
-    const { expenses, addExpense, markExpensePaid, budget, updateBudget, currentGroup } = useAppData();
+    const { expenses, addExpense, markExpensePaid, budget, updateBudget, currentGroup, user } = useAppData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
@@ -182,7 +182,14 @@ const Expenses = () => {
                                 <div className="task-card-header">
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <h4 className="task-custom-title">{expense.title}</h4>
-                                        <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>₱{parseFloat(expense.amount).toFixed(2)}</span>
+                                        {/* Show your share if split, otherwise show total amount */}
+                                        {expense.split && user ? (
+                                            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>
+                                                ₱{(parseFloat(expense.amount) / (roommates.length || 1)).toFixed(2)}
+                                            </span>
+                                        ) : (
+                                            <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>₱{parseFloat(expense.amount).toFixed(2)}</span>
+                                        )}
                                     </div>
                                     <span className="task-time">{new Date(expense.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
                                 </div>
@@ -193,9 +200,27 @@ const Expenses = () => {
 
                                 <div className="task-meta-row" style={{ flexDirection: 'column', gap: '5px' }}>
                                     {expense.split && (
-                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <span>Your Share:</span>
-                                            <span style={{ fontWeight: '600', color: '#4A2C2C' }}>₱{(parseFloat(expense.amount) / memberCount).toFixed(2)}</span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <span style={{ fontWeight: 600 }}>Total</span>
+                                                <span style={{ fontWeight: '600', color: '#4A2C2C' }}>₱{parseFloat(expense.amount).toFixed(2)}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+                                                <span style={{ color: '#666' }}>{`Split between ${memberCount} members`}</span>
+                                                <span style={{ color: '#666' }}>₱{(parseFloat(expense.amount) / (memberCount || 1)).toFixed(2)} each</span>
+                                            </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
+                                                {roommates.map(member => {
+                                                    const share = (parseFloat(expense.amount) / (memberCount || 1)).toFixed(2);
+                                                    const isYou = user && member && user.id === member.id;
+                                                    return (
+                                                        <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: isYou ? '#0b6623' : '#333', fontWeight: isYou ? 700 : 500 }}>
+                                                            <span>{isYou ? `${member.fullName || member.name} (You)` : (member.fullName || member.name)}</span>
+                                                            <span>₱{share}</span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -287,6 +312,35 @@ const Expenses = () => {
                                     <span className="slider round"></span>
                                 </label>
                             </div>
+                            {newExpense.split && (
+                                <div className="form-group" style={{ marginTop: 8 }}>
+                                    <label style={{ marginBottom: 6 }}>Split preview</label>
+                                    <div style={{ padding: '8px 12px', border: '1px solid #eee', borderRadius: 6, background: '#fafafa' }}>
+                                        {(!newExpense.amount || isNaN(parseFloat(newExpense.amount))) ? (
+                                            <div style={{ color: '#666' }}>Enter an amount to see per-member share</div>
+                                        ) : (
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600 }}>
+                                                    <span>Each member</span>
+                                                    <span>₱{(parseFloat(newExpense.amount) / (memberCount || 1)).toFixed(2)}</span>
+                                                </div>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 6 }}>
+                                                    {roommates.map(member => {
+                                                        const share = (parseFloat(newExpense.amount) / (memberCount || 1)).toFixed(2);
+                                                        const isYou = user && member && user.id === member.id;
+                                                        return (
+                                                            <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', color: isYou ? '#0b6623' : '#333' }}>
+                                                                <span style={{ fontWeight: isYou ? 700 : 500 }}>{isYou ? `${member.fullName || member.name} (You)` : (member.fullName || member.name)}</span>
+                                                                <span style={{ fontWeight: 600 }}>₱{share}</span>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                             <button type="submit" className="modal-submit-button">Save</button>
                         </form>
                     </div>

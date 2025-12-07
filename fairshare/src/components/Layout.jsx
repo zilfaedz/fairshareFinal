@@ -8,15 +8,14 @@ import Notifications from './Notifications';
 const Layout = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user, groups, toastMessage, showToast, hideToast, logout, notifications, markNotificationsRead } = useAppData();
+    const { user, groups, toastMessage, showToast, hideToast, logout, notifications, markNotificationsRead, pendingCount } = useAppData();
     const [showNotifications, setShowNotifications] = useState(false);
     const notificationRef = useRef(null);
 
     const isActive = (path) => location.pathname === path;
     const hasGroup = groups && groups.length > 0;
 
-    // Count pending notifications
-    const pendingCount = notifications ? notifications.filter(n => !(n.isRead || n.read)).length : 0;
+    // pendingCount is provided by context (counts only new notifications since last seen)
 
     // Protect direct URL access
     useEffect(() => {

@@ -69,4 +69,38 @@ public class ExpenseController {
     public void deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
     }
+
+    @PutMapping("/{id}")
+    public Expense updateExpense(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        Expense updated = new Expense();
+        updated.setTitle((String) payload.get("title"));
+        updated.setDescription((String) payload.get("description"));
+
+        Object amountObj = payload.get("amount");
+        if (amountObj instanceof Integer) {
+            updated.setAmount(((Integer) amountObj).doubleValue());
+        } else if (amountObj instanceof Double) {
+            updated.setAmount((Double) amountObj);
+        } else if (amountObj instanceof String && !((String) amountObj).isEmpty()) {
+            updated.setAmount(Double.parseDouble((String) amountObj));
+        }
+
+        updated.setDate((String) payload.get("date"));
+
+        Object paidByIdObj = payload.get("paidById");
+        Long paidById = null;
+        if (paidByIdObj != null && !paidByIdObj.toString().isEmpty()) {
+            try {
+                paidById = Long.valueOf(paidByIdObj.toString());
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
+        }
+
+        if (paidById != null) {
+            userRepository.findById(paidById).ifPresent(updated::setPaidBy);
+        }
+
+        return expenseService.updateExpense(id, updated);
+    }
 }

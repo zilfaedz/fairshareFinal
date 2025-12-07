@@ -229,10 +229,10 @@ const Chores = () => {
             <div className="chores-list">
                 {selectedUser && (
                     <div className="task-section my-chores-section">
-                        <h3 className="task-section-title" style={{ color: '#1890ff' }}>My Assigned Chores</h3>
+                        <h3 className="task-section-title" >My Chores</h3>
                         <div className="tasks-grid">
                             {chores.filter(c => c.assignedTo && c.assignedTo.id === selectedUser.id && c.status !== 'completed').length === 0 ? (
-                                <div className="empty-state-enhanced" style={{ gridColumn: '1/-1', textAlign: 'left', paddingLeft: 0 }}>You have no active chores assigned.</div>
+                                <div className="empty-state-enhanced" style={{ gridColumn: '1/-1', textAlign: 'center', paddingLeft: 0 }}>You have no active chores assigned.</div>
                             ) : (
                                 chores.filter(c => c.assignedTo && c.assignedTo.id === selectedUser.id && c.status !== 'completed').map(chore => {
                                     const time = (chore.dueDate || '').split(' ')[1] || '';
@@ -254,7 +254,7 @@ const Chores = () => {
                                                 <p className="task-description">{chore.description}</p>
                                             )}
                                             <div className="task-meta-row">
-                                                <span style={{ fontWeight: 'bold', color: '#1890ff' }}>Assigned to You</span>
+                                                <span style={{ fontWeight: 'bold'}}>Assigned to You</span>
                                                 <span className="task-due-date">Due: {new Date((chore.dueDate || '').split(' ')[0]).toLocaleDateString()}</span>
                                             </div>
                                             <div className="task-actions">
@@ -400,7 +400,13 @@ const Chores = () => {
                                                 <input
                                                     type="checkbox"
                                                     checked={randomAssignee}
-                                                    onChange={(e) => setRandomAssignee(e.target.checked)}
+                                                    onChange={(e) => {
+                                                        const checked = e.target.checked;
+                                                        setRandomAssignee(checked);
+                                                        if (checked) {
+                                                            setNewChore(prev => ({ ...prev, assignedToId: '' }));
+                                                        }
+                                                    }}
                                                     style={{ marginRight: '8px' }}
                                                 />
                                                 Randomize Assignee

@@ -13,4 +13,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     List<Notification> findByRecipientAndStatusOrderByCreatedAtDesc(User recipient,
             Notification.NotificationStatus status);
+    
+    // Delete notifications by group id (used when removing a group)
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("delete from Notification n where n.group.id = :groupId")
+    void deleteByGroupId(@org.springframework.data.repository.query.Param("groupId") Long groupId);
 }

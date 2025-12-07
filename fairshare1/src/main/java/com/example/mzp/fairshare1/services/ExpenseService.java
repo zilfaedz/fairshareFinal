@@ -44,4 +44,17 @@ public class ExpenseService {
     public void deleteExpense(Long id) {
         expenseRepository.deleteById(id);
     }
+
+    public Expense updateExpense(Long id, Expense updated) {
+        Expense existing = expenseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        if (updated.getTitle() != null) existing.setTitle(updated.getTitle());
+        if (updated.getDescription() != null) existing.setDescription(updated.getDescription());
+        if (updated.getAmount() != null) existing.setAmount(updated.getAmount());
+        if (updated.getDate() != null) existing.setDate(updated.getDate());
+        if (updated.getPaidBy() != null) existing.setPaidBy(updated.getPaidBy());
+
+        return expenseRepository.save(existing);
+    }
 }
