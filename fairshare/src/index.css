@@ -18,3 +18,16 @@ code {
   margin-top: 5px;
   display: block;
 }
+
+/* Utility classes for buttons and inputs */
+.settings-button.small {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.settings-input.compact {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  height: 32px;
+  /* Enforce height to match button */
+}

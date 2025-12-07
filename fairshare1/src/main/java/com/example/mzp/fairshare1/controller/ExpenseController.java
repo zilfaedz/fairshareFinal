@@ -1,6 +1,6 @@
 package com.example.mzp.fairshare1.controller;
 
-import com.example.mzp.fairshare1.models.Expense;
+import com.example.mzp.fairshare1.entity.Expense;
 import com.example.mzp.fairshare1.services.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,12 @@ public class ExpenseController {
 
     @Autowired
     private ExpenseService expenseService;
+
+    @Autowired
+    private com.example.mzp.fairshare1.services.NotificationService notificationService;
+
+    @Autowired
+    private com.example.mzp.fairshare1.repositories.UserRepository userRepository;
 
     @PostMapping("/group/{groupId}")
     public Expense createExpense(@PathVariable Long groupId, @RequestBody Map<String, Object> payload) {
@@ -43,7 +49,15 @@ public class ExpenseController {
             }
         }
 
-        return expenseService.createExpense(expense, groupId, paidById);
+        Expense createdExpense = expenseService.createExpense(expense, groupId, paidById);
+
+        if (paidById != null) {
+            userRepository.findById(paidById).ifPresent(creator -> {
+                notificationService.sendExpenseNotification(createdExpense, creator);
+            });
+        }
+
+        return createdExpense;
     }
 
     @GetMapping("/group/{groupId}")

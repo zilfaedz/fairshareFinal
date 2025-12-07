@@ -14,6 +14,7 @@ const Settings = () => {
         leaveGroup,
 
         removeGroupMember,
+        sendInvite
     } = useAppData();
 
     const [activeTab, setActiveTab] = useState('account');
@@ -235,6 +236,31 @@ const Settings = () => {
                                         <p className="member-count">{group.members ? group.members.length : 0} members</p>
                                     </div>
                                     <div className="group-actions-top">
+                                        <div className="invite-section" style={{ display: 'flex', gap: '8px', marginRight: '16px' }}>
+                                            <input
+                                                type="email"
+                                                placeholder="Invite by email"
+                                                className="settings-input compact"
+                                                style={{ width: '200px', margin: 0 }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        const email = e.target.value;
+                                                        if (email && email.trim()) {
+                                                            sendInvite(group.id, email);
+                                                            e.target.value = '';
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                            <button className="settings-button primary small" onClick={(e) => {
+                                                const input = e.currentTarget.previousSibling;
+                                                const email = input.value;
+                                                if (email && email.trim()) {
+                                                    sendInvite(group.id, email);
+                                                    input.value = '';
+                                                }
+                                            }}>Invite</button>
+                                        </div>
                                         <span className="room-code">{group.code}</span>
                                         <button className="icon-button copy-button" onClick={() => copyToClipboard(group.code)}>
                                             <Copy size={16} />

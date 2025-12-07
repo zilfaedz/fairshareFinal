@@ -1,7 +1,7 @@
 package com.example.mzp.fairshare1.services;
 
-import com.example.mzp.fairshare1.models.Group;
-import com.example.mzp.fairshare1.models.User;
+import com.example.mzp.fairshare1.entity.Group;
+import com.example.mzp.fairshare1.entity.User;
 import com.example.mzp.fairshare1.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +36,13 @@ public class GroupService {
     public Group joinGroup(String code, User user) {
         Group group = groupRepository.findByCode(code)
                 .orElseThrow(() -> new RuntimeException("Group not found with code: " + code));
+        group.addMember(user);
+        return groupRepository.save(group);
+    }
+
+    public Group addMember(Long groupId, User user) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
         group.addMember(user);
         return groupRepository.save(group);
     }

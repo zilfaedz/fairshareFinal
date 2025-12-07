@@ -1,8 +1,8 @@
 package com.example.mzp.fairshare1.services;
 
-import com.example.mzp.fairshare1.models.Chore;
-import com.example.mzp.fairshare1.models.Group;
-import com.example.mzp.fairshare1.models.User;
+import com.example.mzp.fairshare1.entity.Chore;
+import com.example.mzp.fairshare1.entity.Group;
+import com.example.mzp.fairshare1.entity.User;
 import com.example.mzp.fairshare1.repositories.ChoreRepository;
 import com.example.mzp.fairshare1.repositories.GroupRepository;
 import com.example.mzp.fairshare1.repositories.UserRepository;
@@ -60,4 +60,5 @@ public class ChoreService {
     public void deleteChore(Long id) {
         choreRepository.deleteById(id);
     }
+
 }

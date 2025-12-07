@@ -1,4 +1,4 @@
-package com.example.mzp.fairshare1.models;
+package com.example.mzp.fairshare1.entity;
 
 import jakarta.persistence.*;
 

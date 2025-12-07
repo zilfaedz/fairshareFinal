@@ -1,7 +1,7 @@
 package com.example.mzp.fairshare1.controller;
 
-import com.example.mzp.fairshare1.models.Group;
-import com.example.mzp.fairshare1.models.User;
+import com.example.mzp.fairshare1.entity.Group;
+import com.example.mzp.fairshare1.entity.User;
 import com.example.mzp.fairshare1.repositories.UserRepository;
 import com.example.mzp.fairshare1.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;

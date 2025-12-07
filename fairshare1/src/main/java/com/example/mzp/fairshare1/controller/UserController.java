@@ -1,6 +1,6 @@
 package com.example.mzp.fairshare1.controller;
 
-import com.example.mzp.fairshare1.models.User;
+import com.example.mzp.fairshare1.entity.User;
 import com.example.mzp.fairshare1.repositories.UserRepository;
 import org.springframework.web.bind.annotation.*;
 

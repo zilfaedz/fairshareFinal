@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppData } from '../context/AppDataContext';
-import { LayoutDashboard, CheckSquare, DollarSign, Settings as SettingsIcon, LogOut, Menu } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, DollarSign, Settings as SettingsIcon, LogOut, Menu, Bell } from 'lucide-react';
 import Toast from './Toast';
+import Notifications from './Notifications';
 
 const Layout = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user, groups, toastMessage, showToast, hideToast, logout } = useAppData();
+    const { user, groups, toastMessage, showToast, hideToast, logout, notifications, markNotificationsRead } = useAppData();
+    const [showNotifications, setShowNotifications] = useState(false);
+    const notificationRef = useRef(null);
 
     const isActive = (path) => location.pathname === path;
     const hasGroup = groups && groups.length > 0;
+
+    // Count pending notifications
+    const pendingCount = notifications ? notifications.filter(n => !n.isRead).length : 0;
 
     // Protect direct URL access
     useEffect(() => {
@@ -18,6 +24,22 @@ const Layout = ({ children }) => {
             navigate('/dashboard');
         }
     }, [hasGroup, location.pathname, navigate]);
+
+    // Close notifications on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setShowNotifications(false);
+            }
+        };
+
+        if (showNotifications) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showNotifications]);
 
     const handleLogout = () => {
         logout();
@@ -77,6 +99,27 @@ const Layout = ({ children }) => {
                 <header className="topbar">
                     <button className="menu-button"><Menu size={24} /></button>
                     <div className="topbar-right">
+                        <div className="notification-wrapper" ref={notificationRef}>
+                            <button className="notification-button" onClick={() => {
+                                setShowNotifications(!showNotifications);
+                                if (!showNotifications) {
+                                    if (typeof markNotificationsRead === 'function') {
+                                        markNotificationsRead();
+                                    } else {
+                                        console.warn('markNotificationsRead is not available');
+                                    }
+                                    // Optimistic update if needed, but fetchNotifications will handle it
+                                }
+                            }}>
+                                <Bell size={24} />
+                                {pendingCount > 0 && <span className="notification-badge">{pendingCount}</span>}
+                            </button>
+                            {showNotifications && (
+                                <div className="notifications-dropdown">
+                                    <Notifications onClose={() => setShowNotifications(false)} />
+                                </div>
+                            )}
+                        </div>
                         <Link to="/settings" className="user-profile" style={{ textDecoration: 'none' }}>
                             {user.profilePicture ? (
                                 <img src={user.profilePicture} alt="User" className="user-avatar" />

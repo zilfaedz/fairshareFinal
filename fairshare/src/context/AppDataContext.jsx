@@ -167,11 +167,11 @@ export const AppDataProvider = ({ children }) => {
                 showToast("Please select a due date.");
                 return;
             }
-            
+
             const response = await fetch(`http://localhost:8080/api/chores/group/${currentGroup.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(chore),
+                body: JSON.stringify({ ...chore, creatorId: user.id }),
             });
             if (response.ok) {
                 const newChore = await response.json();
@@ -220,7 +220,7 @@ export const AppDataProvider = ({ children }) => {
         try {
             // Filter out fields that backend doesn't need
             const { split, ...cleanedExpense } = expense;
-            
+
             // Validate required fields
             if (!cleanedExpense.title || !cleanedExpense.title.trim()) {
                 showToast("Please enter an expense title.");
@@ -230,7 +230,7 @@ export const AppDataProvider = ({ children }) => {
                 showToast("Please enter a valid amount greater than 0.");
                 return;
             }
-            
+
             const response = await fetch(`http://localhost:8080/api/expenses/group/${currentGroup.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -291,6 +291,9 @@ export const AppDataProvider = ({ children }) => {
             showToast("Failed to delete chore.");
         }
     };
+
+
+
 
     const updateUser = async (updatedUser) => {
         try {
@@ -446,6 +449,77 @@ export const AppDataProvider = ({ children }) => {
 
 
 
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        if (user) {
+            fetchNotifications();
+            // Poll for notifications every 30 seconds
+            const interval = setInterval(fetchNotifications, 30000);
+            return () => clearInterval(interval);
+        } else {
+            setNotifications([]);
+        }
+    }, [user]);
+
+    const fetchNotifications = async () => {
+        if (!user) return;
+        try {
+            const response = await fetch(`http://localhost:8080/api/notifications/user/${user.id}`);
+            if (response.ok) {
+                const data = await response.json();
+                setNotifications(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch notifications:", error);
+        }
+    };
+
+    const sendInvite = async (groupId, email) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/notifications/invite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ groupId, email, senderId: user.id }),
+            });
+            if (response.ok) {
+                showToast("Invite sent successfully!");
+                return { success: true };
+            } else {
+                const errorText = await response.text();
+                showToast(errorText || "Failed to send invite.");
+                return { success: false, message: errorText };
+            }
+        } catch (error) {
+            console.error("Failed to send invite:", error);
+            showToast("Network error.");
+            return { success: false, message: "Network error." };
+        }
+    };
+
+    const respondToInvite = async (notificationId, accept) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/notifications/${notificationId}/respond`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accept }),
+            });
+            if (response.ok) {
+                showToast(accept ? "Invite accepted!" : "Invite rejected.");
+                fetchNotifications();
+                fetchUserGroups(user.id); // Refresh groups if accepted
+                return { success: true };
+            } else {
+                showToast("Failed to respond to invite.");
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Failed to respond:", error);
+            showToast("Network error.");
+            return { success: false };
+        }
+    };
+
     const removeGroupMember = async (groupId, memberId) => {
         try {
             const response = await fetch(`http://localhost:8080/api/groups/${groupId}/removeMember`, {
@@ -484,6 +558,20 @@ export const AppDataProvider = ({ children }) => {
         setToastMessage(null);
     };
 
+    const markNotificationsRead = async () => {
+        if (!user) return;
+        try {
+            const response = await fetch(`http://localhost:8080/api/notifications/mark-read/${user.id}`, {
+                method: 'POST'
+            });
+            if (response.ok) {
+                fetchNotifications();
+            }
+        } catch (error) {
+            console.error('Error marking notifications read:', error);
+        }
+    };
+
     return (
         <AppDataContext.Provider value={{
             user,
@@ -505,6 +593,7 @@ export const AppDataProvider = ({ children }) => {
             toggleChoreStatus,
             addExpense,
             markExpensePaid,
+
             createGroup,
             updateGroup,
             joinGroup,
@@ -512,7 +601,12 @@ export const AppDataProvider = ({ children }) => {
             leaveGroup,
             removeGroupMember,
             currentGroup,
-            setCurrentGroup
+            setCurrentGroup,
+            notifications,
+            fetchNotifications,
+            sendInvite,
+            respondToInvite,
+            markNotificationsRead
         }}>
             {children}
         </AppDataContext.Provider>

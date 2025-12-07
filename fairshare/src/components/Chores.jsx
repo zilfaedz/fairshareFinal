@@ -4,7 +4,7 @@ import { useAppData } from '../context/AppDataContext';
 import { Plus, Calendar, Clock, CheckCircle, Trash2, Edit2, X } from 'lucide-react';
 
 const Chores = () => {
-    const { chores, addChore, updateChore, deleteChore, toggleChoreStatus, currentGroup } = useAppData();
+    const { chores, addChore, updateChore, deleteChore, toggleChoreStatus, currentGroup, user: selectedUser } = useAppData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedChore, setSelectedChore] = useState(null);
@@ -15,6 +15,8 @@ const Chores = () => {
         date: new Date().toISOString().split('T')[0],
         time: '12:00'
     });
+
+    const [randomAssignee, setRandomAssignee] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -30,6 +32,7 @@ const Chores = () => {
             date: new Date().toISOString().split('T')[0],
             time: '12:00'
         });
+        setRandomAssignee(false);
         setIsEditMode(true);
         setIsModalOpen(true);
     };
@@ -44,6 +47,7 @@ const Chores = () => {
             time: time || '12:00',
             assignedToId: chore.assignedTo ? chore.assignedTo.id : ''
         });
+        setRandomAssignee(false);
         setIsEditMode(false);
         setIsModalOpen(true);
     };
@@ -81,10 +85,18 @@ const Chores = () => {
             return;
         }
 
+        let assignedToId = newChore.assignedToId;
+
+        if (!selectedChore && randomAssignee && groupMembers.length > 0) {
+            const randomIndex = Math.floor(Math.random() * groupMembers.length);
+            assignedToId = groupMembers[randomIndex].id;
+        }
+
         const chorePayload = {
             ...newChore,
             dueDate: `${newChore.date} ${newChore.time}`,
-            status: newChore.status || 'pending'
+            status: newChore.status || 'pending',
+            assignedToId: assignedToId
         };
 
         if (selectedChore) {
@@ -215,6 +227,53 @@ const Chores = () => {
             </div>
 
             <div className="chores-list">
+                {selectedUser && (
+                    <div className="task-section my-chores-section">
+                        <h3 className="task-section-title" style={{ color: '#1890ff' }}>My Assigned Chores</h3>
+                        <div className="tasks-grid">
+                            {chores.filter(c => c.assignedTo && c.assignedTo.id === selectedUser.id && c.status !== 'completed').length === 0 ? (
+                                <div className="empty-state-enhanced" style={{ gridColumn: '1/-1', textAlign: 'left', paddingLeft: 0 }}>You have no active chores assigned.</div>
+                            ) : (
+                                chores.filter(c => c.assignedTo && c.assignedTo.id === selectedUser.id && c.status !== 'completed').map(chore => {
+                                    const time = (chore.dueDate || '').split(' ')[1] || '';
+                                    const formatTime = (t) => {
+                                        if (!t) return '';
+                                        const [h, m] = t.split(':');
+                                        const hour = parseInt(h);
+                                        const ampm = hour >= 12 ? 'PM' : 'AM';
+                                        const hour12 = hour % 12 || 12;
+                                        return `${hour12}:${m}${ampm}`;
+                                    };
+                                    return (
+                                        <div key={chore.id} className="task-card featured">
+                                            <div className="task-card-header">
+                                                <h4 className="task-custom-title">{chore.title}</h4>
+                                                {time && <span className="task-time">{formatTime(time)}</span>}
+                                            </div>
+                                            {chore.description && (
+                                                <p className="task-description">{chore.description}</p>
+                                            )}
+                                            <div className="task-meta-row">
+                                                <span style={{ fontWeight: 'bold', color: '#1890ff' }}>Assigned to You</span>
+                                                <span className="task-due-date">Due: {new Date((chore.dueDate || '').split(' ')[0]).toLocaleDateString()}</span>
+                                            </div>
+                                            <div className="task-actions">
+                                                <button className="btn-action-edit" onClick={(e) => { e.stopPropagation(); handleChoreClick(chore); }}>
+                                                    <Edit2 size={14} /> Edit
+                                                </button>
+                                                <button className="btn-action-complete" onClick={(e) => { e.stopPropagation(); toggleChoreStatus(chore.id); }}>
+                                                    <CheckCircle size={14} /> Done
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+                    </div>
+                )}
+                <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #eee' }} />
+
                 {sortedDates.length === 0 ? (
                     <div className="tasks-grid">
                         <div className="empty-state-enhanced">No {activeTab} tasks found.</div>
@@ -255,7 +314,7 @@ const Chores = () => {
                                                 <button className="btn-action-edit" onClick={(e) => { e.stopPropagation(); handleChoreClick(chore); }}>
                                                     <Edit2 size={14} /> Edit
                                                 </button>
-                                                {chore.status !== 'completed' && (
+                                                {chore.status !== 'completed' && chore.assignedTo && selectedUser && chore.assignedTo.id === selectedUser.id && (
                                                     <button className="btn-action-complete" onClick={(e) => { e.stopPropagation(); toggleChoreStatus(chore.id); }}>
                                                         <CheckCircle size={14} /> Done
                                                     </button>
@@ -334,14 +393,28 @@ const Chores = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label className="form-label">Assigned Housemate</label>
+                                    <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        Assigned Housemate
+                                        {!selectedChore && (
+                                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '0.9rem', color: '#666' }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={randomAssignee}
+                                                    onChange={(e) => setRandomAssignee(e.target.checked)}
+                                                    style={{ marginRight: '8px' }}
+                                                />
+                                                Randomize Assignee
+                                            </div>
+                                        )}
+                                    </label>
                                     <select
                                         name="assignedToId"
                                         value={newChore.assignedToId}
                                         onChange={handleInputChange}
                                         className="form-select-enhanced"
+                                        disabled={randomAssignee}
                                     >
-                                        <option value="">Select a housemate</option>
+                                        <option value="">{randomAssignee ? "Randomly selected on save" : "Select a housemate"}</option>
                                         {groupMembers.map(member => (
                                             <option key={member.id} value={member.id}>{member.fullName || member.name}</option>
                                         ))}

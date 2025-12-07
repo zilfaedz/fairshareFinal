@@ -1,8 +1,8 @@
 package com.example.mzp.fairshare1.services;
 
-import com.example.mzp.fairshare1.models.Expense;
-import com.example.mzp.fairshare1.models.Group;
-import com.example.mzp.fairshare1.models.User;
+import com.example.mzp.fairshare1.entity.Expense;
+import com.example.mzp.fairshare1.entity.Group;
+import com.example.mzp.fairshare1.entity.User;
 import com.example.mzp.fairshare1.repositories.ExpenseRepository;
 import com.example.mzp.fairshare1.repositories.GroupRepository;
 import com.example.mzp.fairshare1.repositories.UserRepository;
