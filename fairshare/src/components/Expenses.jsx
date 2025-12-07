@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppData } from '../context/AppDataContext';
-import { Plus, DollarSign, Calendar, Check, X, FileText } from 'lucide-react';
+import { Plus, DollarSign, Calendar, Check, X, FileText, Clock } from 'lucide-react';
 
 const Expenses = () => {
     const { expenses, addExpense, markExpensePaid, budget, updateBudget, currentGroup } = useAppData();
@@ -31,7 +31,7 @@ const Expenses = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         // Client-side validation
         if (!newExpense.title || !newExpense.title.trim()) {
             alert("Please enter an expense title.");
@@ -45,7 +45,7 @@ const Expenses = () => {
             alert("Please select a date.");
             return;
         }
-        
+
         addExpense(newExpense);
         setIsModalOpen(false);
         setNewExpense({
@@ -104,83 +104,115 @@ const Expenses = () => {
 
     const filteredExpenses = filterExpenses(expenses);
 
+    // Stats Calculations
+    const today = new Date().toISOString().split('T')[0];
+    const upcomingCount = expenses.filter(e => e.date >= today && e.status !== 'paid').length;
+    const paidCount = expenses.filter(e => e.status === 'paid').length;
+    const overdueCount = expenses.filter(e => e.date < today && e.status !== 'paid').length;
+
     return (
         <div className="page-container">
-            <div className="page-header">
-                <div>
-                    <h1>Expenses</h1>
-                    <p style={{ margin: 0, color: '#666' }}>Monthly Budget: <strong>₱{budget}</strong></p>
+            <div className="task-header">
+                <div className="task-header-left">
+                    <h1 className="task-title">Expenses</h1>
+                    <p style={{ margin: 0, color: '#666', fontSize: '15px' }}>Monthly Budget: <strong style={{ color: '#4A2C2C' }}>₱{budget}</strong></p>
                 </div>
                 <div className="header-actions">
-                    <button className="add-button" onClick={() => setIsModalOpen(true)}>
-                        <Plus size={16} style={{ marginRight: '5px' }} /> Add Expense
+                    <button className="btn-add-enhanced" onClick={() => setIsModalOpen(true)}>
+                        <Plus size={20} /> Add Expense
                     </button>
-                    <button className="add-button" style={{ backgroundColor: '#FADADD', color: '#4A2C2C' }} onClick={handleBudgetClick}>
-                        Set Budget
+                    <button className="btn-add-enhanced" style={{ background: 'white', color: '#4A2C2C', border: '2px solid #e5e7eb' }} onClick={handleBudgetClick}>
+                        <DollarSign size={20} /> Set Budget
                     </button>
                 </div>
             </div>
 
-            <div className="tabs">
-                <button
-                    className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
+            <div className="stats-grid">
+                <div
+                    className={`stat-card ${activeTab === 'upcoming' ? 'active' : ''}`}
                     onClick={() => setActiveTab('upcoming')}
                 >
-                    Upcoming
-                </button>
-                <button
-                    className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
+                    <div className="stat-icon blue">
+                        <Calendar size={24} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{upcomingCount}</span>
+                        <span className="stat-label">Upcoming</span>
+                    </div>
+                </div>
+                <div
+                    className={`stat-card ${activeTab === 'completed' ? 'active' : ''}`}
                     onClick={() => setActiveTab('completed')}
                 >
-                    Completed
-                </button>
-                <button
-                    className={`tab-button ${activeTab === 'overdue' ? 'active' : ''}`}
+                    <div className="stat-icon green">
+                        <Check size={24} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{paidCount}</span>
+                        <span className="stat-label">Paid</span>
+                    </div>
+                </div>
+                <div
+                    className={`stat-card ${activeTab === 'overdue' ? 'active' : ''}`}
                     onClick={() => setActiveTab('overdue')}
                 >
-                    Overdue
-                </button>
+                    <div className="stat-icon red">
+                        <Clock size={24} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{overdueCount}</span>
+                        <span className="stat-label">Overdue</span>
+                    </div>
+                </div>
             </div>
 
-            <div className="expenses-list">
-                <h3 className="date-label">{activeTab === 'upcoming' ? 'Due this month' : activeTab === 'overdue' ? 'Overdue' : 'Paid'} </h3>
+            <div className="chores-list"> {/* keeping container name or change to generic? Keeping for safety if App.css targets it, but I removed its styles. */}
+                {filteredExpenses.length > 0 && (
+                    <h3 className="task-section-title">{activeTab === 'upcoming' ? 'Due this month' : activeTab === 'overdue' ? 'Overdue' : 'Paid'} </h3>
+                )}
+
                 {filteredExpenses.length === 0 ? (
-                    <p className="empty-state">No {activeTab} expenses.</p>
+                    <div className="tasks-grid">
+                        <div className="empty-state-enhanced">No {activeTab} expenses.</div>
+                    </div>
                 ) : (
-                    filteredExpenses.map(expense => (
-                        <div key={expense.id} className="expense-card">
-                            <div className="expense-details">
-                                <h4>{expense.title}</h4>
-                                <div className="expense-row">
-                                    <span className="label">Total Amount</span>
-                                    <span className="value">₱{parseFloat(expense.amount).toFixed(2)}</span>
+                    <div className="tasks-grid">
+                        {filteredExpenses.map(expense => (
+                            <div key={expense.id} className="task-card">
+                                <div className="task-card-header">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                        <h4 className="task-custom-title">{expense.title}</h4>
+                                        <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A2C2C' }}>₱{parseFloat(expense.amount).toFixed(2)}</span>
+                                    </div>
+                                    <span className="task-time">{new Date(expense.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
                                 </div>
+
                                 {expense.description && (
-                                    <div className="expense-row">
-                                        <span className="label">Description</span>
-                                        <span className="value">{expense.description}</span>
-                                    </div>
+                                    <p className="task-description">{expense.description}</p>
                                 )}
-                                <div className="expense-row">
-                                    <span className="label">Due Date</span>
-                                    <span className="value">{new Date(expense.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
+
+                                <div className="task-meta-row" style={{ flexDirection: 'column', gap: '5px' }}>
+                                    {expense.split && (
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <span>Your Share:</span>
+                                            <span style={{ fontWeight: '600', color: '#4A2C2C' }}>₱{(parseFloat(expense.amount) / memberCount).toFixed(2)}</span>
+                                        </div>
+                                    )}
                                 </div>
-                                {expense.split && (
-                                    <div className="expense-row">
-                                        <span className="label">Your Share (1/{memberCount})</span>
-                                        <span className="value">₱{(parseFloat(expense.amount) / memberCount).toFixed(2)}</span>
-                                    </div>
-                                )}
+
+                                <div className="task-actions">
+                                    <button
+                                        className={`btn-action-complete ${expense.status === 'paid' ? '' : ''}`}
+                                        style={{ flex: 1, backgroundColor: expense.status === 'paid' ? '#e5e7eb' : '#E6F4EA', color: expense.status === 'paid' ? '#666' : '#137333' }}
+                                        onClick={() => handleStatusClick(expense)}
+                                        disabled={expense.status === 'paid'}
+                                    >
+                                        {expense.status === 'paid' ? <><Check size={16} /> Paid</> : 'Mark as Paid'}
+                                    </button>
+                                </div>
                             </div>
-                            <button
-                                className={`status-button ${expense.status === 'paid' ? 'paid' : 'unpaid'}`}
-                                onClick={() => handleStatusClick(expense)}
-                                disabled={expense.status === 'paid'}
-                            >
-                                {expense.status === 'paid' ? 'Paid' : 'Not Paid'}
-                            </button>
-                        </div>
-                    ))
+                        ))}
+                    </div>
                 )}
             </div>
 

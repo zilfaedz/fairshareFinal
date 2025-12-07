@@ -70,7 +70,7 @@ const Chores = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         // Client-side validation
         if (!newChore.title || !newChore.title.trim()) {
             alert("Please enter a chore title.");
@@ -80,7 +80,7 @@ const Chores = () => {
             alert("Please select a due date.");
             return;
         }
-        
+
         const chorePayload = {
             ...newChore,
             dueDate: `${newChore.date} ${newChore.time}`,
@@ -142,54 +142,137 @@ const Chores = () => {
 
     const groupMembers = currentGroup ? currentGroup.members : [];
 
+    // Stats Calculations
+    const today = new Date().toISOString().split('T')[0];
+    const upcomingCount = chores.filter(c => {
+        const d = (c.dueDate || '').split(' ')[0];
+        return d >= today && c.status !== 'completed';
+    }).length;
+    const completedCount = chores.filter(c => c.status === 'completed').length;
+    const overdueCount = chores.filter(c => {
+        const d = (c.dueDate || '').split(' ')[0];
+        return d < today && c.status !== 'completed';
+    }).length;
+
+    // Sort chores within groups by time
+    Object.keys(groupedChores).forEach(date => {
+        groupedChores[date].sort((a, b) => {
+            const timeA = (a.dueDate || '').split(' ')[1] || '23:59';
+            const timeB = (b.dueDate || '').split(' ')[1] || '23:59';
+            return timeA.localeCompare(timeB);
+        });
+    });
+
     return (
         <div className="page-container">
-            <div className="page-header">
-                <h1>Chores</h1>
-                <div className="header-actions">
-                    <button className="add-button" onClick={handleAddClick}>
-                        <Plus size={16} style={{ marginRight: '5px' }} /> Add Chore
-                    </button>
+            <div className="task-header">
+                <div className="task-header-left">
+                    <h1 className="task-title">Chores</h1>
+                    <p className="task-subtitle">Manage household tasks</p>
                 </div>
+                <button className="btn-add-enhanced" onClick={handleAddClick}>
+                    <Plus size={20} /> Add Chore
+                </button>
             </div>
 
-            <div className="tabs">
-                <button
-                    className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
+            <div className="stats-grid">
+                <div
+                    className={`stat-card ${activeTab === 'upcoming' ? 'active' : ''}`}
                     onClick={() => setActiveTab('upcoming')}
                 >
-                    Upcoming
-                </button>
-                <button
-                    className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
+                    <div className="stat-icon blue">
+                        <Calendar size={24} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{upcomingCount}</span>
+                        <span className="stat-label">Upcoming</span>
+                    </div>
+                </div>
+                <div
+                    className={`stat-card ${activeTab === 'completed' ? 'active' : ''}`}
                     onClick={() => setActiveTab('completed')}
                 >
-                    Completed
-                </button>
-                <button
-                    className={`tab-button ${activeTab === 'overdue' ? 'active' : ''}`}
+                    <div className="stat-icon green">
+                        <CheckCircle size={24} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{completedCount}</span>
+                        <span className="stat-label">Completed</span>
+                    </div>
+                </div>
+                <div
+                    className={`stat-card ${activeTab === 'overdue' ? 'active' : ''}`}
                     onClick={() => setActiveTab('overdue')}
                 >
-                    Overdue
-                </button>
+                    <div className="stat-icon red">
+                        <Clock size={24} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{overdueCount}</span>
+                        <span className="stat-label">Overdue</span>
+                    </div>
+                </div>
             </div>
 
             <div className="chores-list">
                 {sortedDates.length === 0 ? (
-                    <p className="empty-state">No {activeTab} tasks.</p>
+                    <div className="tasks-grid">
+                        <div className="empty-state-enhanced">No {activeTab} tasks found.</div>
+                    </div>
                 ) : (
                     sortedDates.map(date => (
-                        <div key={date} className="date-group">
-                            <h3 className="date-label">{getDateLabel(date)} ⌄</h3>
-                            {groupedChores[date].map(chore => (
-                                <div key={chore.id} className={`chore-item ${chore.status}`} onClick={() => handleChoreClick(chore)}>
-                                    <div className="chore-info">
-                                        <span className="chore-name">{chore.title}</span>
-                                        {chore.description && <span className="chore-area">({chore.description})</span>}
-                                    </div>
-                                    <span className="chore-time">{(chore.dueDate || '').split(' ')[1] || ''}</span>
-                                </div>
-                            ))}
+                        <div key={date} className="task-section">
+                            <h3 className="task-section-title">{getDateLabel(date)}</h3>
+                            <div className="tasks-grid">
+                                {groupedChores[date].map(chore => {
+                                    const time = (chore.dueDate || '').split(' ')[1] || '';
+                                    // Format time to 12h
+                                    const formatTime = (t) => {
+                                        if (!t) return '';
+                                        const [h, m] = t.split(':');
+                                        const hour = parseInt(h);
+                                        const ampm = hour >= 12 ? 'PM' : 'AM';
+                                        const hour12 = hour % 12 || 12;
+                                        return `${hour12}:${m}${ampm}`;
+                                    };
+
+                                    return (
+                                        <div key={chore.id} className="task-card">
+                                            <div className="task-card-header">
+                                                <h4 className="task-custom-title">{chore.title}</h4>
+                                                {time && <span className="task-time">{formatTime(time)}</span>}
+                                            </div>
+
+                                            {chore.description && (
+                                                <p className="task-description">{chore.description}</p>
+                                            )}
+
+                                            <div className="task-meta-row">
+                                                <span>{chore.assignedTo ? (chore.assignedTo.fullName || chore.assignedTo.name) : 'Unassigned'}</span>
+                                            </div>
+
+                                            <div className="task-actions">
+                                                <button className="btn-action-edit" onClick={(e) => { e.stopPropagation(); handleChoreClick(chore); }}>
+                                                    <Edit2 size={14} /> Edit
+                                                </button>
+                                                {chore.status !== 'completed' && (
+                                                    <button className="btn-action-complete" onClick={(e) => { e.stopPropagation(); toggleChoreStatus(chore.id); }}>
+                                                        <CheckCircle size={14} /> Done
+                                                    </button>
+                                                )}
+                                                <button className="btn-action-delete" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (window.confirm('Are you sure you want to delete this chore?')) {
+                                                        deleteChore(chore.id);
+                                                    }
+                                                }}>
+                                                    <Trash2 size={14} /> Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     ))
                 )}
@@ -251,12 +334,12 @@ const Chores = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Assigned Housemate</label>
+                                    <label className="form-label">Assigned Housemate</label>
                                     <select
                                         name="assignedToId"
                                         value={newChore.assignedToId}
                                         onChange={handleInputChange}
-                                        className="form-select"
+                                        className="form-select-enhanced"
                                     >
                                         <option value="">Select a housemate</option>
                                         {groupMembers.map(member => (
