@@ -309,7 +309,7 @@ const Chores = () => {
                                         <button className="action-button completed" onClick={handleCompleteClick}>Completed</button>
                                     )}
                                     <button className="action-button edit" onClick={handleEditClick}>Edit</button>
-                                    <button className="action-button delete" onClick={handleDeleteClick} style={{ backgroundColor: '#ff4444', color: 'white', marginLeft: '10px' }}>Delete</button>
+                                    <button className="action-button delete" onClick={handleDeleteClick}>Delete</button>
                                 </div>
                             </div>
                         ) : (

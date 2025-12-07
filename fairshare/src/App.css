@@ -1065,6 +1065,9 @@ input:checked+.slider:before {
 /* Chore Details Modal */
 .chore-details {
   margin-bottom: 20px;
+  background-color: #FFF0F5;
+  padding: 20px;
+  border-radius: 15px;
 }
 
 .detail-row {
@@ -1101,13 +1104,30 @@ input:checked+.slider:before {
 }
 
 .action-button.completed {
-  background-color: #81C784;
-  color: white;
+  background-color: #E6F4EA;
+  color: #137333;
+}
+
+.action-button.completed:hover {
+  background-color: #CEEAD6;
 }
 
 .action-button.edit {
-  background-color: #E6A8B5;
-  color: white;
+  background-color: #E8F0FE;
+  color: #1967D2;
+}
+
+.action-button.edit:hover {
+  background-color: #D2E3FC;
+}
+
+.action-button.delete {
+  background-color: #FCE8E6;
+  color: #C5221F;
+}
+
+.action-button.delete:hover {
+  background-color: #FAD2CF;
 }
 
 .action-button.cancel {
