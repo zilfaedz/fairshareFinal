@@ -6255,3 +6255,3517 @@ Hibernate:
             on m1_1.id=m1_0.user_id 
     where
         g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    insert 
+    into
+        chores
+        (assigned_to_id, description, due_date, group_id, status, title) 
+    values
+        (?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        c1_0.id,
+        at1_0.id,
+        at1_0.birthdate,
+        at1_0.email,
+        at1_0.name,
+        at1_0.gender,
+        at1_0.password,
+        at1_0.profile_picture,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    left join
+        users at1_0 
+            on at1_0.id=c1_0.assigned_to_id 
+    join
+        groups_table g1_0 
+            on g1_0.id=c1_0.group_id 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    update
+        chores 
+    set
+        assigned_to_id=?,
+        description=?,
+        due_date=?,
+        group_id=?,
+        status=?,
+        title=? 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        e1_0.id,
+        e1_0.amount,
+        e1_0.date,
+        e1_0.description,
+        e1_0.group_id,
+        e1_0.paid_by_id,
+        e1_0.title 
+    from
+        expenses e1_0 
+    where
+        e1_0.group_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.assigned_to_id,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    where
+        c1_0.group_id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Updating user: 2
+Received details: User{id=2, fullName='Marishka', email='sadf@gmail.com', password='123456', birthdate='null', gender='null'}
+Hibernate: 
+    update
+        users 
+    set
+        birthdate=?,
+        email=?,
+        name=?,
+        gender=?,
+        password=?,
+        profile_picture=? 
+    where
+        id=?
+Saved user: User{id=2, fullName='Marishka', email='sadf@gmail.com', password='123456', birthdate='null', gender='null'}
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        g1_0.name 
+    from
+        groups_table g1_0
+Hibernate: 
+    select
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture 
+    from
+        group_members m1_0 
+    join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        m1_0.group_id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        at1_0.id,
+        at1_0.birthdate,
+        at1_0.email,
+        at1_0.name,
+        at1_0.gender,
+        at1_0.password,
+        at1_0.profile_picture,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    left join
+        users at1_0 
+            on at1_0.id=c1_0.assigned_to_id 
+    join
+        groups_table g1_0 
+            on g1_0.id=c1_0.group_id 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    delete 
+    from
+        chores 
+    where
+        id=?
+Hibernate: 
+    select
+        c1_0.id,
+        at1_0.id,
+        at1_0.birthdate,
+        at1_0.email,
+        at1_0.name,
+        at1_0.gender,
+        at1_0.password,
+        at1_0.profile_picture,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    left join
+        users at1_0 
+            on at1_0.id=c1_0.assigned_to_id 
+    join
+        groups_table g1_0 
+            on g1_0.id=c1_0.group_id 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    delete 
+    from
+        chores 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        at1_0.id,
+        at1_0.birthdate,
+        at1_0.email,
+        at1_0.name,
+        at1_0.gender,
+        at1_0.password,
+        at1_0.profile_picture,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    left join
+        users at1_0 
+            on at1_0.id=c1_0.assigned_to_id 
+    join
+        groups_table g1_0 
+            on g1_0.id=c1_0.group_id 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    delete 
+    from
+        chores 
+    where
+        id=?
+Hibernate: 
+    select
+        c1_0.id,
+        at1_0.id,
+        at1_0.birthdate,
+        at1_0.email,
+        at1_0.name,
+        at1_0.gender,
+        at1_0.password,
+        at1_0.profile_picture,
+        c1_0.description,
+        c1_0.due_date,
+        c1_0.group_id,
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name,
+        c1_0.status,
+        c1_0.title 
+    from
+        chores c1_0 
+    left join
+        users at1_0 
+            on at1_0.id=c1_0.assigned_to_id 
+    join
+        groups_table g1_0 
+            on g1_0.id=c1_0.group_id 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    delete 
+    from
+        chores 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.birthdate,
+        u1_0.email,
+        u1_0.name,
+        u1_0.gender,
+        u1_0.password,
+        u1_0.profile_picture 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        n1_0.id,
+        n1_0.created_at,
+        n1_0.group_id,
+        n1_0.recipient_id,
+        n1_0.sender_id,
+        n1_0.status,
+        n1_0.type 
+    from
+        notifications n1_0 
+    where
+        n1_0.recipient_id=? 
+    order by
+        n1_0.created_at desc
+Hibernate: 
+    select
+        g1_0.id,
+        g1_0.code,
+        m1_0.group_id,
+        m1_1.id,
+        m1_1.birthdate,
+        m1_1.email,
+        m1_1.name,
+        m1_1.gender,
+        m1_1.password,
+        m1_1.profile_picture,
+        g1_0.name 
+    from
+        groups_table g1_0 
+    left join
+        group_members m1_0 
+            on g1_0.id=m1_0.group_id 
+    left join
+        users m1_1 
+            on m1_1.id=m1_0.user_id 
+    where
+        g1_0.id=?
+^C

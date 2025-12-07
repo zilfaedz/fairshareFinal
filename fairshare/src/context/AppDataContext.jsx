@@ -550,8 +550,28 @@ export const AppDataProvider = ({ children }) => {
         }
     };
 
-    const showToast = (message) => {
-        setToastMessage(message);
+    const showToast = (message, type) => {
+        // message can be a string or an object { text, type }
+        if (message && typeof message === 'object' && message.text) {
+            setToastMessage({ text: message.text, type: message.type || 'info' });
+            return;
+        }
+
+        if (!message) return;
+
+        // If caller provided an explicit type, use it. Otherwise, try to infer.
+        if (!type) {
+            const m = String(message).toLowerCase();
+            if (m.includes('success') || m.includes('successfully') || m.includes('joined') || m.includes('accepted') || m.includes('copied') || m.includes('created') || m.includes('updated') || m.includes('sent') || m.includes('left') || m.includes('deleted')) {
+                type = 'success';
+            } else if (m.includes('failed') || m.includes('error') || m.includes('network') || m.includes('please')) {
+                type = 'error';
+            } else {
+                type = 'info';
+            }
+        }
+
+        setToastMessage({ text: String(message), type });
     };
 
     const hideToast = () => {

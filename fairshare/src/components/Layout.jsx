@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
     const hasGroup = groups && groups.length > 0;
 
     // Count pending notifications
-    const pendingCount = notifications ? notifications.filter(n => !n.isRead).length : 0;
+    const pendingCount = notifications ? notifications.filter(n => !(n.isRead || n.read)).length : 0;
 
     // Protect direct URL access
     useEffect(() => {

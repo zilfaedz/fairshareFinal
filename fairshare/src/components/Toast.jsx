@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AlertCircle, X } from 'lucide-react';
+import { AlertCircle, X, CheckCircle } from 'lucide-react';
 
 const Toast = ({ message, onClose, duration = 3000 }) => {
     useEffect(() => {
@@ -13,12 +13,25 @@ const Toast = ({ message, onClose, duration = 3000 }) => {
 
     if (!message) return null;
 
+    const text = typeof message === 'string' ? message : (message.text || '');
+    const type = typeof message === 'string' ? (message.toLowerCase().includes('success') ? 'success' : 'info') : (message.type || 'info');
+
+    let backgroundColor = '#2b6cb0'; // info (blue)
+    let Icon = AlertCircle;
+    if (type === 'success') {
+        backgroundColor = '#38a169';
+        Icon = CheckCircle;
+    } else if (type === 'error') {
+        backgroundColor = '#FF4D4F';
+        Icon = AlertCircle;
+    }
+
     return (
         <div style={{
             position: 'fixed',
             bottom: '20px',
             right: '20px',
-            backgroundColor: '#FF4D4F',
+            backgroundColor,
             color: 'white',
             padding: '12px 20px',
             borderRadius: '8px',
@@ -29,8 +42,8 @@ const Toast = ({ message, onClose, duration = 3000 }) => {
             zIndex: 1000,
             animation: 'slideIn 0.3s ease-out'
         }}>
-            <AlertCircle size={20} />
-            <span>{message}</span>
+            <Icon size={20} />
+            <span>{text}</span>
             <button onClick={onClose} style={{
                 background: 'none',
                 border: 'none',
