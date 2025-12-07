@@ -7,6 +7,13 @@ body {
   color: #4A4A4A;
 }
 
+input,
+button,
+textarea,
+select {
+  font-family: 'Outfit', sans-serif;
+}
+
 .App {
   min-height: 100vh;
 }
@@ -776,7 +783,9 @@ input:checked+.slider:before {
 
 .stat-card.active {
   border-color: #E6A8B5;
-  background-color: #FFF0F5;
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(230, 168, 181, 0.1);
+  /* Optional: add a subtle ring/shadow to emphasize active state without color */
 }
 
 .stat-card:hover {
