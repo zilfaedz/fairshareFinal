@@ -4,7 +4,6 @@ body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
   background-color: #FFF0F5;
-  /* Light pink background */
   color: #4A4A4A;
 }
 
@@ -1629,5 +1628,76 @@ input:checked+.slider:before {
 
 .interactive-card:active {
   transform: translateY(-2px);
+
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tasks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .task-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-add-enhanced {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .task-section-title {
+    font-size: 20px;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 10px;
+  }
+
+  .task-title {
+    font-size: 26px;
+  }
+
+  .tabs {
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    /* space for scrollbar if needed */
+  }
+
+  .tab-button {
+    font-size: 1rem;
+    white-space: nowrap;
+  }
 }
