@@ -166,7 +166,7 @@ const Expenses = () => {
                         <Plus size={20} /> Add Expense
                     </button>
                     <button className="btn-add-enhanced" style={{ background: 'white', color: '#4A2C2C', border: '2px solid #e5e7eb' }} onClick={handleBudgetClick}>
-                        <DollarSign size={20} /> Set Budget
+                        <span style={{ fontWeight: 700, fontSize: '18px' }}>₱</span> Set Budget
                     </button>
                 </div>
             </div>
@@ -340,7 +340,7 @@ const Expenses = () => {
                             </div>
                             <div className="form-group">
                                 <label>Amount</label>
-                                <div className="amount-input-wrapper">
+                                <div className="amount-input-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <span className="currency-symbol">₱</span>
                                     <input
                                         type="number"
@@ -349,13 +349,13 @@ const Expenses = () => {
                                         onChange={handleInputChange}
                                         required
                                         step="0.01"
+                                        style={{ flex: 1 }}
                                     />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label>Date</label>
                                 <div className="date-input-wrapper">
-                                    <span className="calendar-icon">📅</span>
                                     <input
                                         type="date"
                                         name="date"
@@ -366,9 +366,9 @@ const Expenses = () => {
                                 </div>
                             </div>
 
-                            <div className="form-group toggle-group">
-                                <label>Split expense</label>
-                                <label className="switch">
+                            <div className="form-group" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <span className="inline-checkbox-label" style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>Split expense</span>
+                                <label className="switch" style={{ margin: 0 }}>
                                     <input
                                         type="checkbox"
                                         name="split"
@@ -378,8 +378,6 @@ const Expenses = () => {
                                     <span className="slider round"></span>
                                 </label>
                             </div>
-
-
 
                             <button type="submit" className="modal-submit-button">Save</button>
                         </form>

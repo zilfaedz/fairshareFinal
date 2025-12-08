@@ -83,7 +83,7 @@ const Dashboard = () => {
                         <span className="stat-badge expense">₱{monthlyExpense.toFixed(2)}</span>
                     </div>
                     <div className="stat-row">
-                        <span><DollarSign size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />Budget Remaining</span>
+                        <span><span style={{ marginRight: '8px', fontWeight: 700 }}>₱</span>Budget Remaining</span>
                         <span className="stat-badge budget">₱{budgetRemaining.toFixed(2)}</span>
                     </div>
                     <div className="card-actions">

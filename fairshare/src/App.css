@@ -411,7 +411,7 @@ input, button, textarea, select {
 
 /* Improve spacing around horizontal rule inside dashboard cards */
 .dashboard-card hr {
-  margin: 14px 0 22px 0;
+  margin: 10px 0 14px 0;
   border: none;
   border-top: 1px solid rgba(0,0,0,0.08);
 }
@@ -501,18 +501,32 @@ input, button, textarea, select {
 .page-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 40px 40px;
+  padding: 0 32px 28px;
 }
 
 .task-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 48px;
-  gap: 32px;
-  padding: 40px 0 32px;
-  border-bottom: 2px solid rgba(230, 168, 181, 0.15);
-  animation: fadeInDown 0.6s ease-out;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 16px;
+  padding: 12px 0 10px;
+  border-bottom: 2px solid rgba(230, 168, 181, 0.12);
+  animation: fadeInDown 0.5s ease-out;
+}
+
+/* Header action buttons stack spacing (Add Expense / Set Budget) */
+.header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* Make stacked header buttons equal width */
+.header-actions .btn-add-enhanced {
+  width: 180px;
+  justify-content: center;
 }
 
 @keyframes fadeInDown {
@@ -525,22 +539,22 @@ input, button, textarea, select {
 }
 
 .task-title {
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 700;
   color: var(--neutral-700);
-  margin: 0 0 12px 0;
+  margin: 0 0 6px 0;
   letter-spacing: -0.5px;
 }
 
 .task-subtitle {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--neutral-500);
   margin: 0;
   font-weight: 500;
 }
 
 .btn-add-enhanced {
-  padding: 16px 32px;
+  padding: 12px 28px;
   background: var(--gradient-primary);
   color: white;
   border: none;
@@ -588,9 +602,9 @@ input, button, textarea, select {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 48px;
-  animation: fadeInUp 0.7s ease-out 0.2s backwards;
+  gap: 14px;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s ease-out 0.2s backwards;
 }
 
 @keyframes fadeInUp {
@@ -697,22 +711,23 @@ input, button, textarea, select {
 }
 
 .task-section-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--neutral-700);
-  margin: 56px 0 28px 0;
+  margin: 10px 0 12px 0;
   padding-left: 4px;
   position: relative;
   display: inline-block;
+  z-index: 2;
 }
 
 .task-section-title::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -4px;
   left: 0;
   width: 60px;
-  height: 4px;
+  height: 3px;
   background: var(--gradient-primary);
   border-radius: 2px;
 }
@@ -720,15 +735,16 @@ input, button, textarea, select {
 .tasks-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 24px;
-  animation: fadeInUp 0.7s ease-out 0.3s backwards;
+  gap: 12px;
+  margin-top: 6px;
+  animation: fadeInUp 0.6s ease-out 0.25s backwards;
 }
 
 .task-card {
   background: white;
   border: 2px solid #F0F0F0;
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: 22px;
   transition: all var(--transition-base);
   display: flex;
   flex-direction: column;
@@ -757,7 +773,7 @@ input, button, textarea, select {
 .task-card:hover {
   border-color: var(--primary-pink);
   box-shadow: 0 16px 40px rgba(230, 168, 181, 0.25);
-  transform: translateY(-8px);
+  transform: translateY(-6px);
 }
 
 .task-custom-title {
@@ -797,7 +813,7 @@ input, button, textarea, select {
 .task-actions {
   display: flex;
   gap: 10px;
-  padding-top: 20px;
+  padding-top: 12px;
   border-top: 2px solid #F3F4F6;
   margin-top: auto;
 }
@@ -883,10 +899,10 @@ input, button, textarea, select {
 
 .modal-content {
   background-color: white;
-  padding: 36px;
+  padding: 28px;
   border-radius: var(--radius-xl);
   width: 100%;
-  max-width: 540px;
+  max-width: 460px;
   box-shadow: var(--shadow-xl);
   animation: modalSlideIn 0.3s ease-out;
 }
@@ -906,8 +922,8 @@ input, button, textarea, select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 28px;
-  padding-bottom: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
   border-bottom: 2px solid #f3f4f6;
 }
 
@@ -939,7 +955,7 @@ input, button, textarea, select {
 }
 
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .form-group label {
@@ -948,6 +964,16 @@ input, button, textarea, select {
   font-size: 14px;
   color: var(--neutral-700);
   font-weight: 600;
+}
+
+/* Inline checkbox + text label (Randomize Assignee) */
+.inline-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
 }
 
 .form-input-enhanced,
@@ -965,6 +991,27 @@ input, button, textarea, select {
   transition: all var(--transition-base);
   background: white;
   box-sizing: border-box;
+}
+
+/* Improve select dropdown arrow alignment and spacing */
+.form-select-enhanced,
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%239CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px 18px;
+  padding-right: 46px; /* space for arrow */
+}
+
+/* Tweak focus ring for selects to match inputs */
+.form-select-enhanced:focus,
+.form-group select:focus {
+  border-color: var(--primary-pink);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(230, 168, 181, 0.15);
 }
 
 .form-input-enhanced:focus,
@@ -985,7 +1032,7 @@ input, button, textarea, select {
 
 .form-row {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .form-row .form-group {
@@ -1035,6 +1082,21 @@ input, button, textarea, select {
 .modal-submit-button span {
   position: relative;
   z-index: 1;
+}
+
+/* Global modal action buttons: horizontal layout and no overflow */
+.modal-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.modal-actions .action-button {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
 }
 
 /* =========================================

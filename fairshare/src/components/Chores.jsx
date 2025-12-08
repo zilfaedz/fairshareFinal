@@ -8,6 +8,8 @@ const Chores = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedChore, setSelectedChore] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [choreToDelete, setChoreToDelete] = useState(null);
     const [newChore, setNewChore] = useState({
         title: '',
         description: '',
@@ -67,8 +69,8 @@ const Chores = () => {
 
     const handleDeleteClick = () => {
         if (selectedChore) {
-            deleteChore(selectedChore.id);
-            setIsModalOpen(false);
+            setChoreToDelete(selectedChore);
+            setIsDeleteModalOpen(true);
         }
     };
 
@@ -227,52 +229,6 @@ const Chores = () => {
             </div>
 
             <div className="chores-list">
-                {selectedUser && (
-                    <div className="task-section my-chores-section">
-                        <h3 className="task-section-title" >My Chores</h3>
-                        <div className="tasks-grid">
-                            {chores.filter(c => c.assignedTo && c.assignedTo.id === selectedUser.id && c.status !== 'completed').length === 0 ? (
-                                <div className="empty-state-enhanced" style={{ gridColumn: '1/-1', textAlign: 'center', paddingLeft: 0 }}>You have no active chores assigned.</div>
-                            ) : (
-                                chores.filter(c => c.assignedTo && c.assignedTo.id === selectedUser.id && c.status !== 'completed').map(chore => {
-                                    const time = (chore.dueDate || '').split(' ')[1] || '';
-                                    const formatTime = (t) => {
-                                        if (!t) return '';
-                                        const [h, m] = t.split(':');
-                                        const hour = parseInt(h);
-                                        const ampm = hour >= 12 ? 'PM' : 'AM';
-                                        const hour12 = hour % 12 || 12;
-                                        return `${hour12}:${m}${ampm}`;
-                                    };
-                                    return (
-                                        <div key={chore.id} className="task-card featured">
-                                            <div className="task-card-header">
-                                                <h4 className="task-custom-title">{chore.title}</h4>
-                                                {time && <span className="task-time">{formatTime(time)}</span>}
-                                            </div>
-                                            {chore.description && (
-                                                <p className="task-description">{chore.description}</p>
-                                            )}
-                                            <div className="task-meta-row">
-                                                <span style={{ fontWeight: 'bold'}}>Assigned to You</span>
-                                                <span className="task-due-date">Due: {new Date((chore.dueDate || '').split(' ')[0]).toLocaleDateString()}</span>
-                                            </div>
-                                            <div className="task-actions">
-                                                <button className="btn-action-edit" onClick={(e) => { e.stopPropagation(); handleChoreClick(chore); }}>
-                                                    <Edit2 size={14} /> Edit
-                                                </button>
-                                                <button className="btn-action-complete" onClick={(e) => { e.stopPropagation(); toggleChoreStatus(chore.id); }}>
-                                                    <CheckCircle size={14} /> Done
-                                                </button>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </div>
-                    </div>
-                )}
-                <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #eee' }} />
 
                 {sortedDates.length === 0 ? (
                     <div className="tasks-grid">
@@ -298,7 +254,27 @@ const Chores = () => {
                                     return (
                                         <div key={chore.id} className="task-card">
                                             <div className="task-card-header">
-                                                <h4 className="task-custom-title">{chore.title}</h4>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                                    <h4 className="task-custom-title">{chore.title}</h4>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                        <button
+                                                            className="btn-icon"
+                                                            onClick={(e) => { e.stopPropagation(); handleChoreClick(chore); setIsEditMode(true); }}
+                                                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}
+                                                            title="Edit"
+                                                        >
+                                                            <Edit2 size={16} />
+                                                        </button>
+                                                        <button
+                                                            className="btn-icon"
+                                                            onClick={(e) => { e.stopPropagation(); setChoreToDelete(chore); setIsDeleteModalOpen(true); }}
+                                                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d93025' }}
+                                                            title="Delete"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 {time && <span className="task-time">{formatTime(time)}</span>}
                                             </div>
 
@@ -311,22 +287,11 @@ const Chores = () => {
                                             </div>
 
                                             <div className="task-actions">
-                                                <button className="btn-action-edit" onClick={(e) => { e.stopPropagation(); handleChoreClick(chore); }}>
-                                                    <Edit2 size={14} /> Edit
-                                                </button>
                                                 {chore.status !== 'completed' && chore.assignedTo && selectedUser && chore.assignedTo.id === selectedUser.id && (
                                                     <button className="btn-action-complete" onClick={(e) => { e.stopPropagation(); toggleChoreStatus(chore.id); }}>
                                                         <CheckCircle size={14} /> Done
                                                     </button>
                                                 )}
-                                                <button className="btn-action-delete" onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    if (window.confirm('Are you sure you want to delete this chore?')) {
-                                                        deleteChore(chore.id);
-                                                    }
-                                                }}>
-                                                    <Trash2 size={14} /> Delete
-                                                </button>
                                             </div>
                                         </div>
                                     );
@@ -396,7 +361,7 @@ const Chores = () => {
                                     <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                         Assigned Housemate
                                         {!selectedChore && (
-                                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '0.9rem', color: '#666' }}>
+                                            <div className="inline-checkbox-label">
                                                 <input
                                                     type="checkbox"
                                                     checked={randomAssignee}
@@ -455,6 +420,34 @@ const Chores = () => {
                                 </div>
                             </form>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {isDeleteModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Confirm Delete</h2>
+                            <button className="close-button" onClick={() => { setIsDeleteModalOpen(false); setChoreToDelete(null); }}><X size={20} /></button>
+                        </div>
+                        <p>Are you sure you want to delete this chore?</p>
+                        <div className="modal-actions">
+                            <button
+                                className="action-button delete"
+                                style={{ backgroundColor: '#d93025', color: 'white' }}
+                                onClick={() => {
+                                    if (choreToDelete) {
+                                        deleteChore(choreToDelete.id);
+                                        setIsDeleteModalOpen(false);
+                                        setChoreToDelete(null);
+                                    }
+                                }}
+                            >
+                                Delete
+                            </button>
+                            <button className="action-button cancel" onClick={() => { setIsDeleteModalOpen(false); setChoreToDelete(null); }}>Cancel</button>
+                        </div>
                     </div>
                 </div>
             )}
