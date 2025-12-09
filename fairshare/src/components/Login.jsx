@@ -138,7 +138,7 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="form-footer">
+          <div className="form-footer" style={{marginTop: '20px'}}>
             <p>Don't have an account? <Link to="/register" className="link-primary-bold">Create account</Link></p>
           </div>
         </div>

@@ -23,10 +23,21 @@ public class ChoreService {
     @Autowired
     private UserRepository userRepository;
 
-    public Chore createChore(Chore chore, Long groupId, Long assignedToId) {
+    @Autowired
+    private FairnessService fairnessService;
+
+    public Chore createChore(Chore chore, Long groupId, Long assignedToId, boolean useFairAssignment) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
         chore.setGroup(group);
+
+        // Use fair assignment if requested and no specific user is assigned
+        if (useFairAssignment && (assignedToId == null || assignedToId == 0)) {
+            Long fairestMemberId = fairnessService.selectFairestMember(groupId);
+            if (fairestMemberId != null) {
+                assignedToId = fairestMemberId;
+            }
+        }
 
         if (assignedToId != null) {
             User user = userRepository.findById(assignedToId)

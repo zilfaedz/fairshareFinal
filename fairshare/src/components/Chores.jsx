@@ -87,18 +87,12 @@ const Chores = () => {
             return;
         }
 
-        let assignedToId = newChore.assignedToId;
-
-        if (!selectedChore && randomAssignee && groupMembers.length > 0) {
-            const randomIndex = Math.floor(Math.random() * groupMembers.length);
-            assignedToId = groupMembers[randomIndex].id;
-        }
-
         const chorePayload = {
             ...newChore,
             dueDate: `${newChore.date} ${newChore.time}`,
             status: newChore.status || 'pending',
-            assignedToId: assignedToId
+            assignedToId: newChore.assignedToId,
+            useFairAssignment: randomAssignee // Use fair assignment if checkbox is checked
         };
 
         if (selectedChore) {
@@ -361,7 +355,7 @@ const Chores = () => {
                                     <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                         Assigned Housemate
                                         {!selectedChore && (
-                                            <div className="inline-checkbox-label">
+                                            <div className="inline-checkbox-label" title="Assigns to member with highest fairness score (based on completed and pending tasks)">
                                                 <input
                                                     type="checkbox"
                                                     checked={randomAssignee}
@@ -374,7 +368,7 @@ const Chores = () => {
                                                     }}
                                                     style={{ marginRight: '8px' }}
                                                 />
-                                                Randomize Assignee
+                                                Fair Assignment
                                             </div>
                                         )}
                                     </label>
@@ -385,7 +379,7 @@ const Chores = () => {
                                         className="form-select-enhanced"
                                         disabled={randomAssignee}
                                     >
-                                        <option value="">{randomAssignee ? "Randomly selected on save" : "Select a housemate"}</option>
+                                        <option value="">{randomAssignee ? "Fairly selected on save" : "Select a housemate"}</option>
                                         {groupMembers.map(member => (
                                             <option key={member.id} value={member.id}>{member.fullName || member.name}</option>
                                         ))}

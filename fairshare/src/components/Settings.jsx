@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAppData } from '../context/AppDataContext';
-import { User, Users, LogOut, Trash2, Copy, Camera, X } from 'lucide-react';
+import { User, Users, LogOut, Trash2, Copy, Camera, X, UserPlus } from 'lucide-react';
 
 const Settings = () => {
     const {
@@ -206,7 +206,10 @@ const Settings = () => {
                             </div>
 
                             <div className="settings-card pink-bg">
-                                <h3 style={{ marginTop: '20px' }}>Create New Group</h3>
+                                <div className="card-header-icon">
+                                    <UserPlus size={24} className="icon" />
+                                    <h3>Create New Group</h3>
+                                </div>
                                 <p className="card-description">Group Name</p>
                                 <form onSubmit={handleCreateGroup} className="settings-form-row">
                                     <input
@@ -360,63 +363,63 @@ const Settings = () => {
                         <div className="settings-card pink-bg">
                             <h3>Basic info</h3>
                             {isEditingBasicInfo ? (
-                            <div className="edit-form-grid">
-                                <div className="info-row">
-                                    <span className="info-label">Name</span>
-                                    <input
-                                        type="text"
-                                        className="settings-input"
-                                        value={editFormData.fullName || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, fullName: e.target.value })}
-                                    />
+                                <div className="edit-form-grid">
+                                    <div className="info-row">
+                                        <span className="info-label">Name</span>
+                                        <input
+                                            type="text"
+                                            className="settings-input"
+                                            value={editFormData.fullName || ''}
+                                            onChange={(e) => setEditFormData({ ...editFormData, fullName: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Date of Birth</span>
+                                        <input
+                                            type="date"
+                                            className="settings-input"
+                                            value={editFormData.birthdate || ''}
+                                            onChange={(e) => setEditFormData({ ...editFormData, birthdate: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Gender</span>
+                                        <select
+                                            className="settings-input"
+                                            value={editFormData.gender || ''}
+                                            onChange={(e) => setEditFormData({ ...editFormData, gender: e.target.value })}
+                                        >
+                                            <option value="" disabled>Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    {/* Email moved to Account info section */}
+                                    <hr className="divider" />
+                                    <div className="form-actions">
+                                        <button className="settings-button white" onClick={handleCancelBasicInfo}>Cancel</button>
+                                        <button className="settings-button primary" onClick={handleSaveBasicInfo}>Save</button>
+                                    </div>
                                 </div>
-                                <div className="info-row">
-                                    <span className="info-label">Date of Birth</span>
-                                    <input
-                                        type="date"
-                                        className="settings-input"
-                                        value={editFormData.birthdate || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, birthdate: e.target.value })}
-                                    />
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Gender</span>
-                                    <select
-                                        className="settings-input"
-                                        value={editFormData.gender || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, gender: e.target.value })}
-                                    >
-                                        <option value="" disabled>Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                                {/* Email moved to Account info section */}
-                                <hr className="divider" />
-                                <div className="form-actions">
-                                    <button className="settings-button white" onClick={handleCancelBasicInfo}>Cancel</button>
-                                    <button className="settings-button primary" onClick={handleSaveBasicInfo}>Save</button>
-                                </div>
-                            </div>
                             ) : (
-                            <>
-                                <div className="info-row">
-                                    <span className="info-label">Name</span>
-                                    <span className="info-value">{user.fullName}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Date of Birth</span>
-                                    <span className="info-value">{user.birthdate ? new Date(user.birthdate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Gender</span>
-                                    <span className="info-value">{user.gender || 'Not set'}</span>
-                                </div>
-                                {/* Email moved to Account info section */}
-                                <hr className="divider" />
-                                <button className="settings-button white full-width" onClick={handleEditBasicInfo}>Edit</button>
-                            </>
+                                <>
+                                    <div className="info-row">
+                                        <span className="info-label">Name</span>
+                                        <span className="info-value">{user.fullName}</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Date of Birth</span>
+                                        <span className="info-value">{user.birthdate ? new Date(user.birthdate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Gender</span>
+                                        <span className="info-value">{user.gender || 'Not set'}</span>
+                                    </div>
+                                    {/* Email moved to Account info section */}
+                                    <hr className="divider" />
+                                    <button className="settings-button white full-width" onClick={handleEditBasicInfo}>Edit</button>
+                                </>
                             )}
                         </div>
 
@@ -425,67 +428,67 @@ const Settings = () => {
                             <h3>Account info</h3>
                             {isEditingAccountInfo ? (
                                 <div className="edit-form-grid">
-                                <div className="info-row">
-                                    <span className="info-label">Email</span>
-                                    <input
-                                        type="email"
-                                        className="settings-input"
-                                        placeholder="Enter email"
-                                        value={accountEditFormData.email || ''}
-                                        onChange={(e) => {
-                                            setAccountEditFormData({ ...accountEditFormData, email: e.target.value });
-                                        }}
-                                    />
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Current Password</span>
-                                    <input
-                                        type="password"
-                                        className="settings-input"
-                                        placeholder="Enter current password to change password"
-                                        value={accountEditFormData.currentPassword || ''}
-                                        onChange={(e) => {
-                                            setAccountEditFormData({ ...accountEditFormData, currentPassword: e.target.value });
-                                            setPasswordError('');
-                                        }}
-                                    />
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">New Password</span>
-                                    <input
-                                        type="password"
-                                        className="settings-input"
-                                        placeholder="Leave empty to keep current password"
-                                        value={accountEditFormData.newPassword || ''}
-                                        onChange={(e) => {
-                                            setAccountEditFormData({ ...accountEditFormData, newPassword: e.target.value });
-                                            setPasswordError('');
-                                        }}
-                                    />
-                                </div>
-                                {passwordError && (
-                                    <div className="error-message" style={{ color: 'red', marginTop: '-10px', marginBottom: '10px' }}>
-                                        {passwordError}
+                                    <div className="info-row">
+                                        <span className="info-label">Email</span>
+                                        <input
+                                            type="email"
+                                            className="settings-input"
+                                            placeholder="Enter email"
+                                            value={accountEditFormData.email || ''}
+                                            onChange={(e) => {
+                                                setAccountEditFormData({ ...accountEditFormData, email: e.target.value });
+                                            }}
+                                        />
                                     </div>
-                                )}
-                                <hr className="divider" />
-                                <div className="form-actions">
-                                    <button className="settings-button white" onClick={handleCancelAccountInfo}>Cancel</button>
-                                    <button className="settings-button primary" onClick={handleSaveAccountInfo}>Save</button>
-                                </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Current Password</span>
+                                        <input
+                                            type="password"
+                                            className="settings-input"
+                                            placeholder="Enter current password to change password"
+                                            value={accountEditFormData.currentPassword || ''}
+                                            onChange={(e) => {
+                                                setAccountEditFormData({ ...accountEditFormData, currentPassword: e.target.value });
+                                                setPasswordError('');
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">New Password</span>
+                                        <input
+                                            type="password"
+                                            className="settings-input"
+                                            placeholder="Leave empty to keep current password"
+                                            value={accountEditFormData.newPassword || ''}
+                                            onChange={(e) => {
+                                                setAccountEditFormData({ ...accountEditFormData, newPassword: e.target.value });
+                                                setPasswordError('');
+                                            }}
+                                        />
+                                    </div>
+                                    {passwordError && (
+                                        <div className="error-message" style={{ color: 'red', marginTop: '-10px', marginBottom: '10px' }}>
+                                            {passwordError}
+                                        </div>
+                                    )}
+                                    <hr className="divider" />
+                                    <div className="form-actions">
+                                        <button className="settings-button white" onClick={handleCancelAccountInfo}>Cancel</button>
+                                        <button className="settings-button primary" onClick={handleSaveAccountInfo}>Save</button>
+                                    </div>
                                 </div>
                             ) : (
                                 <>
-                                <div className="info-row">
-                                    <span className="info-label">Email</span>
-                                    <span className="info-value">{user.email}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Password</span>
-                                    <span className="info-value">••••••••••</span>
-                                </div>
-                                <hr className="divider" />
-                                <button className="settings-button white full-width" onClick={handleEditAccountInfo}>Edit</button>
+                                    <div className="info-row">
+                                        <span className="info-label">Email</span>
+                                        <span className="info-value">{user.email}</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Password</span>
+                                        <span className="info-value">••••••••••</span>
+                                    </div>
+                                    <hr className="divider" />
+                                    <button className="settings-button white full-width" onClick={handleEditAccountInfo}>Edit</button>
                                 </>
                             )}
                         </div>

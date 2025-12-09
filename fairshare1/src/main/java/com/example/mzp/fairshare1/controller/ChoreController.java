@@ -22,6 +22,9 @@ public class ChoreController {
     @Autowired
     private com.example.mzp.fairshare1.repositories.UserRepository userRepository;
 
+    @Autowired
+    private com.example.mzp.fairshare1.services.FairnessService fairnessService;
+
     @PostMapping("/group/{groupId}")
     public Chore createChore(@PathVariable Long groupId, @RequestBody Map<String, Object> payload) {
         Chore chore = new Chore();
@@ -54,11 +57,14 @@ public class ChoreController {
             }
         }
 
+        // Check if fair assignment is requested
+        boolean useFairAssignment = Boolean.TRUE.equals(payload.get("useFairAssignment"));
+
         // Temporary fix: To support notifications, we need the creator.
         // We will try to get `creatorId` from payload if available.
         Object creatorIdObj = payload.get("creatorId");
 
-        Chore createdChore = choreService.createChore(chore, groupId, assignedToId);
+        Chore createdChore = choreService.createChore(chore, groupId, assignedToId, useFairAssignment);
 
         if (creatorIdObj != null) {
             Long creatorId = Long.valueOf(creatorIdObj.toString());
@@ -83,6 +89,12 @@ public class ChoreController {
     @DeleteMapping("/{id}")
     public void deleteChore(@PathVariable Long id) {
         choreService.deleteChore(id);
+    }
+
+    @GetMapping("/group/{groupId}/fairness-scores")
+    public Map<Long, com.example.mzp.fairshare1.services.FairnessService.FairnessScore> getFairnessScores(
+            @PathVariable Long groupId) {
+        return fairnessService.calculateFairnessScores(groupId);
     }
 
 }

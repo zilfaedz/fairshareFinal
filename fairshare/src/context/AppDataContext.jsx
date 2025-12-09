@@ -16,6 +16,7 @@ export const AppDataProvider = ({ children }) => {
     const [groups, setGroups] = useState([]);
     const [budget, setBudget] = useState(0);
     const [toastMessage, setToastMessage] = useState(null);
+    const [fairnessScores, setFairnessScores] = useState({});
 
     const [currentGroup, setCurrentGroup] = useState(null);
 
@@ -35,9 +36,11 @@ export const AppDataProvider = ({ children }) => {
         if (currentGroup) {
             fetchGroupChores(currentGroup.id);
             fetchGroupExpenses(currentGroup.id);
+            fetchFairnessScores(currentGroup.id);
         } else {
             setChores([]);
             setExpenses([]);
+            setFairnessScores({});
         }
     }, [currentGroup]);
 
@@ -81,6 +84,18 @@ export const AppDataProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Failed to fetch expenses:", error);
+        }
+    };
+
+    const fetchFairnessScores = async (groupId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/chores/group/${groupId}/fairness-scores`);
+            if (response.ok) {
+                const data = await response.json();
+                setFairnessScores(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch fairness scores:", error);
         }
     };
 
@@ -175,11 +190,12 @@ export const AppDataProvider = ({ children }) => {
             const response = await fetch(`http://localhost:8080/api/chores/group/${currentGroup.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...chore, creatorId: user.id }),
+                body: JSON.stringify({ ...chore, creatorId: user.id, useFairAssignment: chore.useFairAssignment || false }),
             });
             if (response.ok) {
                 const newChore = await response.json();
                 setChores([...chores, newChore]);
+                if (currentGroup) fetchFairnessScores(currentGroup.id); // Refresh scores
                 showToast("Chore added successfully!");
             } else {
                 const errorText = await response.text();
@@ -206,6 +222,7 @@ export const AppDataProvider = ({ children }) => {
             if (response.ok) {
                 const updatedChore = await response.json();
                 setChores(chores.map(c => c.id === id ? updatedChore : c));
+                if (currentGroup) fetchFairnessScores(currentGroup.id); // Refresh scores
             }
         } catch (error) {
             console.error("Failed to update chore status:", error);
@@ -731,7 +748,9 @@ export const AppDataProvider = ({ children }) => {
             sendInvite,
             respondToInvite,
             markNotificationsRead,
-            pendingCount
+            pendingCount,
+            fairnessScores,
+            fetchFairnessScores
         }}>
             {children}
         </AppDataContext.Provider>

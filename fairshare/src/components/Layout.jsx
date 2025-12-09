@@ -10,6 +10,7 @@ const Layout = ({ children }) => {
     const navigate = useNavigate();
     const { user, groups, toastMessage, showToast, hideToast, logout, notifications, markNotificationsRead, pendingCount } = useAppData();
     const [showNotifications, setShowNotifications] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
     const notificationRef = useRef(null);
 
     const isActive = (path) => location.pathname === path;
@@ -52,19 +53,24 @@ const Layout = ({ children }) => {
         }
     };
 
+    const toggleSidebar = () => {
+        setCollapsed(!collapsed);
+    };
+
     return (
         <div className="layout-container">
             <Toast message={toastMessage} onClose={hideToast} />
-            <aside className="sidebar">
+            <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-header">
                     <Link to="/dashboard" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div className="logo-circle-small"></div>
+                        <img src={require('../img/logo.png')} alt="FairShare Logo" className="logo-image" />
                         <h2 className="app-title-small">FairShare</h2>
                     </Link>
                 </div>
                 <nav className="sidebar-nav">
                     <Link to="/dashboard" className={`nav-item ${isActive('/dashboard') ? 'active' : ''}`}>
-                        <LayoutDashboard size={20} className="nav-icon" /> Dashboard
+                        <LayoutDashboard size={20} className="nav-icon" />
+                        <span className="nav-text">Dashboard</span>
                     </Link>
 
                     <Link
@@ -73,7 +79,8 @@ const Layout = ({ children }) => {
                         onClick={(e) => handleRestrictedClick(e, '/chores')}
                         style={{ opacity: hasGroup ? 1 : 0.6, cursor: hasGroup ? 'pointer' : 'not-allowed' }}
                     >
-                        <CheckSquare size={20} className="nav-icon" /> Chores
+                        <CheckSquare size={20} className="nav-icon" />
+                        <span className="nav-text">Chores</span>
                     </Link>
                     <Link
                         to="/expenses"
@@ -81,22 +88,25 @@ const Layout = ({ children }) => {
                         onClick={(e) => handleRestrictedClick(e, '/expenses')}
                         style={{ opacity: hasGroup ? 1 : 0.6, cursor: hasGroup ? 'pointer' : 'not-allowed' }}
                     >
-                        <DollarSign size={20} className="nav-icon" /> Expenses
+                        <DollarSign size={20} className="nav-icon" />
+                        <span className="nav-text">Expenses</span>
                     </Link>
 
                     <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`}>
-                        <SettingsIcon size={20} className="nav-icon" /> Settings
+                        <SettingsIcon size={20} className="nav-icon" />
+                        <span className="nav-text">Settings</span>
                     </Link>
                 </nav>
                 <div className="sidebar-footer">
                     <button onClick={handleLogout} className="logout-button">
-                        <LogOut size={20} className="nav-icon" /> Logout
+                        <LogOut size={20} className="nav-icon" />
+                        <span className="nav-text">Logout</span>
                     </button>
                 </div>
             </aside>
             <main className="main-content">
                 <header className="topbar">
-                    <button className="menu-button"><Menu size={24} /></button>
+                    <button className="menu-button" onClick={toggleSidebar}><Menu size={24} /></button>
                     <div className="topbar-right">
                         <div className="notification-wrapper" ref={notificationRef}>
                             <button className="notification-button" onClick={() => {

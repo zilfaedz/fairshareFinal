@@ -46,6 +46,7 @@ public class NotificationService {
         notification.setSender(sender);
         notification.setGroup(group);
         notification.setType(Notification.NotificationType.GROUP_INVITE);
+        notification.setMessage(sender.getFullName() + " invited you to join " + group.getName());
 
         notificationRepository.save(notification);
     }
@@ -109,6 +110,7 @@ public class NotificationService {
         notification.setSender(creator);
         notification.setGroup(chore.getGroup());
         notification.setType(Notification.NotificationType.CHORE_ASSIGNED);
+        notification.setMessage(creator.getFullName() + " assigned you a chore: " + chore.getTitle());
         notificationRepository.save(notification);
     }
 
@@ -122,6 +124,7 @@ public class NotificationService {
                 notification.setSender(creator);
                 notification.setGroup(group);
                 notification.setType(Notification.NotificationType.EXPENSE_ADDED);
+                notification.setMessage(creator.getFullName() + " added an expense to " + group.getName());
                 notificationRepository.save(notification);
             }
         }

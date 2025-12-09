@@ -180,7 +180,7 @@ const Register = () => {
                         </button>
                     </form>
 
-                    <div className="form-footer">
+                    <div className="form-footer" style={{marginTop: '20px'}}>
                         <p>Already have an account? <Link to="/login" className="link-primary-bold">Sign in</Link></p>
                     </div>
                 </div>

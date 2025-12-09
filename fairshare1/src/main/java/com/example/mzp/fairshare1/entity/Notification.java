@@ -39,6 +39,9 @@ public class Notification {
     @JsonProperty("isRead")
     private boolean isRead = false;
 
+    @Column(nullable = true)
+    private String message;
+
     public Notification() {
         this.createdAt = LocalDateTime.now();
         this.status = NotificationStatus.PENDING;
@@ -121,5 +124,13 @@ public class Notification {
 
     public void setRead(boolean read) {
         this.isRead = read;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
