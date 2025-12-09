@@ -28,6 +28,7 @@ const Settings = () => {
 
     const [isEditingAccountInfo, setIsEditingAccountInfo] = useState(false);
     const [accountEditFormData, setAccountEditFormData] = useState({
+        email: user?.email || '',
         newPassword: '',
         currentPassword: ''
     });
@@ -92,6 +93,11 @@ const Settings = () => {
 
         // Update user with new password
         const updatedData = {};
+
+        // Update email if changed
+        if (accountEditFormData.email && accountEditFormData.email !== user.email) {
+            updatedData.email = accountEditFormData.email;
+        }
 
         // Only update password if a new one was provided
         if (accountEditFormData.newPassword) {
@@ -306,9 +312,9 @@ const Settings = () => {
             {/* Account Settings Tab */}
             {activeTab === 'account' && (
                 <div className="settings-content">
-                    {/* Basic Info */}
-                    <div className="settings-card pink-bg">
-                        <h3>Basic info</h3>
+                    {/* Profile Picture Card on top */}
+                    <div className="settings-card pink-bg profile-compact">
+                        <h3>Profile Picture</h3>
                         <div className="profile-picture-section">
                             <div className="profile-label">Profile Picture</div>
                             <div className="profile-picture-controls">
@@ -322,9 +328,9 @@ const Settings = () => {
                                             onChange={handleFileChange}
                                         />
                                         {editFormData.profilePicture ? (
-                                            <img src={editFormData.profilePicture} alt="Profile" className="profile-picture-circle large" />
+                                            <img src={editFormData.profilePicture} alt="Profile" className="profile-picture-circle compact" />
                                         ) : (
-                                            <div className="profile-picture-circle large"></div>
+                                            <div className="profile-picture-circle compact"></div>
                                         )}
                                         <div className="profile-picture-actions">
                                             <span className="upload-text" onClick={triggerFileUpload}>Upload profile picture</span>
@@ -334,9 +340,9 @@ const Settings = () => {
                                 ) : (
                                     <>
                                         {user.profilePicture ? (
-                                            <img src={user.profilePicture} alt="Profile" className="profile-picture-circle large" />
+                                            <img src={user.profilePicture} alt="Profile" className="profile-picture-circle compact" />
                                         ) : (
-                                            <div className="profile-picture-circle large"></div>
+                                            <div className="profile-picture-circle compact"></div>
                                         )}
                                         <div className="profile-picture-actions">
                                             <span className="upload-text" style={{ opacity: 0.5, cursor: 'default' }}>Upload profile picture</span>
@@ -346,8 +352,14 @@ const Settings = () => {
                                 )}
                             </div>
                         </div>
-                        <hr className="divider" />
-                        {isEditingBasicInfo ? (
+                    </div>
+
+                    {/* Two-column grid: Basic info left, Account info right */}
+                    <div className="settings-content settings-grid-two">
+                        {/* Basic Info */}
+                        <div className="settings-card pink-bg">
+                            <h3>Basic info</h3>
+                            {isEditingBasicInfo ? (
                             <div className="edit-form-grid">
                                 <div className="info-row">
                                     <span className="info-label">Name</span>
@@ -380,22 +392,14 @@ const Settings = () => {
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
-                                <div className="info-row">
-                                    <span className="info-label">Email</span>
-                                    <input
-                                        type="email"
-                                        className="settings-input"
-                                        value={editFormData.email || ''}
-                                        onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
-                                    />
-                                </div>
+                                {/* Email moved to Account info section */}
                                 <hr className="divider" />
                                 <div className="form-actions">
                                     <button className="settings-button white" onClick={handleCancelBasicInfo}>Cancel</button>
                                     <button className="settings-button primary" onClick={handleSaveBasicInfo}>Save</button>
                                 </div>
                             </div>
-                        ) : (
+                            ) : (
                             <>
                                 <div className="info-row">
                                     <span className="info-label">Name</span>
@@ -409,21 +413,30 @@ const Settings = () => {
                                     <span className="info-label">Gender</span>
                                     <span className="info-value">{user.gender || 'Not set'}</span>
                                 </div>
-                                <div className="info-row">
-                                    <span className="info-label">Email</span>
-                                    <span className="info-value">{user.email}</span>
-                                </div>
+                                {/* Email moved to Account info section */}
                                 <hr className="divider" />
                                 <button className="settings-button white full-width" onClick={handleEditBasicInfo}>Edit</button>
                             </>
-                        )}
-                    </div>
+                            )}
+                        </div>
 
-                    {/* Account Info */}
-                    <div className="settings-card pink-bg">
-                        <h3>Account info</h3>
-                        {isEditingAccountInfo ? (
-                            <div className="edit-form-grid">
+                        {/* Account Info */}
+                        <div className="settings-card pink-bg">
+                            <h3>Account info</h3>
+                            {isEditingAccountInfo ? (
+                                <div className="edit-form-grid">
+                                <div className="info-row">
+                                    <span className="info-label">Email</span>
+                                    <input
+                                        type="email"
+                                        className="settings-input"
+                                        placeholder="Enter email"
+                                        value={accountEditFormData.email || ''}
+                                        onChange={(e) => {
+                                            setAccountEditFormData({ ...accountEditFormData, email: e.target.value });
+                                        }}
+                                    />
+                                </div>
                                 <div className="info-row">
                                     <span className="info-label">Current Password</span>
                                     <input
@@ -460,17 +473,22 @@ const Settings = () => {
                                     <button className="settings-button white" onClick={handleCancelAccountInfo}>Cancel</button>
                                     <button className="settings-button primary" onClick={handleSaveAccountInfo}>Save</button>
                                 </div>
-                            </div>
-                        ) : (
-                            <>
+                                </div>
+                            ) : (
+                                <>
+                                <div className="info-row">
+                                    <span className="info-label">Email</span>
+                                    <span className="info-value">{user.email}</span>
+                                </div>
                                 <div className="info-row">
                                     <span className="info-label">Password</span>
                                     <span className="info-value">••••••••••</span>
                                 </div>
                                 <hr className="divider" />
                                 <button className="settings-button white full-width" onClick={handleEditAccountInfo}>Edit</button>
-                            </>
-                        )}
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
