@@ -378,7 +378,12 @@ select {
 
 .dashboard-card.stats-card {
   background: #FFFFFF;
-  padding: 22px 32px 10px; /* slightly wider left/right padding */
+  padding: 22px 32px 22px; /* make top and bottom padding equal */
+  display: flex;
+  flex-direction: column; /* enable vertical centering of inner block */
+}
+.dashboard-card.stats-card .stats-content {
+  margin: auto 0; /* center the content block vertically within the card */
 }
 
 .dashboard-card:hover {
@@ -402,7 +407,7 @@ select {
 
 /* Reduce subtitle spacing only inside stats card */
 .dashboard-card.stats-card .card-subtitle {
-  margin: 4px 0 8px 0;
+  margin: 4px 0 6px 0; /* slightly tighter under subtitle */
   font-size: 0.9rem;
 }
 
@@ -473,7 +478,7 @@ select {
 
 /* Tighter rows only in stats card */
 .dashboard-card.stats-card .stat-row {
-  margin-bottom: 12px; /* tighter to reduce mid-card whitespace */
+  margin-bottom: 10px; /* a bit tighter to reduce mid-card whitespace */
   font-size: 0.9rem;
   display: grid;              /* align label/value cleanly */
   grid-template-columns: 1fr max-content;
@@ -504,8 +509,8 @@ select {
 
 /* Slimmer actions only in stats card */
 .dashboard-card.stats-card .card-actions {
-  gap: 16px;   /* slightly narrower gap */
-  margin-top: 10px; /* bring actions closer to rows */
+  gap: 14px;   /* slightly narrower gap */
+  margin-top: 8px; /* bring actions closer to rows */
   width: 100%;
   justify-content: center; /* centered buttons */
 }
@@ -543,7 +548,7 @@ select {
 
 /* Slightly tighter hr only in stats card */
 .dashboard-card.stats-card hr {
-  margin: 8px 0 14px 0; /* clearer separation between header and rows */
+  margin: 6px 0 10px 0; /* tighter separation between header and rows */
 }
 
 /* Fairness Pie Chart Styles */
@@ -738,8 +743,9 @@ select {
 .summary-card {
   background: #FFFFFF;
   border-radius: var(--radius-xl);
-  padding: 18px; /* reduced padding for smaller footprint */
+  padding: 22px 32px 22px; /* match other cards; equal top/bottom */
   border: 2px solid #F0F0F0;
+  box-shadow: var(--shadow-md); /* match dashboard card base shadow */
   transition: all var(--transition-base);
 }
 
@@ -753,7 +759,7 @@ select {
   margin: 0 0 12px 0;
   color: #4A2C2C;
   font-weight: 700;
-  font-size: 1rem; /* slightly smaller heading */
+  font-size: 1.5rem; /* match other card titles */
 }
 
 .summary-value-box {
@@ -766,20 +772,6 @@ select {
   color: #4A2C2C;
   box-shadow: var(--shadow-sm);
 }
-
-/* Date pill styling to match prototype */
-.summary-value-box.date-box {
-  background: var(--gradient-primary); /* match action button gradient */
-  color: #ffffff; /* white text like buttons */
-  border-radius: var(--radius-md); /* match button radius */
-  padding: 14px 22px; /* align proportions to buttons */
-  font-size: 1rem;
-  box-shadow: var(--shadow-md); /* subtle shadow like buttons */
-}
-
-/* Place Date card in right column of the main grid */
-.dashboard-date-card { grid-column: 2; grid-row: 2; }
-.dashboard-card.stats-card { grid-column: 2; grid-row: 1; }
 
 /* Match hover effects to chore/expenses task cards */
 .dashboard-card::before,
@@ -1490,20 +1482,19 @@ select {
 /* Interactive Cards */
 .interactive-card {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   position: relative;
 }
 
 .interactive-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border-color: #E6A8B5;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-pink); /* match other dashboard cards */
+  border-color: var(--primary-pink);
 }
 
 .interactive-card:active {
   transform: translateY(-2px);
-
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Responsive Design */
@@ -2438,4 +2429,226 @@ input:checked+.slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+/* =========================================
+   IMPROVED DATE CARD DESIGN
+   ========================================= */
+
+/* Base Date Card */
+.dashboard-date-card {
+  grid-column: 2;
+  grid-row: 2;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF8FA 100%);
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+  border: 2px solid #F0F0F0;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background accent */
+.dashboard-date-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(230, 168, 181, 0.08) 0%, transparent 70%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.dashboard-date-card:hover::after {
+  transform: translate(-25%, -25%);
+}
+
+/* Top accent bar */
+.dashboard-date-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transition: transform var(--transition-base);
+  transform-origin: left;
+}
+
+.dashboard-date-card:hover::before {
+  transform: scaleX(1);
+}
+
+.dashboard-date-card:hover {
+  border-color: var(--primary-pink);
+  box-shadow: 0 16px 40px rgba(230, 168, 181, 0.25);
+  transform: translateY(-6px);
+}
+
+/* Header */
+.dashboard-date-card .date-heading {
+  margin: 0 0 20px 0;
+  color: #4A2C2C;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+/* Content Container */
+.dashboard-date-card .date-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Top Line with Icon and Week Badge */
+.dashboard-date-card .date-topline {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.dashboard-date-card .date-icon {
+  font-size: 1.1rem;
+  filter: grayscale(0.2);
+  transition: transform var(--transition-base);
+}
+
+.dashboard-date-card:hover .date-icon {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.dashboard-date-card .date-week {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F8 100%);
+  color: #4A2C2C;
+  border: 2px solid #FFE3EC;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(230, 168, 181, 0.15);
+  letter-spacing: 0.3px;
+  transition: all var(--transition-base);
+}
+
+.dashboard-date-card:hover .date-week {
+  background: linear-gradient(135deg, #FFE3EC 0%, #FADADD 100%);
+  border-color: var(--primary-pink);
+  box-shadow: 0 4px 12px rgba(230, 168, 181, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Main Date Display */
+.dashboard-date-card .date-main {
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  border-radius: 16px;
+  padding: 20px 40px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-pink);
+  letter-spacing: -0.5px;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer effect on date pill */
+.dashboard-date-card .date-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.dashboard-date-card:hover .date-main::before {
+  left: 100%;
+}
+
+.dashboard-date-card:hover .date-main {
+  box-shadow: 0 12px 32px rgba(230, 168, 181, 0.45);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.dashboard-date-card:active .date-main {
+  transform: translateY(-2px) scale(1);
+}
+
+/* Subtitle Row */
+.dashboard-date-card .date-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6D4C4C;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  background: rgba(250, 218, 221, 0.3);
+  border-radius: 999px;
+  transition: all var(--transition-base);
+}
+
+.dashboard-date-card:hover .date-subtitle {
+  background: rgba(250, 218, 221, 0.5);
+  gap: 12px;
+}
+
+.dashboard-date-card .date-subtitle .weekday {
+  font-weight: 700;
+  color: #4A2C2C;
+}
+
+.dashboard-date-card .date-subtitle .year {
+  opacity: 0.85;
+  font-weight: 600;
+}
+
+.dashboard-date-card .date-subtitle .dot {
+  opacity: 0.5;
+  font-size: 0.7rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .dashboard-date-card {
+    padding: 24px 28px;
+  }
+
+  .dashboard-date-card .date-heading {
+    font-size: 1.2rem;
+  }
+
+  .dashboard-date-card .date-main {
+    padding: 18px 32px;
+    font-size: 1.25rem;
+  }
+
+  .dashboard-date-card .date-week {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-date-card .date-main {
+    padding: 16px 28px;
+    font-size: 1.15rem;
+  }
 }

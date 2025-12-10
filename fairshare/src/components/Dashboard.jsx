@@ -205,28 +205,43 @@ const Dashboard = () => {
                     <h3>Chores & Expenses</h3>
                     <p className="card-subtitle">Track and manage your upcoming tasks and spending.</p>
                     <hr />
-                    <div className="stat-row">
-                        <span><Calendar size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />Tasks due today</span>
-                        <span className="stat-badge">{tasksDueToday}</span>
-                    </div>
-                    <div className="stat-row">
-                        <span><TrendingUp size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />Monthly Expense</span>
-                        <span className="stat-badge expense">₱{monthlyExpense.toFixed(2)}</span>
-                    </div>
-                    <div className="stat-row">
-                        <span><span style={{ marginRight: '8px', fontWeight: 700 }}>₱</span>Budget Remaining</span>
-                        <span className="stat-badge budget">₱{budgetRemaining.toFixed(2)}</span>
-                    </div>
-                    <div className="card-actions">
-                        <button className="action-button" onClick={() => handleRestrictedNavigate('/chores')}>Manage Chores</button>
-                        <button className="action-button" onClick={() => handleRestrictedNavigate('/expenses')}>Manage Expenses</button>
+                    <div className="stats-content">
+                        <div className="stat-row">
+                            <span><Calendar size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />Tasks due today</span>
+                            <span className="stat-badge">{tasksDueToday}</span>
+                        </div>
+                        <div className="stat-row">
+                            <span><TrendingUp size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />Monthly Expense</span>
+                            <span className="stat-badge expense">₱{monthlyExpense.toFixed(2)}</span>
+                        </div>
+                        <div className="stat-row">
+                            <span><span style={{ marginRight: '8px', fontWeight: 700 }}>₱</span>Budget Remaining</span>
+                            <span className="stat-badge budget">₱{budgetRemaining.toFixed(2)}</span>
+                        </div>
+                        <div className="card-actions">
+                            <button className="action-button" onClick={() => handleRestrictedNavigate('/chores')}>Manage Chores</button>
+                            <button className="action-button" onClick={() => handleRestrictedNavigate('/expenses')}>Manage Expenses</button>
+                        </div>
                     </div>
                 </div>
                 {/* Date card placed directly under the Chores & Expenses card (right column) */}
                 <div className="summary-card interactive-card dashboard-date-card" onClick={() => navigate('/calendar')}>
-                    <h4>Date</h4>
-                    <div className="summary-value-box date-box">
-                        {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    <h4 className="date-heading">Today</h4>
+                    <div className="date-content">
+                        <div className="date-topline">
+                            <span className="date-icon" aria-hidden>📅</span>
+                            <span className="date-week">Week {Math.ceil((new Date().getDate() + (new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay() || 7) - 1) / 7)}</span>
+                        </div>
+                        <div className="summary-value-box date-box date-main">
+                            {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                        </div>
+                        <div className="date-subtitle">
+                            <span className="weekday">
+                                {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+                            </span>
+                            <span className="dot">•</span>
+                            <span className="year">{new Date().getFullYear()}</span>
+                        </div>
                     </div>
                 </div>
             </div>
