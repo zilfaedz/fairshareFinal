@@ -17,19 +17,17 @@ const LandingPage = () => {
         // =========================================
         const handleAnchorClick = (e) => {
             const href = e.currentTarget.getAttribute('href');
-            if (href.startsWith('#')) {
+            if (href && href.startsWith('#')) {
                 e.preventDefault();
                 const targetId = href.substring(1);
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
-                    const headerOffset = 100;
+                    const headerHeight = headerRef.current?.offsetHeight ?? 80;
+                    const nudge = 8; // lift a little more towards the top
                     const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    const offsetPosition = elementPosition + window.pageYOffset - (headerHeight + nudge);
 
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                 }
             }
         };

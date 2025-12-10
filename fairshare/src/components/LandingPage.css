@@ -190,10 +190,18 @@ main {
 }
 
 .hero {
-    padding: 120px 0 100px;
+    /* Reduce excess top spacing and prepare for centering */
+    padding: 40px 0;
     background: var(--neutral-50);
     position: relative;
     overflow: hidden;
+}
+
+/* Vertically center hero content within the viewport minus header height */
+.hero .container {
+    min-height: calc(100vh - 120px); /* account for sticky header */
+    display: flex;
+    align-items: center;
 }
 
 .hero-content {
@@ -329,8 +337,10 @@ main {
    ========================================= */
 
 .features {
-    padding: 100px 0;
+    /* Sit higher on the viewport */
+    padding: 32px 0 80px;
     background: var(--neutral-50);
+    scroll-margin-top: 72px; /* offset for sticky header when using anchors */
 }
 
 .section-header {
@@ -430,8 +440,10 @@ main {
    ========================================= */
 
 .team-section {
-    padding: 100px 0;
+    /* Sit higher on the viewport */
+    padding: 32px 0 80px;
     background: var(--neutral-50);
+    scroll-margin-top: 72px; /* offset for sticky header when using anchors */
 }
 
 .team-grid {
@@ -575,6 +587,12 @@ main {
 
     .hero {
         padding: 80px 0 60px;
+    }
+
+    /* Let content flow naturally on smaller screens */
+    .hero .container {
+        min-height: auto;
+        display: block;
     }
 
     .hero-content {
