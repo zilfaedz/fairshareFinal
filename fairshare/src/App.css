@@ -354,7 +354,7 @@ select {
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 20px; /* bring cards closer together */
   margin-bottom: 30px;
 }
 
@@ -503,6 +503,11 @@ select {
   padding: 10px 0;
 }
 
+/* Ensure tooltip can position relative to the fairness card */
+.fairness-score-container {
+  position: relative;
+}
+
 .pie-chart-svg {
   width: 200px;
   height: 200px;
@@ -562,19 +567,20 @@ select {
 
 /* Pie Chart Tooltip */
 .pie-chart-tooltip {
-  position: fixed;
+  position: absolute; /* keep within the card to avoid squishing */
   top: 50%;
-  left: 65%;
-  transform: translateY(-50%);
-  background: white;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
   padding: 16px 20px;
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-  z-index: 1001;
-  min-width: 220px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  z-index: 10;
+  min-width: 240px;
+  max-width: 320px;
+  width: max-content;
   pointer-events: none;
-  animation: tooltipSlideIn 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 @keyframes tooltipSlideIn {
@@ -628,29 +634,41 @@ select {
 }
 
 .tooltip-value.completed {
-  color: #065f46;
-  background-color: #d1fae5;
+  color: #065f46; /* emerald-900 */
+  background-color: #d1fae5; /* emerald-100 */
 }
 
-.tooltip-value.pending {
-  color: #9a3412;
-  background-color: #ffedd5;
+.tooltip-value.upcoming {
+  color: #1e40af; /* blue-800 */
+  background-color: #dbeafe; /* blue-100 */
 }
 
 .tooltip-value.overdue {
-  color: #991b1b;
-  background-color: #fee2e2;
+  color: #991b1b; /* red-900 */
+  background-color: #fee2e2; /* red-100 */
 }
 
 .tooltip-value.score {
-  color: #1e40af;
-  background-color: #dbeafe;
+  color: #4A2C2C; /* neutral-700 close to brand */
+  background-color: #FADADD; /* primary-pink-light */
 }
 
 .tooltip-divider {
   height: 1px;
   background-color: rgba(0, 0, 0, 0.1);
   margin: 8px 0;
+}
+
+/* Responsive adjustment: keep tooltip nicely centered on smaller screens */
+@media (max-width: 768px) {
+  .pie-chart-tooltip {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 220px;
+    max-width: 280px;
+    padding: 14px 16px;
+  }
 }
 
 .action-button:hover {
@@ -665,13 +683,13 @@ select {
 .summary-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 30px;
+  gap: 24px; /* slightly tighter spacing */
 }
 
 .summary-card {
   background: #FFFFFF;
   border-radius: var(--radius-xl);
-  padding: 24px;
+  padding: 18px; /* reduced padding for smaller footprint */
   border: 2px solid #F0F0F0;
   transition: all var(--transition-base);
 }
@@ -683,17 +701,18 @@ select {
 }
 
 .summary-card h4 {
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
   color: #4A2C2C;
   font-weight: 700;
+  font-size: 1rem; /* slightly smaller heading */
 }
 
 .summary-value-box {
   background: #FFFFFF;
-  padding: 20px;
+  padding: 14px; /* reduced inner padding */
   border-radius: var(--radius-md);
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.5rem; /* scale value text down a bit */
   font-weight: 700;
   color: #4A2C2C;
   box-shadow: var(--shadow-sm);
@@ -730,6 +749,18 @@ select {
   border-color: var(--primary-pink);
   box-shadow: 0 16px 40px rgba(230, 168, 181, 0.25);
   transform: translateY(-8px);
+}
+
+/* Responsive tweaks for summary cards */
+@media (max-width: 1024px) {
+  .summary-card { padding: 16px; }
+  .summary-value-box { font-size: 1.35rem; }
+}
+
+@media (max-width: 768px) {
+  .summary-grid { grid-template-columns: 1fr; gap: 16px; }
+  .summary-card { padding: 14px; }
+  .summary-value-box { font-size: 1.25rem; }
 }
 
 /* =========================================

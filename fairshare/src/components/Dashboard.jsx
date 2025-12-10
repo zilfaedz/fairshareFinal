@@ -7,6 +7,8 @@ const Dashboard = () => {
     const { chores, expenses, user, budget, groups, showToast, currentGroup, fairnessScores } = useAppData();
     const navigate = useNavigate();
     const [hoveredMember, setHoveredMember] = useState(null);
+    const [tooltipPos, setTooltipPos] = useState({ x: null, y: null });
+    const [showTooltip, setShowTooltip] = useState(false);
 
     // Calculate stats
     const today = new Date().toISOString().split('T')[0];
@@ -86,9 +88,18 @@ const Dashboard = () => {
                                         return { completed, pending, overdue };
                                     };
 
+                                    const handleMouseMove = (e) => {
+                                        const container = e.currentTarget.closest('.fairness-score-container');
+                                        if (!container) return;
+                                        const rect = container.getBoundingClientRect();
+                                        const offsetX = e.clientX - rect.left;
+                                        const offsetY = e.clientY - rect.top;
+                                        setTooltipPos({ x: offsetX, y: offsetY });
+                                    };
+
                                     return (
                                         <>
-                                            <div style={{ position: 'relative' }}>
+                                            <div style={{ position: 'relative' }} onMouseMove={handleMouseMove}>
                                                 <svg viewBox="0 0 200 200" className="pie-chart-svg">
                                                     {members.map((member, index) => {
                                                         const percentage = (Math.max(member.score, 0) / total) * 100;
@@ -123,8 +134,8 @@ const Dashboard = () => {
                                                                 stroke="#fff"
                                                                 strokeWidth="2"
                                                                 className="pie-slice"
-                                                                onMouseEnter={() => setHoveredMember(member)}
-                                                                onMouseLeave={() => setHoveredMember(null)}
+                                                                onMouseEnter={(e) => { setHoveredMember(member); setShowTooltip(true); handleMouseMove(e); }}
+                                                                onMouseLeave={() => { setHoveredMember(null); setShowTooltip(false); }}
                                                             />
                                                         );
                                                     })}
@@ -137,8 +148,9 @@ const Dashboard = () => {
                                                         <div
                                                             key={member.userId}
                                                             className="legend-item"
-                                                            onMouseEnter={() => setHoveredMember(member)}
-                                                            onMouseLeave={() => setHoveredMember(null)}
+                                                            onMouseEnter={(e) => { setHoveredMember(member); setShowTooltip(true); handleMouseMove(e); }}
+                                                            onMouseLeave={() => { setHoveredMember(null); setShowTooltip(false); }}
+                                                            onMouseMove={handleMouseMove}
                                                         >
                                                             <div
                                                                 className="legend-color"
@@ -150,8 +162,15 @@ const Dashboard = () => {
                                                     );
                                                 })}
                                             </div>
-                                            {hoveredMember && (
-                                                <div className="pie-chart-tooltip">
+                                            {hoveredMember && showTooltip && tooltipPos.x !== null && tooltipPos.y !== null && (
+                                                <div
+                                                    className="pie-chart-tooltip"
+                                                    style={{
+                                                        left: Math.max(12, tooltipPos.x + 12),
+                                                        top: Math.max(12, tooltipPos.y + 12),
+                                                        transform: 'translate(0, 0)'
+                                                    }}
+                                                >
                                                     <div className="tooltip-header">{hoveredMember.fullName}</div>
                                                     <div className="tooltip-content">
                                                         <div className="tooltip-row">
@@ -159,8 +178,8 @@ const Dashboard = () => {
                                                             <span className="tooltip-value completed">{getMemberStats(hoveredMember.userId).completed}</span>
                                                         </div>
                                                         <div className="tooltip-row">
-                                                            <span className="tooltip-label">Pending:</span>
-                                                            <span className="tooltip-value pending">{getMemberStats(hoveredMember.userId).pending}</span>
+                                                            <span className="tooltip-label">Upcoming:</span>
+                                                            <span className="tooltip-value upcoming">{getMemberStats(hoveredMember.userId).pending}</span>
                                                         </div>
                                                         <div className="tooltip-row">
                                                             <span className="tooltip-label">Overdue:</span>
