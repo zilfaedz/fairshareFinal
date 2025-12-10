@@ -408,9 +408,7 @@ const Chores = () => {
                                 </div>
                                 <div className="modal-actions">
                                     <button type="submit" className="modal-submit-button">Save</button>
-                                    {selectedChore && (
-                                        <button type="button" className="action-button cancel" onClick={() => setIsEditMode(false)}>Cancel</button>
-                                    )}
+
                                 </div>
                             </form>
                         )}

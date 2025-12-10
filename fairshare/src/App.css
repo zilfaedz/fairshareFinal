@@ -619,28 +619,32 @@ select {
 
 .tooltip-value {
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  min-width: 30px;
+  text-align: center;
+  display: inline-block;
 }
 
 .tooltip-value.completed {
-  color: #4CAF50;
-  background-color: rgba(76, 175, 80, 0.1);
+  color: #065f46;
+  background-color: #d1fae5;
 }
 
 .tooltip-value.pending {
-  color: #FFA726;
-  background-color: rgba(255, 167, 38, 0.1);
+  color: #9a3412;
+  background-color: #ffedd5;
 }
 
 .tooltip-value.overdue {
-  color: #EF5350;
-  background-color: rgba(239, 83, 80, 0.1);
+  color: #991b1b;
+  background-color: #fee2e2;
 }
 
 .tooltip-value.score {
-  color: #2196F3;
-  background-color: rgba(33, 150, 243, 0.1);
+  color: #1e40af;
+  background-color: #dbeafe;
 }
 
 .tooltip-divider {
@@ -2274,4 +2278,70 @@ select {
     width: 80px;
     height: 80px;
   }
+}
+
+/* =========================================
+   TOGGLE SWITCH - PINK THEME
+   ========================================= */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  margin-left: 10px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input:checked+.slider {
+  background-color: var(--primary-pink);
+  box-shadow: var(--shadow-pink);
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px var(--primary-pink);
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(22px);
+  -ms-transform: translateX(22px);
+  transform: translateX(22px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

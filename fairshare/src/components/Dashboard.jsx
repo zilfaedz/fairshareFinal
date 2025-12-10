@@ -66,7 +66,7 @@ const Dashboard = () => {
                                 {(() => {
                                     const members = Object.values(fairnessScores).sort((a, b) => b.score - a.score);
                                     const total = members.reduce((sum, m) => sum + Math.max(m.score, 0), 0) || 1;
-                                    const colors = ['#E6A8B5', '#6D4C4C', '#D98E9E', '#4A2C2C', '#FADADD', '#9CA3AF'];
+                                    const colors = ['#4A2C2C', '#FADADD', '#D98E9E', '#6D4C4C'];
 
                                     let currentAngle = 0;
                                     const radius = 70;
