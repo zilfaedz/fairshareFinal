@@ -357,6 +357,8 @@ select {
   grid-template-rows: auto auto; /* two stacked rows on the right */
   gap: 20px; /* bring cards closer together */
   margin-bottom: 30px;
+  /* ensure children animate without overflow issues */
+  will-change: transform, opacity;
 }
 
 .dashboard-card {
@@ -366,6 +368,8 @@ select {
   box-shadow: var(--shadow-md);
   border: 2px solid #F0F0F0;
   transition: all var(--transition-base);
+  /* smooth entrance animation */
+  animation: fadeInUp 400ms ease both;
 }
 
 /* Apply unified gradient for dashboard cards */
@@ -374,6 +378,7 @@ select {
   /* Make Fairness Analytics occupy full left column height across two rows */
   grid-column: 1;
   grid-row: 1 / span 2;
+  animation-delay: 60ms;
 }
 
 .dashboard-card.stats-card {
@@ -381,6 +386,7 @@ select {
   padding: 22px 32px 22px; /* make top and bottom padding equal */
   display: flex;
   flex-direction: column; /* enable vertical centering of inner block */
+  animation-delay: 120ms;
 }
 .dashboard-card.stats-card .stats-content {
   margin: auto 0; /* center the content block vertically within the card */
@@ -766,7 +772,36 @@ select {
   border: 2px solid #F0F0F0;
   box-shadow: var(--shadow-md); /* match dashboard card base shadow */
   transition: all var(--transition-base);
+  animation: fadeInUp 450ms ease both;
+  animation-delay: 180ms; /* Date card enters after stats */
 }
+
+/* Dashboard entrance keyframes (matching task pages) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+    filter: saturate(0.96) brightness(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: saturate(1) brightness(1);
+  }
+}
+
+/* Slight stagger for legend items for a refined feel */
+.pie-chart-legend .legend-item {
+  animation: fadeInUp 300ms ease both;
+}
+.pie-chart-legend .legend-item:nth-child(1) { animation-delay: 40ms; }
+.pie-chart-legend .legend-item:nth-child(2) { animation-delay: 80ms; }
+.pie-chart-legend .legend-item:nth-child(3) { animation-delay: 120ms; }
+.pie-chart-legend .legend-item:nth-child(4) { animation-delay: 160ms; }
+.pie-chart-legend .legend-item:nth-child(5) { animation-delay: 200ms; }
+.pie-chart-legend .legend-item:nth-child(6) { animation-delay: 240ms; }
+.pie-chart-legend .legend-item:nth-child(7) { animation-delay: 280ms; }
+.pie-chart-legend .legend-item:nth-child(8) { animation-delay: 320ms; }
 
 .summary-card:hover {
   border-color: var(--primary-pink);
