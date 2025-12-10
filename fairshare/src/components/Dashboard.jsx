@@ -34,11 +34,7 @@ const Dashboard = () => {
 
     const budgetRemaining = budget - monthlyExpense;
 
-    const tasksCompleted = chores.filter(chore => chore.status === 'completed').length;
-    const tasksOverdue = chores.filter(chore => {
-        const choreDate = (chore.dueDate || '').split(' ')[0];
-        return choreDate < today && chore.status !== 'completed';
-    }).length;
+    // Removed dashboard summary tiles for Completed/Overdue to avoid redundancy with Fairness Analytics
 
     const handleRestrictedNavigate = (path) => {
         if (groups && groups.length > 0) {
@@ -148,9 +144,6 @@ const Dashboard = () => {
                                                         <div
                                                             key={member.userId}
                                                             className="legend-item"
-                                                            onMouseEnter={(e) => { setHoveredMember(member); setShowTooltip(true); handleMouseMove(e); }}
-                                                            onMouseLeave={() => { setHoveredMember(null); setShowTooltip(false); }}
-                                                            onMouseMove={handleMouseMove}
                                                         >
                                                             <div
                                                                 className="legend-color"
@@ -225,22 +218,12 @@ const Dashboard = () => {
                         <span className="stat-badge budget">₱{budgetRemaining.toFixed(2)}</span>
                     </div>
                     <div className="card-actions">
-                        <button className="action-button" onClick={() => handleRestrictedNavigate('/expenses')}>Manage Expenses</button>
                         <button className="action-button" onClick={() => handleRestrictedNavigate('/chores')}>Manage Chores</button>
+                        <button className="action-button" onClick={() => handleRestrictedNavigate('/expenses')}>Manage Expenses</button>
                     </div>
                 </div>
-            </div>
-
-            <div className="summary-grid">
-                <div className="summary-card interactive-card" onClick={() => navigate('/chores?filter=completed')}>
-                    <h4>Tasks Completed</h4>
-                    <div className="summary-value-box">{tasksCompleted}</div>
-                </div>
-                <div className="summary-card interactive-card" onClick={() => navigate('/chores?filter=overdue')}>
-                    <h4>Tasks Overdue</h4>
-                    <div className="summary-value-box">{tasksOverdue}</div>
-                </div>
-                <div className="summary-card interactive-card" onClick={() => navigate('/calendar')}>
+                {/* Date card placed directly under the Chores & Expenses card (right column) */}
+                <div className="summary-card interactive-card dashboard-date-card" onClick={() => navigate('/calendar')}>
                     <h4>Date</h4>
                     <div className="summary-value-box date-box">
                         {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
