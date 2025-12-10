@@ -556,8 +556,8 @@ select {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 10px 0;
+  gap: 22px;
+  padding: 12px 0 16px 0; /* slightly more breathing space */
 }
 
 /* Ensure tooltip can position relative to the fairness card */
@@ -566,8 +566,8 @@ select {
 }
 
 .pie-chart-svg {
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px; /* scale up to match larger radius */
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 }
 
@@ -583,19 +583,24 @@ select {
 }
 
 .pie-chart-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr)); /* ensure comfortable column width */
+  column-gap: 28px; /* widen horizontal spacing */
+  row-gap: 14px; /* more vertical breathing room */
   width: 100%;
+  margin-top: 16px; /* separate from chart */
+  padding-top: 8px;
 }
 
 .legend-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 16px 1fr max-content;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
+  gap: 12px;
+  padding: 10px 2px; /* add vertical padding, slight horizontal buffer */
   border-radius: 8px;
   transition: background-color 0.2s ease;
+  line-height: 1.4; /* improve readability */
 }
 
 .legend-item:hover {
@@ -611,15 +616,29 @@ select {
 
 .legend-name {
   flex: 1;
-  font-weight: 600;
-  color: #333;
-  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4A2C2C;
+  font-size: 1rem; /* larger */
+  white-space: nowrap; /* keep names tidy per column */
 }
 
 .legend-value {
-  font-weight: 600;
-  color: #666;
-  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6D4C4C;
+  font-size: 0.95rem; /* larger */
+  white-space: nowrap;
+}
+
+/* Responsive: stack legend to single column with generous spacing */
+@media (max-width: 768px) {
+  .pie-chart-legend {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 12px;
+  }
+  .legend-item {
+    padding: 10px 0;
+  }
 }
 
 /* Pie Chart Tooltip */
@@ -2514,11 +2533,12 @@ input:checked+.slider:before {
 /* Top Line with Icon and Week Badge */
 .dashboard-date-card .date-topline {
   width: 100%;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 4px;
+  white-space: nowrap;
 }
 
 .dashboard-date-card .date-icon {
@@ -2532,15 +2552,19 @@ input:checked+.slider:before {
 }
 
 .dashboard-date-card .date-week {
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F8 100%);
-  color: #4A2C2C;
-  border: 2px solid #FFE3EC;
+  background: #FFFFFF;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.95;
+  border: 1.5px solid #E9D5D8;
   border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
+  padding: 6px 12px;
+  font-size: 0.85rem;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(230, 168, 181, 0.15);
-  letter-spacing: 0.3px;
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.2px;
+  line-height: 1; /* avoid multiline wrap */
   transition: all var(--transition-base);
 }
 

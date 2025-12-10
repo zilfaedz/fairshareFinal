@@ -67,7 +67,7 @@ const Dashboard = () => {
                                     const colors = ['#4A2C2C', '#FADADD', '#D98E9E', '#6D4C4C'];
 
                                     let currentAngle = 0;
-                                    const radius = 70;
+                                    const radius = 85; // enlarge chart for better presence
                                     const centerX = 100;
                                     const centerY = 100;
 
@@ -229,7 +229,9 @@ const Dashboard = () => {
                     <h4 className="date-heading">Today</h4>
                     <div className="date-content">
                         <div className="date-topline">
-                            <span className="date-icon" aria-hidden>📅</span>
+                            <span className="date-icon" aria-hidden>
+                                <Calendar size={16} style={{ verticalAlign: 'middle' }} />
+                            </span>
                             <span className="date-week">Week {Math.ceil((new Date().getDate() + (new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay() || 7) - 1) / 7)}</span>
                         </div>
                         <div className="summary-value-box date-box date-main">
