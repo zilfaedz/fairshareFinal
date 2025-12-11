@@ -104,7 +104,6 @@ public class ExpenseController {
             try {
                 paidById = Long.valueOf(paidByIdObj.toString());
             } catch (NumberFormatException e) {
-                // Ignore
             }
         }
 

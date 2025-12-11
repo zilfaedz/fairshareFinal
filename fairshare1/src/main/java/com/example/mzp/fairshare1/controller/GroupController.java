@@ -85,4 +85,24 @@ public class GroupController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/{groupId}/budget")
+    public ResponseEntity<?> updateMonthlyBudget(@PathVariable Long groupId, @RequestBody Map<String, Object> payload) {
+        Object budgetObj = payload.get("budget");
+        if (budgetObj == null) {
+            return ResponseEntity.badRequest().body("Missing 'budget' in payload");
+        }
+        Double budget;
+        try {
+            budget = Double.valueOf(budgetObj.toString());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid budget value");
+        }
+        try {
+            Group updated = groupService.updateMonthlyBudget(groupId, budget);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

@@ -37,6 +37,12 @@ export const AppDataProvider = ({ children }) => {
             fetchGroupChores(currentGroup.id);
             fetchGroupExpenses(currentGroup.id);
             fetchFairnessScores(currentGroup.id);
+            // Keep local budget state in sync with the selected group's stored monthlyBudget
+            try {
+                setBudget(currentGroup.monthlyBudget || 0);
+            } catch (e) {
+                setBudget(0);
+            }
         } else {
             setChores([]);
             setExpenses([]);
@@ -167,8 +173,40 @@ export const AppDataProvider = ({ children }) => {
         setCurrentGroup(null);
     };
 
-    const updateBudget = (newBudget) => {
+    const updateBudget = async (newBudget) => {
+        // Update locally first for snappy UI
         setBudget(newBudget);
+
+        if (!currentGroup || !currentGroup.id) {
+            showToast('No group selected to set budget for.', 'error');
+            return { success: false, message: 'No group selected' };
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/groups/${currentGroup.id}/budget`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ budget: newBudget }),
+            });
+
+            if (response.ok) {
+                const updatedGroup = await response.json();
+                // Update groups array and currentGroup with persisted value
+                setGroups(groups.map(g => g.id === updatedGroup.id ? updatedGroup : g));
+                setCurrentGroup(prev => prev && prev.id === updatedGroup.id ? updatedGroup : prev);
+                setBudget(updatedGroup.monthlyBudget || newBudget);
+                showToast('Monthly budget updated successfully.', 'success');
+                return { success: true, data: updatedGroup };
+            } else {
+                const errorText = await response.text();
+                showToast(errorText || 'Failed to update monthly budget.', 'error');
+                return { success: false, message: errorText };
+            }
+        } catch (error) {
+            console.error('Failed to update monthly budget:', error);
+            showToast('Network error. Failed to update budget.', 'error');
+            return { success: false, message: error.message };
+        }
     };
 
     const addChore = async (chore) => {

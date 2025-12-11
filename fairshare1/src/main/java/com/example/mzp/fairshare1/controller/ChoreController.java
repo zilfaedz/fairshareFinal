@@ -33,19 +33,6 @@ public class ChoreController {
         chore.setDueDate((String) payload.get("dueDate"));
         chore.setStatus((String) payload.get("status"));
 
-        // We need the creator to be passed or determined;
-        // Assuming payload has creatorId? or we can skip if not available?
-        // Let's check if payload has creatorId, existing logic didn't use it explicitly
-        // for creation metadata
-        // but now we need it for notification sender.
-        // If not sent, we can't send notification properly with a sender.
-        // Let's verify if frontend sends `createdBy` or similar.
-        // Looking at AppDataContext.addChore... it sends body: JSON.stringify(chore).
-        // Frontend chore object usually has assignedToId but not explicitly creatorId
-        // in the object state unless added.
-        // However, we are logged in on frontend.
-        // Let's check AppDataContext.addChore again. It posts to
-        // /api/chores/group/{groupId}.
 
         Object assignedToIdObj = payload.get("assignedToId");
         Long assignedToId = null;
@@ -53,15 +40,11 @@ public class ChoreController {
             try {
                 assignedToId = Long.valueOf(assignedToIdObj.toString());
             } catch (NumberFormatException e) {
-                // Ignore invalid ID format, treat as null
             }
         }
 
-        // Check if fair assignment is requested
         boolean useFairAssignment = Boolean.TRUE.equals(payload.get("useFairAssignment"));
 
-        // Temporary fix: To support notifications, we need the creator.
-        // We will try to get `creatorId` from payload if available.
         Object creatorIdObj = payload.get("creatorId");
 
         Chore createdChore = choreService.createChore(chore, groupId, assignedToId, useFairAssignment);
