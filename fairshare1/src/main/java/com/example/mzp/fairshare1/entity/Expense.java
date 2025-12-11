@@ -20,7 +20,7 @@ public class Expense {
 
     private String date;
 
-    @Column(name = "is_split")
+    @Column(name = "split")
     private Boolean isSplit;
 
     @ManyToOne

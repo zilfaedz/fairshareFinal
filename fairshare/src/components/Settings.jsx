@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAppData } from '../context/AppDataContext';
-import { User, Users, LogOut, Trash2, Copy, Camera, X, UserPlus } from 'lucide-react';
+import { User, Users, LogOut, Trash2, Copy, Camera, X, UserPlus, Crown } from 'lucide-react';
 
 const Settings = () => {
     const {
@@ -12,6 +12,7 @@ const Settings = () => {
         joinGroup,
         deleteGroup,
         leaveGroup,
+        transferOwnership,
 
         removeGroupMember,
         sendInvite
@@ -55,14 +56,22 @@ const Settings = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setEditFormData((prev) => ({ ...prev, profilePicture: reader.result }));
+                if (isEditingBasicInfo) {
+                    setEditFormData((prev) => ({ ...prev, profilePicture: reader.result }));
+                } else {
+                    updateUser({ profilePicture: reader.result });
+                }
             };
             reader.readAsDataURL(file);
         }
     };
 
     const handleRemoveProfilePicture = () => {
-        setEditFormData((prev) => ({ ...prev, profilePicture: "" }));
+        if (isEditingBasicInfo) {
+            setEditFormData((prev) => ({ ...prev, profilePicture: "" }));
+        } else {
+            updateUser({ profilePicture: "" });
+        }
     };
 
     const triggerFileUpload = () => {
@@ -79,7 +88,6 @@ const Settings = () => {
     };
 
     const handleSaveAccountInfo = () => {
-        // Validate current password if trying to change password
         if (accountEditFormData.newPassword) {
             if (!accountEditFormData.currentPassword) {
                 setPasswordError('Please enter your current password to change it');
@@ -91,15 +99,12 @@ const Settings = () => {
             }
         }
 
-        // Update user with new password
         const updatedData = {};
 
-        // Update email if changed
         if (accountEditFormData.email && accountEditFormData.email !== user.email) {
             updatedData.email = accountEditFormData.email;
         }
 
-        // Only update password if a new one was provided
         if (accountEditFormData.newPassword) {
             updatedData.password = accountEditFormData.newPassword;
         }
@@ -157,9 +162,70 @@ const Settings = () => {
         }
     };
 
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        type: null, // 'delete' or 'transfer'
+        group: null,
+        member: null
+    });
+
     const handleCancelEditGroup = () => {
         setEditingGroupId(null);
         setEditedGroupName('');
+    };
+
+    const handleDeleteGroupAttempt = (group) => {
+        if (group.owner && group.owner.id !== user.id) {
+            showToast("Only the group owner can delete this group.");
+            return;
+        }
+        setModalConfig({
+            isOpen: true,
+            type: 'delete',
+            group: group,
+            member: null
+        });
+    };
+
+    const handleMemberClick = (group, member) => {
+        if (!group.owner || group.owner.id !== user.id) return; // Only owner can transfer
+        if (member.id === user.id) return; // Can't transfer to self
+
+        setModalConfig({
+            isOpen: true,
+            type: 'transfer',
+            group: group,
+            member: member
+        });
+    };
+
+    const handleLeaveGroupAttempt = (group) => {
+        if (group.owner && group.owner.id === user.id) {
+            showToast("You must transfer ownership before leaving the group.");
+            return;
+        }
+        setModalConfig({
+            isOpen: true,
+            type: 'leave',
+            group: group,
+            member: null
+        });
+    };
+
+    const handleCloseModal = () => {
+        setModalConfig({ isOpen: false, type: null, group: null, member: null });
+    };
+
+    const handleConfirmAction = () => {
+        const { type, group, member } = modalConfig;
+        if (type === 'delete' && group) {
+            deleteGroup(group.id);
+        } else if (type === 'transfer' && group && member) {
+            transferOwnership(group.id, member.id);
+        } else if (type === 'leave' && group) {
+            leaveGroup(group.id);
+        }
+        handleCloseModal();
     };
 
     return (
@@ -279,11 +345,23 @@ const Settings = () => {
 
                                 <div className="members-list">
                                     {group.members && group.members.map((member) => (
-                                        <div key={member.id} className="member-item">
-                                            <span>{member.fullName || member.name}</span>
+                                        <div
+                                            key={member.id}
+                                            className="member-item"
+                                            onClick={() => handleMemberClick(group, member)}
+                                            style={{ cursor: (group.owner && group.owner.id === user.id && member.id !== user.id) ? 'pointer' : 'default' }}
+                                            title={(group.owner && group.owner.id === user.id && member.id !== user.id) ? "Click to transfer ownership" : ""}
+                                        >
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                {member.fullName || member.name}
+                                                {group.owner && group.owner.id === member.id && <Crown size={14} color="#FFD700" fill="#FFD700" />}
+                                            </span>
                                             <button
                                                 className="icon-button delete-button"
-                                                onClick={() => removeGroupMember(group.id, member.id)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    removeGroupMember(group.id, member.id);
+                                                }}
                                             >
                                                 <Trash2 size={16} />
                                             </button>
@@ -301,8 +379,15 @@ const Settings = () => {
                                     ) : (
                                         <button className="settings-button white" onClick={() => handleEditGroup(group)}>Edit Name</button>
                                     )}
-                                    <button className="settings-button secondary" onClick={() => deleteGroup(group.id)}>Delete Group</button>
-                                    <button className="settings-button danger" onClick={() => leaveGroup(group.id)}>Leave Group</button>
+                                    <button
+                                        className="settings-button secondary"
+                                        onClick={() => handleDeleteGroupAttempt(group)}
+                                        style={group.owner && group.owner.id !== user.id ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                                    >Delete Group</button>
+                                    <button
+                                        className="settings-button danger"
+                                        onClick={() => handleLeaveGroupAttempt(group)}
+                                    >Leave Group</button>
                                 </div>
                             </div>
                         ))
@@ -321,38 +406,26 @@ const Settings = () => {
                         <div className="profile-picture-section">
                             <div className="profile-label">Profile Picture</div>
                             <div className="profile-picture-controls">
-                                {isEditingBasicInfo ? (
-                                    <>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            style={{ display: 'none' }}
-                                            accept="image/*"
-                                            onChange={handleFileChange}
-                                        />
-                                        {editFormData.profilePicture ? (
-                                            <img src={editFormData.profilePicture} alt="Profile" className="profile-picture-circle compact" />
-                                        ) : (
-                                            <div className="profile-picture-circle compact"></div>
-                                        )}
-                                        <div className="profile-picture-actions">
-                                            <span className="upload-text" onClick={triggerFileUpload}>Upload profile picture</span>
-                                            <span className="remove-text" onClick={handleRemoveProfilePicture}>Remove</span>
-                                        </div>
-                                    </>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                                {(isEditingBasicInfo ? editFormData.profilePicture : user.profilePicture) ? (
+                                    <img
+                                        src={isEditingBasicInfo ? editFormData.profilePicture : user.profilePicture}
+                                        alt="Profile"
+                                        className="profile-picture-circle compact"
+                                    />
                                 ) : (
-                                    <>
-                                        {user.profilePicture ? (
-                                            <img src={user.profilePicture} alt="Profile" className="profile-picture-circle compact" />
-                                        ) : (
-                                            <div className="profile-picture-circle compact"></div>
-                                        )}
-                                        <div className="profile-picture-actions">
-                                            <span className="upload-text" style={{ opacity: 0.5, cursor: 'default' }}>Upload profile picture</span>
-                                            <span className="remove-text" style={{ opacity: 0.5, cursor: 'default' }}>Remove</span>
-                                        </div>
-                                    </>
+                                    <div className="profile-picture-circle compact"></div>
                                 )}
+                                <div className="profile-picture-actions">
+                                    <span className="upload-text" onClick={triggerFileUpload} style={{ cursor: 'pointer', opacity: 1 }}>Upload profile picture</span>
+                                    <span className="remove-text" onClick={handleRemoveProfilePicture} style={{ cursor: 'pointer', opacity: 1 }}>Remove</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -395,7 +468,6 @@ const Settings = () => {
                                             <option value="Other">Other</option>
                                         </select>
                                     </div>
-                                    {/* Email moved to Account info section */}
                                     <hr className="divider" />
                                     <div className="form-actions">
                                         <button className="settings-button white" onClick={handleCancelBasicInfo}>Cancel</button>
@@ -410,20 +482,18 @@ const Settings = () => {
                                     </div>
                                     <div className="info-row">
                                         <span className="info-label">Date of Birth</span>
-                                        <span className="info-value">{user.birthdate ? new Date(user.birthdate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</span>
+                                        <span className="info-value">{user.birthdate ? new Date(user.birthdate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Set birthday'}</span>
                                     </div>
                                     <div className="info-row">
                                         <span className="info-label">Gender</span>
-                                        <span className="info-value">{user.gender || 'Not set'}</span>
+                                        <span className="info-value">{user.gender || 'Set gender'}</span>
                                     </div>
-                                    {/* Email moved to Account info section */}
                                     <hr className="divider" />
                                     <button className="settings-button white full-width" onClick={handleEditBasicInfo}>Edit</button>
                                 </>
                             )}
                         </div>
 
-                        {/* Account Info */}
                         <div className="settings-card pink-bg">
                             <h3>Account info</h3>
                             {isEditingAccountInfo ? (
@@ -491,6 +561,46 @@ const Settings = () => {
                                     <button className="settings-button white full-width" onClick={handleEditAccountInfo}>Edit</button>
                                 </>
                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Modal */}
+            {modalConfig.isOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>
+                                {modalConfig.type === 'delete' ? 'Delete Group' :
+                                    modalConfig.type === 'leave' ? 'Leave Group' : 'Transfer Ownership'}
+                            </h2>
+                            <button className="close-button" onClick={handleCloseModal}>
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="modal-body" style={{ margin: '20px 0', fontSize: '15px' }}>
+                            {modalConfig.type === 'delete' ? (
+                                <p>Are you sure you want to delete "<b>{modalConfig.group?.name}</b>"? This cannot be undone.</p>
+                            ) : modalConfig.type === 'leave' ? (
+                                <p>Are you sure you want to leave "<b>{modalConfig.group?.name}</b>"?</p>
+                            ) : (
+                                <p>Do you want to transfer ownership of "<b>{modalConfig.group?.name}</b>" to <b>{modalConfig.member?.fullName || modalConfig.member?.name}</b>?</p>
+                            )}
+                        </div>
+
+                        <div className="modal-actions">
+                            <button
+                                className={`action-button ${['delete', 'leave'].includes(modalConfig.type) ? 'delete' : ''}`}
+                                style={!['delete', 'leave'].includes(modalConfig.type) ? { backgroundColor: 'var(--primary-pink)', color: 'white' } : { backgroundColor: '#d93025', color: 'white' }}
+                                onClick={handleConfirmAction}
+                            >
+                                {modalConfig.type === 'delete' ? 'Delete' :
+                                    modalConfig.type === 'leave' ? 'Leave' : 'Transfer'}
+                            </button>
+                            <button className="action-button cancel" onClick={handleCloseModal}>
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>

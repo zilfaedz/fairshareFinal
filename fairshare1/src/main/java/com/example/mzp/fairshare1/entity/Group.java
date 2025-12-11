@@ -22,6 +22,13 @@ public class Group {
     @JoinTable(name = "group_members", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> members = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    @Column(nullable = false)
+    private Double monthlyBudget = 0.0;
+
     public Group() {
     }
 
@@ -68,5 +75,21 @@ public class Group {
 
     public void removeMember(User user) {
         this.members.remove(user);
+    }
+
+    public Double getMonthlyBudget() {
+        return monthlyBudget;
+    }
+
+    public void setMonthlyBudget(Double monthlyBudget) {
+        this.monthlyBudget = monthlyBudget;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

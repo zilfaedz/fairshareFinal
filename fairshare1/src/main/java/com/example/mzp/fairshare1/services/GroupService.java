@@ -51,12 +51,6 @@ public class GroupService {
     }
 
     public List<Group> getUserGroups(User user) {
-        // In a real app, we might want a custom query in repository for performance
-        // But for now, filtering all groups is okay for small scale or we rely on the
-        // ManyToMany mapping
-        // Actually, since it's ManyToMany, we can't easily query from the Group side
-        // without a custom query
-        // Let's use a simple approach: find all groups where members contains user
         return groupRepository.findAll().stream()
                 .filter(group -> group.getMembers().contains(user))
                 .collect(Collectors.toList());
@@ -64,16 +58,9 @@ public class GroupService {
 
     @Transactional
     public void deleteGroup(Long groupId) {
-        // First, delete all chores associated with this group
         choreRepository.deleteByGroupId(groupId);
-
-        // Delete all expenses associated with this group
         expenseRepository.deleteByGroupId(groupId);
-
-        // Delete notifications associated with this group (to avoid FK constraint)
         notificationRepository.deleteByGroupId(groupId);
-
-        // Now we can safely delete the group
         groupRepository.deleteById(groupId);
     }
 
@@ -91,6 +78,13 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
+    public Group updateMonthlyBudget(Long groupId, Double budget) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        group.setMonthlyBudget(budget);
+        return groupRepository.save(group);
+    }
+
     private String generateUniqueCode() {
         String code;
         do {
@@ -100,16 +94,13 @@ public class GroupService {
     }
 
     private String generateCode() {
-        // 3 letters + 6 numbers
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
 
-        // 3 uppercase letters
         for (int i = 0; i < 3; i++) {
             sb.append((char) ('A' + random.nextInt(26)));
         }
 
-        // 6 numbers
         for (int i = 0; i < 6; i++) {
             sb.append(random.nextInt(10));
         }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppData } from '../context/AppDataContext';
 import { CheckCircle, AlertCircle, Calendar, DollarSign, PieChart, TrendingUp } from 'lucide-react';
@@ -10,8 +10,49 @@ const Dashboard = () => {
     const [tooltipPos, setTooltipPos] = useState({ x: null, y: null });
     const [showTooltip, setShowTooltip] = useState(false);
 
-    // Calculate stats
     const today = new Date().toISOString().split('T')[0];
+    const [welcomeMessage, setWelcomeMessage] = useState('');
+
+    useEffect(() => {
+        const noGroupMessages = [
+            "Looks a little empty here! Join a household to bring your dashboard to life ✨",
+            "No household yet—once you join one, your Chore Queue will start filling up!",
+            "Ready to get started? Join a household group to begin your FairShare journey 💗"
+        ];
+
+        const goodBalanceMessages = [
+            "You're keeping the harmony ✨ Check your Chore Queue for what’s up next.",
+            "Balance level: awesome. Peek at your Chore Queue to keep it going!",
+            "You're making fair sharing look easy. Check your Chore Queue for your next step."
+        ];
+
+        const overdueMessages = [
+            "Your balance meter is tilting a bit 😅 Check your Chore Queue to straighten it out!",
+            "A little catch-up moment! See your Chore Queue to get things back in sync.",
+            "Your chores miss you 🧹💗 Check your Chore Queue to reconnect."
+        ];
+
+        const getRandomMessage = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        if (!groups || groups.length === 0) {
+            setWelcomeMessage(getRandomMessage(noGroupMessages));
+        } else {
+            // Check for overdue chores assigned to current user
+            const hasOverdue = chores.some(chore => {
+                const choreDate = (chore.dueDate || '').split(' ')[0];
+                return chore.assignedTo && chore.assignedTo.id === user.id &&
+                    choreDate < today && chore.status !== 'completed';
+            });
+
+            if (hasOverdue) {
+                setWelcomeMessage(getRandomMessage(overdueMessages));
+            } else {
+                setWelcomeMessage(getRandomMessage(goodBalanceMessages));
+            }
+        }
+    }, [groups, chores, user, today]);
+
+    // Calculate stats
     const tasksDueToday = chores.filter(chore => {
         const choreDate = (chore.dueDate || '').split(' ')[0];
         return choreDate === today && chore.status !== 'completed';
@@ -34,7 +75,6 @@ const Dashboard = () => {
 
     const budgetRemaining = budget - monthlyExpense;
 
-    // Removed dashboard summary tiles for Completed/Overdue to avoid redundancy with Fairness Analytics
 
     const handleRestrictedNavigate = (path) => {
         if (groups && groups.length > 0) {
@@ -49,7 +89,7 @@ const Dashboard = () => {
             <div className="welcome-banner">
                 <div className="welcome-text">
                     <h1>Hello, <strong>{user.fullName}!</strong></h1>
-                    <p>You're holding up your end of the bargain. Check your Chore Queue to keep the balance.</p>
+                    <p>{welcomeMessage}</p>
                 </div>
             </div>
 

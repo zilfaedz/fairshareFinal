@@ -490,6 +490,34 @@ export const AppDataProvider = ({ children }) => {
         }
     };
 
+    const transferOwnership = async (groupId, newOwnerId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/groups/${groupId}/transfer-ownership`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newOwnerId, requesterId: user.id }),
+            });
+
+            if (response.ok) {
+                const updatedGroup = await response.json();
+                setGroups(groups.map(g => g.id === groupId ? updatedGroup : g));
+                if (currentGroup && currentGroup.id === groupId) {
+                    setCurrentGroup(updatedGroup);
+                }
+                showToast("Ownership transferred successfully!");
+                return { success: true };
+            } else {
+                const errorText = await response.text();
+                showToast(errorText || "Failed to transfer ownership.");
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Transfer ownership failed:", error);
+            showToast("Network error.");
+            return { success: false };
+        }
+    };
+
     const leaveGroup = async (groupId) => {
         // For now, leaving is same as removing self, reusing removeMember logic if needed or just local
         // Ideally backend should have a leave endpoint or use removeMember with own ID
@@ -740,6 +768,7 @@ export const AppDataProvider = ({ children }) => {
             joinGroup,
             deleteGroup,
             leaveGroup,
+            transferOwnership,
             removeGroupMember,
             currentGroup,
             setCurrentGroup,
