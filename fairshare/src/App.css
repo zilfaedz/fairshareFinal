@@ -1921,13 +1921,16 @@ select {
 .modal-actions {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 16px;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
 }
 
 .modal-actions .action-button {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 1 1 140px;
+  min-width: 140px;
   padding: 14px 18px;
   border-radius: var(--radius-md);
 }
