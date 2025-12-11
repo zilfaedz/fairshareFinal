@@ -10,22 +10,18 @@ const Layout = ({ children }) => {
     const navigate = useNavigate();
     const { user, groups, toastMessage, showToast, hideToast, logout, notifications, markNotificationsRead, pendingCount } = useAppData();
     const [showNotifications, setShowNotifications] = useState(false);
-    const [collapsed, setCollapsed] = useState(false);
     const notificationRef = useRef(null);
 
     const isActive = (path) => location.pathname === path;
     const hasGroup = groups && groups.length > 0;
+    const currentGroup = hasGroup ? groups[0] : null;
 
-    // pendingCount is provided by context (counts only new notifications since last seen)
-
-    // Protect direct URL access
     useEffect(() => {
         if (!hasGroup && (location.pathname === '/chores' || location.pathname === '/expenses')) {
             navigate('/dashboard');
         }
     }, [hasGroup, location.pathname, navigate]);
 
-    // Close notifications on outside click
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (notificationRef.current && !notificationRef.current.contains(event.target)) {
@@ -53,71 +49,99 @@ const Layout = ({ children }) => {
         }
     };
 
-    const toggleSidebar = () => {
-        setCollapsed(!collapsed);
-    };
-
     return (
         <div className="layout-container">
             <Toast message={toastMessage} onClose={hideToast} />
-            <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+            <aside className="sidebar">
                 <div className="sidebar-header">
-                    <Link to="/dashboard" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <img src={require('../img/logo.png')} alt="FairShare Logo" className="logo-image" />
-                        <h2 className="app-title-small">FairShare</h2>
-                    </Link>
+                    <div className="user-profile-card">
+                        <div className="user-avatar-large">
+                            {user.profilePicture ? (
+                                <img src={user.profilePicture} alt="User" />
+                            ) : (
+                                <div className="avatar-placeholder"></div>
+                            )}
+                        </div>
+                        <div className="user-info">
+                            <span className="user-name">{user.fullName}</span>
+                            <span className="user-level">{currentGroup ? currentGroup.name : 'No Group'}</span>
+                        </div>
+                    </div>
                 </div>
-                <nav className="sidebar-nav">
-                    <Link to="/dashboard" className={`nav-item ${isActive('/dashboard') ? 'active' : ''}`}>
-                        <LayoutDashboard size={20} className="nav-icon" />
-                        <span className="nav-text">Dashboard</span>
-                    </Link>
 
-                    <Link
-                        to="/chores"
-                        className={`nav-item ${isActive('/chores') ? 'active' : ''}`}
-                        onClick={(e) => handleRestrictedClick(e, '/chores')}
-                        style={{ opacity: hasGroup ? 1 : 0.6, cursor: hasGroup ? 'pointer' : 'not-allowed' }}
-                    >
-                        <CheckSquare size={20} className="nav-icon" />
-                        <span className="nav-text">Chores</span>
-                    </Link>
-                    <Link
-                        to="/expenses"
-                        className={`nav-item ${isActive('/expenses') ? 'active' : ''}`}
-                        onClick={(e) => handleRestrictedClick(e, '/expenses')}
-                        style={{ opacity: hasGroup ? 1 : 0.6, cursor: hasGroup ? 'pointer' : 'not-allowed' }}
-                    >
-                        <DollarSign size={20} className="nav-icon" />
-                        <span className="nav-text">Expenses</span>
-                    </Link>
+                <nav className="nav-menu">
+                    <div className="nav-section">
+                        <span className="nav-section-label">Main</span>
+                        <Link to="/dashboard" className={`nav-item ${isActive('/dashboard') ? 'active' : ''}`}>
+                            <div className="nav-item-content">
+                                <LayoutDashboard size={20} className="nav-icon" />
+                                <span className="nav-label">Dashboard</span>
+                            </div>
+                            <span className="nav-indicator"></span>
+                        </Link>
+                    </div>
 
-                    <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`}>
-                        <SettingsIcon size={20} className="nav-icon" />
-                        <span className="nav-text">Settings</span>
-                    </Link>
+                    <div className="nav-section">
+                        <span className="nav-section-label">Features</span>
+                        <Link
+                            to="/chores"
+                            className={`nav-item ${isActive('/chores') ? 'active' : ''} ${!hasGroup ? 'disabled' : ''}`}
+                            onClick={(e) => handleRestrictedClick(e, '/chores')}
+                        >
+                            <div className="nav-item-content">
+                                <CheckSquare size={20} className="nav-icon" />
+                                <span className="nav-label">Chores</span>
+                            </div>
+                            <span className="nav-indicator"></span>
+                        </Link>
+
+                        <Link
+                            to="/expenses"
+                            className={`nav-item ${isActive('/expenses') ? 'active' : ''} ${!hasGroup ? 'disabled' : ''}`}
+                            onClick={(e) => handleRestrictedClick(e, '/expenses')}
+                        >
+                            <div className="nav-item-content">
+                                <DollarSign size={20} className="nav-icon" />
+                                <span className="nav-label">Expenses</span>
+                            </div>
+                            <span className="nav-indicator"></span>
+                        </Link>
+                    </div>
+
+                    <div className="nav-section">
+                        <span className="nav-section-label">Account</span>
+                        <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`}>
+                            <div className="nav-item-content">
+                                <SettingsIcon size={20} className="nav-icon" />
+                                <span className="nav-label">Settings</span>
+                            </div>
+                            <span className="nav-indicator"></span>
+                        </Link>
+                    </div>
                 </nav>
+
                 <div className="sidebar-footer">
-                    <button onClick={handleLogout} className="logout-button">
-                        <LogOut size={20} className="nav-icon" />
-                        <span className="nav-text">Logout</span>
+                    {/* Quick stats removed as requested */}
+
+                    <button onClick={handleLogout} className="btn-logout">
+                        <LogOut size={18} />
+                        <span>Logout</span>
                     </button>
                 </div>
             </aside>
+
             <main className="main-content">
                 <header className="topbar">
-                    <button className="menu-button" onClick={toggleSidebar}><Menu size={24} /></button>
+                    <div className="topbar-left">
+                        <img src={require('../img/logo.png')} alt="FairShare" className="topbar-logo" />
+                        <h1 className="topbar-title">FairShare</h1>
+                    </div>
                     <div className="topbar-right">
                         <div className="notification-wrapper" ref={notificationRef}>
                             <button className="notification-button" onClick={() => {
                                 setShowNotifications(!showNotifications);
-                                if (!showNotifications) {
-                                    if (typeof markNotificationsRead === 'function') {
-                                        markNotificationsRead();
-                                    } else {
-                                        console.warn('markNotificationsRead is not available');
-                                    }
-                                    // Optimistic update if needed, but fetchNotifications will handle it
+                                if (!showNotifications && typeof markNotificationsRead === 'function') {
+                                    markNotificationsRead();
                                 }
                             }}>
                                 <Bell size={24} />
@@ -129,14 +153,6 @@ const Layout = ({ children }) => {
                                 </div>
                             )}
                         </div>
-                        <Link to="/settings" className="user-profile" style={{ textDecoration: 'none' }}>
-                            {user.profilePicture ? (
-                                <img src={user.profilePicture} alt="User" className="user-avatar" />
-                            ) : (
-                                <div className="user-avatar"></div>
-                            )}
-                            <span className="user-name">{user.fullName}</span>
-                        </Link>
                     </div>
                 </header>
                 <div className="content-area">

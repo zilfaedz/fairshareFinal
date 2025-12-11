@@ -68,125 +68,231 @@ select {
   outline-offset: 2px;
 }
 
-/* =========================================
-   LAYOUT
-   ========================================= */
+/* Ensure main content does not sit under the fixed sidebar */
+.main-content {
+  margin-left: 280px;
+}
+
+@media (max-width: 1200px) {
+  .main-content { margin-left: 240px; }
+}
+
+@media (max-width: 992px) {
+  .main-content { margin-left: 220px; }
+}
+
+@media (max-width: 768px) {
+  .main-content { margin-left: 200px; }
+}
+
+/* Layout Container */
 .layout-container {
   display: flex;
   min-height: 100vh;
 }
 
+/* ============================================
+   SIDEBAR
+   ============================================ */
 .sidebar {
-  width: 250px;
+  width: 280px;
+  /* Match header's pink tone */
   background-color: #FADADD;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-right: 1px solid #E5E7EB;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: fixed; /* Keep sidebar fixed on the left */
+  top: 0;
+  left: 0;
+  height: 100vh; /* Full viewport height */
+  min-height: 0; /* Allow flex children to size correctly */
+  z-index: 1000; /* Above main content */
+}
+
+/* Sidebar footer anchored at bottom; nav area scrolls above it */
+.sidebar-footer {
+  margin-top: auto; /* Push footer to the bottom of the flex column */
+  background: #FADADD; /* Align footer with sidebar/header pink */
+  padding: 12px 16px; /* Slightly tighter to reduce perceived gap */
+  border-top: 1px solid rgba(217, 142, 158, 0.35); /* Soft pink divider instead of gray */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25); /* Gentle highlight for a polished look */
+  }
+  .sidebar-footer { padding: 8px 16px; }
+  .btn-logout { width: 100%; margin: 0; }
+  .sidebar.collapsed .btn-logout { margin: 0; }
+
+.sidebar.collapsed .sidebar-footer {
+  padding: 12px 16px;
+}
+
+/* Make nav scroll independently so footer stays in view */
+.nav-menu {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 0; /* End scroll flush with footer */
+}
+
+/* Responsive tweaks for split-screen / smaller widths */
+@media (max-width: 1200px) {
+  .sidebar { width: 240px; }
+}
+
+@media (max-width: 992px) {
+  .sidebar { width: 220px; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { width: 200px; }
+  .btn-logout { width: 100%; }
 }
 
 .sidebar.collapsed {
   width: 80px;
-  padding: 20px 10px;
 }
 
+/* ============================================
+   SIDEBAR HEADER - User Profile Card
+   ============================================ */
 .sidebar-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 40px;
-  padding-left: 10px;
-  transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), justify-content 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 24px 20px;
+  border-bottom: 1px solid #E5E7EB;
+  transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar.collapsed .sidebar-header {
-  justify-content: center;
-  padding: 0;
+  padding: 24px 16px;
 }
 
-.logo-image {
+.user-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: justify-content 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .user-profile-card {
+  justify-content: center;
+}
+
+.user-avatar-large {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FADADD 0%, #FFB6C1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .user-avatar-large {
   width: 40px;
   height: 40px;
-  object-fit: contain;
-  margin-right: 10px;
-  transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1), height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar.collapsed .logo-image {
-  margin-right: 0;
-  width: 28px;
-  height: 28px;
+.user-avatar-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.app-title-small {
-  transition: opacity 0.2s ease, width 0.2s ease;
-  overflow: hidden;
-  white-space: nowrap;
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #FADADD 0%, #FFB6C1 100%);
 }
 
-.sidebar.collapsed .app-title-small {
-  opacity: 0;
-  width: 0;
-  pointer-events: none;
-}
-
-.nav-text {
-  transition: opacity 0.3s ease, width 0.3s ease;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.sidebar.collapsed .nav-text {
-  opacity: 0;
-  width: 0;
-  pointer-events: none;
-}
-
-.app-title-small {
-  font-family: 'Pacifico', cursive;
-  font-size: 1.5rem;
-  color: #4A2C2C;
-  margin: 0;
-}
-
-.sidebar-nav {
+.user-info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
   flex: 1;
+  min-width: 0;
+  transition: opacity 0.2s ease, width 0.2s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .user-info {
+  opacity: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1F2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-level {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6B7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================
+   NAVIGATION MENU
+   ============================================ */
+.nav-menu {
+  flex: 1;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .nav-menu {
+  padding: 20px 10px;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #4A2C2C; /* Match FairShare title color */
+  padding: 0 12px 8px;
+  transition: opacity 0.2s ease, height 0.2s ease, padding 0.2s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .nav-section-label {
+  opacity: 0;
+  height: 0;
+  padding: 0;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
+  justify-content: space-between;
+  padding: 12px 16px;
   text-decoration: none;
-  color: #6D4C4C;
-  font-weight: 600;
+  color: #4A2C2C; /* Match FairShare title color */
+  font-weight: 500;
   border-radius: 10px;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   cursor: pointer;
-}
-
-.nav-item:hover,
-.nav-item.active {
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #4A2C2C;
-}
-
-.nav-item.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.nav-icon {
-  margin-right: 12px;
-  font-size: 1.2rem;
-  transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sidebar.collapsed .nav-icon {
-  margin-right: 0;
+  position: relative;
 }
 
 .sidebar.collapsed .nav-item {
@@ -194,29 +300,348 @@ select {
   padding: 12px 0;
 }
 
-.sidebar-footer {
-  margin-top: auto;
-}
-
-.logout-button {
+.nav-item-content {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
-  background: none;
-  border: none;
-  color: #6D4C4C;
-  font-weight: 600;
-  font-family: 'Outfit', sans-serif;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), justify-content 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 12px;
+  flex: 1;
 }
 
-.sidebar.collapsed .logout-button {
-  justify-content: center;
-  padding: 12px 0;
+.nav-icon {
+  color: #6B7280;
+  flex-shrink: 0;
+  transition: color 0.2s ease, margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .nav-icon {
+  margin: 0;
+}
+
+.nav-label {
+  font-size: 15px;
+  font-weight: 500;
+  transition: opacity 0.3s ease, width 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #4A2C2C; /* Match FairShare title color */
+}
+
+.sidebar.collapsed .nav-label {
+  opacity: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+.nav-indicator {
+  width: 0;
+  height: 24px;
+  background: linear-gradient(135deg, #FADADD 0%, #FFB6C1 100%);
+  border-radius: 4px;
+  transition: width 0.2s ease, opacity 0.2s ease;
+  position: absolute;
+  right: 16px;
+}
+
+.sidebar.collapsed .nav-indicator {
+  opacity: 0;
+}
+
+.nav-item:hover {
+  /* Stronger, prettier pink hover for clear visibility */
+  background: linear-gradient(135deg, rgba(250, 218, 221, 0.95) 0%, rgba(255, 182, 193, 0.9) 100%);
+  color: #4A2C2C;
+  box-shadow: var(--shadow-pink);
+}
+
+.nav-item:hover .nav-icon {
+  color: #4A2C2C; /* Darker icon color on hover for contrast */
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(250, 218, 221, 0.6) 0%, rgba(255, 182, 193, 0.6) 100%);
+  color: #4A2C2C;
+  font-weight: 600;
+}
+
+.nav-item.active .nav-icon {
+  color: #4A2C2C;
+}
+
+.nav-item.active .nav-indicator {
+  width: 4px;
+  background: var(--primary-pink-dark); /* Dark pink indicator on active */
+}
+
+.nav-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-item.disabled:hover {
+  background-color: transparent;
+}
+
+.nav-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6B7280;
+  background: #F3F4F6;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .nav-badge {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   SIDEBAR FOOTER - Stats & Logout
+   ============================================ */
+.sidebar-footer {
+  background: #FADADD; /* Match sidebar pink */
+  padding: 20px;
+  border-top: 1px solid rgba(217, 142, 158, 0.35); /* Soft pink divider */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .sidebar-footer {
+  padding: 20px 10px;
+}
+
+.quick-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #F8F9FA;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  width: 100%;
+  transition: opacity 0.2s ease, height 0.2s ease, padding 0.2s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .quick-stats {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.stat-item {
+  flex: 1;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #38CA79;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6B7280;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 32px;
+  background: #E5E7EB;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #FADADD; /* Match sidebar pink */
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  color: #4A2C2C; /* Consistent text color */
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.sidebar.collapsed .btn-logout {
+  padding: 12px 0;
+}
+
+.sidebar.collapsed .btn-logout span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: linear-gradient(135deg, rgba(250, 218, 221, 0.95) 0%, rgba(255, 182, 193, 0.9) 100%);
+  border-color: rgba(0,0,0,0.08);
+  color: #4A2C2C;
+  box-shadow: var(--shadow-pink);
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #F9FAFB;
+  overflow: hidden;
+}
+
+/* ============================================
+   TOPBAR
+   ============================================ */
+.topbar {
+  background: #FFFFFF;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E5E7EB;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.topbar-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.5rem;
+  color: #4A2C2C;
+  margin: 0;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.menu-button:hover {
+  background: #F3F4F6;
+  color: #374151;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: all 0.2s ease;
+}
+
+.notification-button:hover {
+  background: #F3F4F6;
+  color: #374151;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #EF4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.notifications-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1000;
+}
+
+.content-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar.collapsed {
+    left: -80px;
+  }
+
+  .main-content {
+    width: 100%;
+  }
 }
 
 .main-content {
