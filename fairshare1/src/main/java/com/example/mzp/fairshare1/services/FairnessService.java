@@ -107,7 +107,7 @@ public class FairnessService {
         }
 
         public void calculateScore() {
-            this.score = 100 + (completed * 10) - (pending * 20);
+            this.score = Math.min(100, 100 + (completed * 10) - (pending * 20));
         }
 
         // Getters
