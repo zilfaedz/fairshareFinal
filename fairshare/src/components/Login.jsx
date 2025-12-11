@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppData } from '../context/AppDataContext';
 import Toast from './Toast';
-import { Mail, Lock, Shield, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Shield, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { login, showToast, toastMessage, hideToast } = useAppData();
@@ -112,7 +113,7 @@ const Login = () => {
 
             <div className="input-group-modern">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => {
@@ -126,12 +127,18 @@ const Login = () => {
               <div className="input-icon-left">
                 <Lock size={20} />
               </div>
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
             {errors.password && <div className="error-message-inline">{errors.password}</div>}
 
-            <div className="form-options" style={{ justifyContent: 'flex-start' }}>
-              <Link to="/forgot-password" className="link-primary">Forgot password?</Link>
-            </div>
+            {/* Forgot password removed as not implemented */}
 
             <button type="submit" className="btn-primary-full">
               <span className="btn-text">Sign In</span>

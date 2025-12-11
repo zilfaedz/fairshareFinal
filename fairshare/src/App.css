@@ -300,6 +300,16 @@ select {
   padding: 12px 0;
 }
 
+/* Ensure icons are perfectly centered when collapsed */
+.sidebar.collapsed .nav-item-content {
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar.collapsed .nav-icon {
+  margin: 0 auto; /* center horizontally */
+}
+
 .nav-item-content {
   display: flex;
   align-items: center;
@@ -649,6 +659,11 @@ select {
   display: flex;
   flex-direction: column;
   background-color: #FFF0F5;
+}
+
+/* Adjust main content offset when sidebar is collapsed */
+.main-content.collapsed {
+  margin-left: 80px;
 }
 
 .topbar {

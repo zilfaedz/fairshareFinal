@@ -550,7 +550,7 @@
 }
 
 .password-toggle:hover {
-    background: var(--neutral-100);
+    background: transparent;
 }
 
 .password-toggle svg {

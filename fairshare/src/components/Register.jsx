@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppData } from '../context/AppDataContext';
-import { User, Mail, Lock, Shield, ArrowLeft } from 'lucide-react';
+import { User, Mail, Lock, Shield, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 
 const Register = () => {
@@ -10,6 +10,8 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { register } = useAppData();
     const navigate = useNavigate();
 
@@ -129,7 +131,7 @@ const Register = () => {
 
                         <div className="input-group-modern">
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="password"
                                 value={password}
                                 onChange={(e) => {
@@ -143,12 +145,20 @@ const Register = () => {
                             <div className="input-icon-left">
                                 <Lock size={20} />
                             </div>
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowPassword((v) => !v)}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
                         </div>
                         {errors.password && <div className="error-message-inline">{errors.password}</div>}
 
                         <div className="input-group-modern">
                             <input
-                                type="password"
+                                type={showConfirmPassword ? "text" : "password"}
                                 id="confirmPassword"
                                 value={confirmPassword}
                                 onChange={(e) => {
@@ -162,18 +172,18 @@ const Register = () => {
                             <div className="input-icon-left">
                                 <Lock size={20} />
                             </div>
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowConfirmPassword((v) => !v)}
+                                aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                            >
+                                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
                         </div>
                         {errors.confirmPassword && <div className="error-message-inline">{errors.confirmPassword}</div>}
 
-                        <div className="terms-modern">
-                            <label className="checkbox-modern">
-                                <input type="checkbox" required />
-                                <div className="checkbox-custom"></div>
-                                <span className="checkbox-label">
-                                    I agree to the <Link to="/terms" className="link-primary">Terms of Service</Link> and <Link to="/privacy" className="link-primary">Privacy Policy</Link>
-                                </span>
-                            </label>
-                        </div>
+                        {/* Terms and Privacy checkbox removed as not implemented */}
 
                         <button type="submit" className="btn-primary-full">
                             <span className="btn-text">Create Account</span>

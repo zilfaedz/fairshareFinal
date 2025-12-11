@@ -10,6 +10,7 @@ const Layout = ({ children }) => {
     const navigate = useNavigate();
     const { user, groups, toastMessage, showToast, hideToast, logout, notifications, markNotificationsRead, pendingCount } = useAppData();
     const [showNotifications, setShowNotifications] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
     const notificationRef = useRef(null);
 
     const isActive = (path) => location.pathname === path;
@@ -52,9 +53,9 @@ const Layout = ({ children }) => {
     return (
         <div className="layout-container">
             <Toast message={toastMessage} onClose={hideToast} />
-            <aside className="sidebar">
+            <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-header">
-                    <div className="user-profile-card">
+                    <div className="user-profile-card" onClick={() => setCollapsed(!collapsed)} style={{cursor: 'pointer'}}>
                         <div className="user-avatar-large">
                             {user.profilePicture ? (
                                 <img src={user.profilePicture} alt="User" />
@@ -130,7 +131,7 @@ const Layout = ({ children }) => {
                 </div>
             </aside>
 
-            <main className="main-content">
+            <main className={`main-content ${collapsed ? 'collapsed' : ''}`}>
                 <header className="topbar">
                     <div className="topbar-left">
                         <img src={require('../img/logo.png')} alt="FairShare" className="topbar-logo" />
