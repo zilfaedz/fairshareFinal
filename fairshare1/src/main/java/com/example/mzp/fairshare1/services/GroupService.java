@@ -64,9 +64,18 @@ public class GroupService {
         groupRepository.deleteById(groupId);
     }
 
-    public void removeMember(Long groupId, User user) {
+    public void removeMember(Long groupId, User user, Long requesterId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        // Allow user to leave (remove themselves)
+        if (!user.getId().equals(requesterId)) {
+            // If removing someone else, requester must be the owner
+            if (!group.getOwner().getId().equals(requesterId)) {
+                throw new RuntimeException("Only the group owner can remove members");
+            }
+        }
+
         group.removeMember(user);
         groupRepository.save(group);
     }
@@ -82,6 +91,22 @@ public class GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
         group.setMonthlyBudget(budget);
+        return groupRepository.save(group);
+    }
+
+    public Group transferOwnership(Long groupId, User newOwner, User requester) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        if (!group.getOwner().getId().equals(requester.getId())) {
+            throw new RuntimeException("Only the owner can transfer ownership");
+        }
+
+        if (!group.getMembers().contains(newOwner)) {
+            throw new RuntimeException("New owner must be a member of the group");
+        }
+
+        group.setOwner(newOwner);
         return groupRepository.save(group);
     }
 

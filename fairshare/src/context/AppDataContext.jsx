@@ -481,6 +481,11 @@ export const AppDataProvider = ({ children }) => {
     };
 
     const joinGroup = async (code) => {
+        if (!user || !user.id) {
+            showToast("You must be logged in to join a group.");
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:8080/api/groups/join', {
                 method: 'POST',
@@ -500,7 +505,7 @@ export const AppDataProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Join group failed:", error);
-            showToast("Network error. Failed to join group.");
+            showToast(`Network error: ${error.message}`);
         }
     };
 
@@ -565,7 +570,7 @@ export const AppDataProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId: user.id }),
+                body: JSON.stringify({ userId: user.id, requesterId: user.id }),
             });
 
             if (response.ok) {
@@ -677,7 +682,7 @@ export const AppDataProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId: memberId }),
+                body: JSON.stringify({ userId: memberId, requesterId: user.id }),
             });
 
             if (response.ok) {

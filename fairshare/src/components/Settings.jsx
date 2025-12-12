@@ -224,6 +224,8 @@ const Settings = () => {
             transferOwnership(group.id, member.id);
         } else if (type === 'leave' && group) {
             leaveGroup(group.id);
+        } else if (type === 'removeMember' && group && member) {
+            removeGroupMember(group.id, member.id);
         }
         handleCloseModal();
     };
@@ -356,15 +358,23 @@ const Settings = () => {
                                                 {member.fullName || member.name}
                                                 {group.owner && group.owner.id === member.id && <Crown size={14} color="#FFD700" fill="#FFD700" />}
                                             </span>
-                                            <button
-                                                className="icon-button delete-button"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    removeGroupMember(group.id, member.id);
-                                                }}
-                                            >
-                                                <Trash2 size={16} />
-                                            </button>
+                                            {/* Only show delete button if current user is owner AND ensuring they don't delete themselves here (leave group instead) */}
+                                            {group.owner && group.owner.id === user.id && member.id !== user.id && (
+                                                <button
+                                                    className="icon-button delete-button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setModalConfig({
+                                                            isOpen: true,
+                                                            type: 'removeMember',
+                                                            group: group,
+                                                            member: member
+                                                        });
+                                                    }}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
@@ -572,7 +582,8 @@ const Settings = () => {
                         <div className="modal-header">
                             <h2>
                                 {modalConfig.type === 'delete' ? 'Delete Group' :
-                                    modalConfig.type === 'leave' ? 'Leave Group' : 'Transfer Ownership'}
+                                    modalConfig.type === 'leave' ? 'Leave Group' :
+                                        modalConfig.type === 'removeMember' ? 'Remove Member' : 'Transfer Ownership'}
                             </h2>
                             <button className="close-button" onClick={handleCloseModal}>
                                 <X size={20} />
@@ -584,6 +595,8 @@ const Settings = () => {
                                 <p>Are you sure you want to delete "<b>{modalConfig.group?.name}</b>"? This cannot be undone.</p>
                             ) : modalConfig.type === 'leave' ? (
                                 <p>Are you sure you want to leave "<b>{modalConfig.group?.name}</b>"?</p>
+                            ) : modalConfig.type === 'removeMember' ? (
+                                <p>Are you sure you want to remove <b>{modalConfig.member?.fullName || modalConfig.member?.name}</b> from "<b>{modalConfig.group?.name}</b>"?</p>
                             ) : (
                                 <p>Do you want to transfer ownership of "<b>{modalConfig.group?.name}</b>" to <b>{modalConfig.member?.fullName || modalConfig.member?.name}</b>?</p>
                             )}
@@ -591,12 +604,13 @@ const Settings = () => {
 
                         <div className="modal-actions">
                             <button
-                                className={`action-button ${['delete', 'leave'].includes(modalConfig.type) ? 'delete' : ''}`}
-                                style={!['delete', 'leave'].includes(modalConfig.type) ? { backgroundColor: 'var(--primary-pink)', color: 'white' } : { backgroundColor: '#d93025', color: 'white' }}
+                                className={`action-button ${['delete', 'leave', 'removeMember'].includes(modalConfig.type) ? 'delete' : ''}`}
+                                style={!['delete', 'leave', 'removeMember'].includes(modalConfig.type) ? { backgroundColor: 'var(--primary-pink)', color: 'white' } : { backgroundColor: '#d93025', color: 'white' }}
                                 onClick={handleConfirmAction}
                             >
                                 {modalConfig.type === 'delete' ? 'Delete' :
-                                    modalConfig.type === 'leave' ? 'Leave' : 'Transfer'}
+                                    modalConfig.type === 'leave' ? 'Leave' :
+                                        modalConfig.type === 'removeMember' ? 'Remove' : 'Transfer'}
                             </button>
                             <button className="action-button cancel" onClick={handleCloseModal}>
                                 Cancel
