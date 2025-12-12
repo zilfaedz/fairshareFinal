@@ -29,11 +29,15 @@ public class GroupService {
     @Autowired
     private com.example.mzp.fairshare1.repositories.NotificationRepository notificationRepository;
 
+    @Transactional
     public Group createGroup(String name, User creator) {
         String code = generateUniqueCode();
         Group group = new Group(name, code);
         group.addMember(creator);
-        return groupRepository.save(group);
+        group.setOwner(creator); // Set creator as owner
+        Group savedGroup = groupRepository.save(group);
+        // Reload to ensure owner is populated correctly
+        return groupRepository.findById(savedGroup.getId()).orElse(savedGroup);
     }
 
     public Group joinGroup(String code, User user) {

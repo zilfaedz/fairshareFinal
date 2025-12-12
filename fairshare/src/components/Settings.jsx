@@ -295,112 +295,115 @@ const Settings = () => {
 
                     <h2 className="section-title">My Groups</h2>
                     {groups && groups.length > 0 ? (
-                        groups.map((group) => (
-                            <div key={group.id} className="settings-card pink-bg group-card">
-                                <div className="group-header">
-                                    <div style={{ flex: 1 }}>
-                                        {editingGroupId === group.id ? (
-                                            <input
-                                                type="text"
-                                                value={editedGroupName}
-                                                onChange={(e) => setEditedGroupName(e.target.value)}
-                                                className="settings-input"
-                                                autoFocus
-                                            />
-                                        ) : (
-                                            <h3>{group.name}</h3>
-                                        )}
-                                        <p className="member-count">{group.members ? group.members.length : 0} members</p>
-                                    </div>
-                                    <div className="group-actions-top">
-                                        <div className="invite-section" style={{ display: 'flex', gap: '8px', marginRight: '16px' }}>
-                                            <input
-                                                type="email"
-                                                placeholder="Invite by email"
-                                                className="settings-input compact"
-                                                style={{ width: '200px', margin: 0 }}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') {
-                                                        const email = e.target.value;
-                                                        if (email && email.trim()) {
-                                                            sendInvite(group.id, email);
-                                                            e.target.value = '';
-                                                        }
-                                                    }
-                                                }}
-                                            />
-                                            <button className="settings-button primary small" onClick={(e) => {
-                                                const input = e.currentTarget.previousSibling;
-                                                const email = input.value;
-                                                if (email && email.trim()) {
-                                                    sendInvite(group.id, email);
-                                                    input.value = '';
-                                                }
-                                            }}>Invite</button>
-                                        </div>
-                                        <span className="room-code">{group.code}</span>
-                                        <button className="icon-button copy-button" onClick={() => copyToClipboard(group.code)}>
-                                            <Copy size={16} />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="members-list">
-                                    {group.members && group.members.map((member) => (
-                                        <div
-                                            key={member.id}
-                                            className="member-item"
-                                            onClick={() => handleMemberClick(group, member)}
-                                            style={{ cursor: (group.owner && group.owner.id === user.id && member.id !== user.id) ? 'pointer' : 'default' }}
-                                            title={(group.owner && group.owner.id === user.id && member.id !== user.id) ? "Click to transfer ownership" : ""}
-                                        >
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                {member.fullName || member.name}
-                                                {group.owner && group.owner.id === member.id && <Crown size={14} color="#FFD700" fill="#FFD700" />}
-                                            </span>
-                                            {/* Only show delete button if current user is owner AND ensuring they don't delete themselves here (leave group instead) */}
-                                            {group.owner && group.owner.id === user.id && member.id !== user.id && (
-                                                <button
-                                                    className="icon-button delete-button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setModalConfig({
-                                                            isOpen: true,
-                                                            type: 'removeMember',
-                                                            group: group,
-                                                            member: member
-                                                        });
-                                                    }}
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
+                        groups.map((group) => {
+                            console.log("Group render:", group); // Debug logging
+                            return (
+                                <div key={group.id} className="settings-card pink-bg group-card">
+                                    <div className="group-header">
+                                        <div style={{ flex: 1 }}>
+                                            {editingGroupId === group.id ? (
+                                                <input
+                                                    type="text"
+                                                    value={editedGroupName}
+                                                    onChange={(e) => setEditedGroupName(e.target.value)}
+                                                    className="settings-input"
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <h3>{group.name}</h3>
                                             )}
+                                            <p className="member-count">{group.members ? group.members.length : 0} members</p>
                                         </div>
-                                    ))}
-                                </div>
+                                        <div className="group-actions-top">
+                                            <div className="invite-section" style={{ display: 'flex', gap: '8px', marginRight: '16px' }}>
+                                                <input
+                                                    type="email"
+                                                    placeholder="Invite by email"
+                                                    className="settings-input compact"
+                                                    style={{ width: '200px', margin: 0 }}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') {
+                                                            const email = e.target.value;
+                                                            if (email && email.trim()) {
+                                                                sendInvite(group.id, email);
+                                                                e.target.value = '';
+                                                            }
+                                                        }
+                                                    }}
+                                                />
+                                                <button className="settings-button primary small" onClick={(e) => {
+                                                    const input = e.currentTarget.previousSibling;
+                                                    const email = input.value;
+                                                    if (email && email.trim()) {
+                                                        sendInvite(group.id, email);
+                                                        input.value = '';
+                                                    }
+                                                }}>Invite</button>
+                                            </div>
+                                            <span className="room-code">{group.code}</span>
+                                            <button className="icon-button copy-button" onClick={() => copyToClipboard(group.code)}>
+                                                <Copy size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="members-list">
+                                        {group.members && group.members.map((member) => (
+                                            <div
+                                                key={member.id}
+                                                className="member-item"
+                                                onClick={() => handleMemberClick(group, member)}
+                                                style={{ cursor: (group.owner && group.owner.id === user.id && member.id !== user.id) ? 'pointer' : 'default' }}
+                                                title={(group.owner && group.owner.id === user.id && member.id !== user.id) ? "Click to transfer ownership" : ""}
+                                            >
+                                                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    {member.fullName || member.name}
+                                                    {group.owner && group.owner.id === member.id && <Crown size={14} color="#FFD700" fill="#FFD700" />}
+                                                </span>
+                                                {/* Only show delete button if current user is owner AND ensuring they don't delete themselves here (leave group instead) */}
+                                                {group.owner && group.owner.id === user.id && member.id !== user.id && (
+                                                    <button
+                                                        className="icon-button delete-button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setModalConfig({
+                                                                isOpen: true,
+                                                                type: 'removeMember',
+                                                                group: group,
+                                                                member: member
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
 
 
-                                <div className="group-footer-actions">
-                                    {editingGroupId === group.id ? (
-                                        <>
-                                            <button className="settings-button white" onClick={handleCancelEditGroup}>Cancel</button>
-                                            <button className="settings-button primary" onClick={() => handleSaveGroup(group.id)}>Save</button>
-                                        </>
-                                    ) : (
-                                        <button className="settings-button white" onClick={() => handleEditGroup(group)}>Edit Name</button>
-                                    )}
-                                    <button
-                                        className="settings-button secondary"
-                                        onClick={() => handleDeleteGroupAttempt(group)}
-                                        style={group.owner && group.owner.id !== user.id ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
-                                    >Delete Group</button>
-                                    <button
-                                        className="settings-button danger"
-                                        onClick={() => handleLeaveGroupAttempt(group)}
-                                    >Leave Group</button>
+                                    <div className="group-footer-actions">
+                                        {editingGroupId === group.id ? (
+                                            <>
+                                                <button className="settings-button white" onClick={handleCancelEditGroup}>Cancel</button>
+                                                <button className="settings-button primary" onClick={() => handleSaveGroup(group.id)}>Save</button>
+                                            </>
+                                        ) : (
+                                            <button className="settings-button white" onClick={() => handleEditGroup(group)}>Edit Name</button>
+                                        )}
+                                        <button
+                                            className="settings-button secondary"
+                                            onClick={() => handleDeleteGroupAttempt(group)}
+                                            style={group.owner && group.owner.id !== user.id ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                                        >Delete Group</button>
+                                        <button
+                                            className="settings-button danger"
+                                            onClick={() => handleLeaveGroupAttempt(group)}
+                                        >Leave Group</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
+                            );
+                        })
                     ) : (
                         <p className="no-groups-message">You are not part of any groups yet.</p>
                     )}
